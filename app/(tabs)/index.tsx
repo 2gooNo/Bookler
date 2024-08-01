@@ -14,6 +14,19 @@ export default function HomeScreen() {
   console.log("test");
   console.log("test");
 
+  console.log("sara test");
+  console.log("sara test");
+  console.log("sara test");
+  console.log("sara test");
+  console.log("sara test");
+  console.log("sara test");
+  console.log("sara test");
+  console.log("sara test");
+  console.log("sara test");
+  console.log("sara test");
+  console.log("sara test");
+  console.log("sara test");
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}

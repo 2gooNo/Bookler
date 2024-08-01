@@ -14,6 +14,7 @@ export default function HomeScreen() {
   console.log("test");
   console.log("test");
 
+
   console.log("sara test");
   console.log("sara test");
   console.log("sara test");
@@ -26,6 +27,15 @@ export default function HomeScreen() {
   console.log("sara test");
   console.log("sara test");
   console.log("sara test");
+
+  console.log("hahahah");
+  console.log("hahahah");
+  console.log("hahahah");
+  console.log("hahahah");
+  console.log("hahahah");
+  console.log("hahahah");
+  console.log("hahahah");
+
 
   return (
     <ParallaxScrollView

@@ -1,4 +1,3 @@
-
 import {
   Image,
   Text,
@@ -24,6 +23,7 @@ function HomeScreen({ navigation }: { navigation: any }) {
     </View>
   );
 }
+
 
 const HomeStack = createNativeStackNavigator();
 export default function HomeStackScreen() {
@@ -53,3 +53,4 @@ export default function HomeStackScreen() {
   );
 }
 const styles = StyleSheet.create({});
+

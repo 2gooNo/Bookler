@@ -1,3 +1,4 @@
+
 import {
   Image,
   Text,
@@ -11,6 +12,7 @@ import { Login } from "@/components/subComponents/logIn";
 import { SignUp } from "@/components/subComponents/signUp";
 
 function HomeScreen({ navigation }: { navigation: any }) {
+
   return (
     <View>
       <Pressable

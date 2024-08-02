@@ -9,9 +9,9 @@ import {
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Login } from "@/components/subComponents/logIn";
 import { SignUp } from "@/components/subComponents/signUp";
+import { LogAndSign } from "@/components/subComponents/LogAndSign";
 
 function HomeScreen({ navigation }: { navigation: any }) {
-
   return (
     <View>
       <Pressable
@@ -24,14 +24,13 @@ function HomeScreen({ navigation }: { navigation: any }) {
   );
 }
 
-
 const HomeStack = createNativeStackNavigator();
 export default function HomeStackScreen() {
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen
         name="Home"
-        component={HomeScreen} // rreplace with loginAndSignUp page
+        component={LogAndSign} // rreplace with loginAndSignUp page
         options={{ headerShown: false }}
       />
       <HomeStack.Screen
@@ -53,4 +52,3 @@ export default function HomeStackScreen() {
   );
 }
 const styles = StyleSheet.create({});
-

@@ -4,8 +4,6 @@ import Svg, { Path } from "react-native-svg";
 function GoogleLogo(props: any) {
   return (
     <Svg
-      width="800px"
-      height="800px"
       viewBox="-3 0 262 262"
       xmlns="http://www.w3.org/2000/svg"
       preserveAspectRatio="xMidYMid"

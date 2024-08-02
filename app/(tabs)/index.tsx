@@ -9,6 +9,7 @@ import {
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Login } from "@/components/subComponents/logIn";
 import { SignUp } from "@/components/subComponents/signUp";
+import { PasswordConfirm } from "@/components/subComponents/passwordConfirm";
 
 function HomeScreen({ navigation }: { navigation: any }) {
   return (
@@ -40,6 +41,11 @@ export default function HomeStackScreen() {
       <HomeStack.Screen
         name="SignUp"
         component={SignUp} // sign up page
+        options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
+        name="PasswordConfirm"
+        component={PasswordConfirm} // sign up page
         options={{ headerShown: false }}
       />
       {/* <HomeStack.Screen

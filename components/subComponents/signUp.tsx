@@ -1,57 +1,100 @@
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth, db } from "../../common /index";
+import { Button, Pressable, Text, TextInput, View } from "react-native";
+import { ErrorMessage, Formik } from "formik";
 import { useContext, useState } from "react";
-import { setDoc, doc } from "firebase/firestore";
-import { Button, Pressable, Text, View } from "react-native";
-import { Formik } from "formik";
+import { AuthContext } from "@/context/authContext";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import * as Yup from "yup";
 
-export function SignUp() {
-  const signUp = (values: any) => {
-    console.log(values);
-    // createUserWithEmailAndPassword(auth, values.email, values.password)
-    //   .then((userCredential) => {
-    //     const user = userCredential.user;
-
-    //     updateProfile(user, {
-    //       displayName: values.username,
-    //       photoURL:
-    //         "https://nestcore-my.sharepoint.com/:i:/g/personal/24hp0317_nest_edu_mn/Ee1NrTdhXkdKp0hTe772thIBnSYMc49xd4xomsNuuHkEzQ?e=12hgEQ",
-    //     })
-    //       .then(() => {
-    //         // console.log("Yipeee");
-    //       })
-    //       .catch((error: any) => {
-    //         // console.log(error);
-    //       });
-    //     try {
-    //     } catch (e) {
-    //       // console.log(e);
-    //     }
-    //   })
-    //   .catch((error: any) => {
-    //     // alert(
-    //     //   "Your email is not a valid email, or this email is already in use"
-    //     // );
-    //     const errorCode = error.code;
-    //     const errorMessage = error.message;
-    //   });
+export function SignUp({ navigation }: { navigation: any }) {
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const { setBirthDate, setUserName, setEmail, birthDate } =
+    useContext(AuthContext);
+  const changeHandler = (val: any) => {
+    console.log(val);
   };
+  console.log(birthDate?.toString(), "=-");
   return (
     <Formik
-      initialValues={{ email: "", userName: " ", birthDate: "" }}
-      onSubmit={(values) => signUp({ values })}
+      initialValues={{
+        userName: "",
+        email: "",
+        birthDate: new Date(),
+      }}
+      validationSchema={Yup.object({
+        birthDate: Yup.date().required("Birthdate is required"),
+      })}
+      onSubmit={(values) => {
+        console.log(values.birthDate);
+        navigation.navigate("PasswordConfirm");
+        setBirthDate(values?.birthDate);
+        setUserName(values?.userName);
+        setEmail(values?.email);
+      }}
     >
-      {({ handleChange, handleBlur, handleSubmit, values }) => (
+      {({
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        setFieldValue,
+        errors,
+        values,
+      }) => (
         <View
           style={{
-            position: "relative",
-            width: "100%",
-            paddingVertical: 30,
-            justifyContent: "center",
+            padding: 100,
+            flexDirection: "column",
           }}
         >
-          <Text> </Text>
-          <Button title="Next" onPress={() => console.log("o")}></Button>
+          <TextInput
+            placeholder="Email"
+            style={{ backgroundColor: "green" }}
+            onChangeText={handleChange("email")}
+            onBlur={handleBlur("email")}
+            value={values.email}
+          />
+          <TextInput
+            placeholder="User name"
+            style={{ backgroundColor: "pink" }}
+            onChangeText={handleChange("userName")}
+            onBlur={handleBlur("userName")}
+            value={values.userName}
+          />
+          <Text style={{ color: "white" }}>
+            {new Date(values.birthDate).toLocaleDateString()}
+          </Text>
+
+          {/* <RNDateTimePicker
+            value={values.birthDate}
+            onChange={changeHandler}
+            minimumDate={new Date(1910, 0, 1)}
+            display="spinner"
+            style={{ width: 250 }}
+            maximumDate={new Date()}
+          /> */}
+          {/* <Datetimepicker
+            value={values.birthDate}
+            onChange={() => handleChange("birthDate")}
+            // date={values.birthDate}
+            // onDateChange={changeHandler}
+            mode="date"
+            display="spinner"
+          /> */}
+          <Button
+            title="Show Date Picker"
+            onPress={() => setDatePickerVisibility(true)}
+          />
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={(date) => {
+              setFieldValue("birthDate", date);
+              setDatePickerVisibility(false);
+            }}
+            onCancel={() => setDatePickerVisibility(false)}
+          />
+          <Pressable onPress={() => handleSubmit()}>
+            <Text style={{ color: "white" }}>Sign in</Text>
+          </Pressable>
         </View>
       )}
     </Formik>

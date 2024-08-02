@@ -12,6 +12,7 @@ import { SignUp } from "@/components/subComponents/signUp";
 import { PasswordConfirm } from "@/components/subComponents/passwordConfirm";
 
 function HomeScreen({ navigation }: { navigation: any }) {
+
   return (
     <View>
       <Pressable
@@ -23,6 +24,7 @@ function HomeScreen({ navigation }: { navigation: any }) {
     </View>
   );
 }
+
 
 const HomeStack = createNativeStackNavigator();
 export default function HomeStackScreen() {
@@ -57,3 +59,4 @@ export default function HomeStackScreen() {
   );
 }
 const styles = StyleSheet.create({});
+

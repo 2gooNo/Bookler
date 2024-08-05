@@ -27,7 +27,7 @@ export function SignUp({ navigation }: { navigation: any }) {
         initialValues={{
           userName: "",
           email: "",
-          birthDate: new Date(),
+          birthDate: "",
         }}
         validationSchema={Yup.object({
           birthDate: Yup.date().required("Birthdate is required"),
@@ -54,26 +54,40 @@ export function SignUp({ navigation }: { navigation: any }) {
             }}
           >
             <TextInput
+              placeholderTextColor="rgb(98,101,105)"
+              placeholder="Name"
+              style={styles.input}
+              onChangeText={handleChange("userName")}
+              onBlur={handleBlur("userName")}
+              value={values.userName}
+            />
+            <TextInput
               placeholder="Email"
+              placeholderTextColor={"rgb(98,101,105)"}
               style={styles.input}
               onChangeText={handleChange("email")}
               onBlur={handleBlur("email")}
               value={values.email}
             />
-            <TextInput
-              placeholder="User name"
-              style={{ backgroundColor: "pink" }}
-              onChangeText={handleChange("userName")}
-              onBlur={handleBlur("userName")}
-              value={values.userName}
-            />
-            <Text style={{ color: "white" }}>
-              {new Date(values.birthDate).toLocaleDateString()}
-            </Text>
-            <Button
-              title="Show Date Picker"
+            <Pressable
+              style={styles.input}
               onPress={() => setDatePickerVisibility(true)}
-            />
+            >
+              <Text
+                style={{
+                  color:
+                    values?.birthDate == ""
+                      ? `rgb(98,101,105)`
+                      : "rgb(74,153,233)",
+                  fontSize: 18,
+                }}
+              >
+                {values?.birthDate == ""
+                  ? "Date of birth"
+                  : new Date(values.birthDate).toLocaleDateString()}
+              </Text>
+            </Pressable>
+
             <DateTimePickerModal
               isVisible={isDatePickerVisible}
               mode="date"
@@ -83,7 +97,7 @@ export function SignUp({ navigation }: { navigation: any }) {
               }}
               onCancel={() => setDatePickerVisibility(false)}
             />
-            <Pressable onPress={() => handleSubmit()}>
+            <Pressable style={styles.nextButton} onPress={() => handleSubmit()}>
               <Text style={{ color: "white" }}>Sign in</Text>
             </Pressable>
           </View>
@@ -99,6 +113,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width,
     paddingTop: "18%",
     paddingLeft: "8%",
+    paddingRight: "10%",
   },
   upperText: {
     fontFamily: "Inter",
@@ -112,6 +127,20 @@ const styles = StyleSheet.create({
   xLogo: {
     marginBottom: "10%",
   },
+  input: {
+    width: "100%",
+    height: "auto",
+    paddingBottom: "3%",
+    borderBottomWidth: 1,
+    borderStyle: "solid",
+    borderColor: "rgb(98,101,105)",
+    fontFamily: "Inter",
+    fontSize: 18,
+    fontWeight: "400",
+    marginBottom: "15%",
+    color: "rgb(74,153,233)",
+  },
+  nextButton: {},
   fastLogButtons: {
     gap: 10,
     width: "100%",
@@ -128,10 +157,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 25,
   },
-  input: {
-    width: "100%",
-    height: "auto",
-  },
+
   fastLogLogo: {
     width: "10%",
     height: "60%",

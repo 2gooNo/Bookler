@@ -20,8 +20,8 @@ type AuthContextType = {
   setEmail: React.Dispatch<React.SetStateAction<string>>;
   setUserName: React.Dispatch<React.SetStateAction<string>>;
   username: string;
-  setBirthDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
-  birthDate: Date | undefined;
+  setBirthDate: React.Dispatch<React.SetStateAction<Date | undefined | string>>;
+  birthDate: Date | undefined | string;
 };
 export const AuthContext = React.createContext<AuthContextType>(
   {} as AuthContextType
@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }: Props) => {
   const [user, setUser] = useState<any>(auth.currentUser);
   const [email, setEmail] = useState<string>("");
   const [username, setUserName] = useState<string>("");
-  const [birthDate, setBirthDate] = useState<Date | undefined>();
+  const [birthDate, setBirthDate] = useState<Date | undefined | string>();
   const navigation = useNavigation<any>();
 
   useEffect(() => {

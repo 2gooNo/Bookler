@@ -12,7 +12,7 @@ import { useContext, useState } from "react";
 import { AuthContext } from "@/context/authContext";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import * as Yup from "yup";
-import XLogo from "@/assets/images/XLogo";
+import BooklerLogo from "@/assets/images/BooklerLogo";
 
 export function SignUp({ navigation }: { navigation: any }) {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -21,7 +21,7 @@ export function SignUp({ navigation }: { navigation: any }) {
 
   return (
     <View style={styles.allContainer}>
-      <XLogo style={styles.xLogo} />
+      <BooklerLogo style={styles.xLogo} />
       <Text style={styles.upperText}>Create your account</Text>
       <Formik
         initialValues={{
@@ -126,6 +126,8 @@ const styles = StyleSheet.create({
   },
   xLogo: {
     marginBottom: "10%",
+    width: "10%",
+    height: "10%",
   },
   input: {
     width: "100%",

@@ -1,13 +1,12 @@
 import AppleLogo from "@/assets/images/AppleLogo";
 import GoogleLogo from "@/assets/images/GoogleLogo";
-import XLogo from "@/assets/images/XLogo";
-import { router } from "expo-router";
+import BooklerLogo from "@/assets/images/BooklerLogo";
 import { View, StyleSheet, Text, Pressable, Dimensions } from "react-native";
 
 export function LogAndSign({ navigation }: any) {
   return (
     <View style={styles.allContainer}>
-      <XLogo style={styles.xLogo}></XLogo>
+      <BooklerLogo style={styles.xLogo} />
       <Text style={styles.upperText}>
         See what's happening in the world right now
       </Text>
@@ -78,6 +77,9 @@ const styles = StyleSheet.create({
   },
   xLogo: {
     marginBottom: "35%",
+    width: "10%",
+    height: "10%",
+    backgroundColor: "green",
   },
   fastLogLogo: {
     width: "10%",

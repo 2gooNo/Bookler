@@ -1,11 +1,10 @@
 import { Button, Text, View, TextInput } from "react-native";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "../../common/firebase";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { setDoc, doc } from "firebase/firestore";
 import { Formik } from "formik";
 import { AuthContext } from "@/context/authContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export function PasswordConfirm() {
   const { username, email, birthDate } = useContext(AuthContext);
@@ -22,7 +21,6 @@ export function PasswordConfirm() {
       values
     );
     if (values.password == values.confirmPassword && values.password) {
-      console.log("-");
       try {
         const userCredential = await createUserWithEmailAndPassword(
           auth,
@@ -35,26 +33,22 @@ export function PasswordConfirm() {
           displayName: username,
           photoURL:
             "https://nestcore-my.sharepoint.com/:i:/g/personal/24hp0317_nest_edu_mn/Ee1NrTdhXkdKp0hTe772thIBnSYMc49xd4xomsNuuHkEzQ?e=12hgEQ",
-        });
-
-        console.log(user);
-
-        await setDoc(doc(db, "users", user.uid), {
-          userId: user.uid,
-          userName: username,
-          email: email,
-          birthDate: birthDate,
-          photoUrl:
-            "https://nestcore-my.sharepoint.com/:i:/g/personal/24hp0317_nest_edu_mn/Ee1NrTdhXkdKp0hTe772thIBnSYMc49xd4xomsNuuHkEzQ?e=12hgEQ",
-          banner: "",
-          favorites: [],
-          friends: [],
-          books: [],
-          description: "",
-          blockedUsers: [],
-        });
-
-        await AsyncStorage.setItem("@userId", user.uid);
+        }).then(() =>
+          setDoc(doc(db, "users", user.uid), {
+            userId: user.uid,
+            userName: username,
+            email: email,
+            birthDate: birthDate,
+            photoUrl:
+              "https://nestcore-my.sharepoint.com/:i:/g/personal/24hp0317_nest_edu_mn/Ee1NrTdhXkdKp0hTe772thIBnSYMc49xd4xomsNuuHkEzQ?e=12hgEQ",
+            banner: "",
+            favorites: [],
+            friends: [],
+            books: [],
+            description: "",
+            blockedUsers: [],
+          })
+        );
       } catch (error: any) {
         console.error(error, "-");
         alert(error.message);

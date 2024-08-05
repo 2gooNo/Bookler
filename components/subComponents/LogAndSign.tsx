@@ -1,9 +1,10 @@
 import AppleLogo from "@/assets/images/AppleLogo";
 import GoogleLogo from "@/assets/images/GoogleLogo";
 import XLogo from "@/assets/images/XLogo";
+import { router } from "expo-router";
 import { View, StyleSheet, Text, Pressable, Dimensions } from "react-native";
 
-export function LogAndSign() {
+export function LogAndSign({ navigation }: any) {
   return (
     <View style={styles.allContainer}>
       <XLogo style={styles.xLogo}></XLogo>
@@ -11,20 +12,31 @@ export function LogAndSign() {
         See what's happening in the world right now
       </Text>
       <View style={styles.choiseSection}>
-        <View style={styles.fastLogButtons}>
-          <Pressable style={styles.fastLogButton}>
-            <GoogleLogo style={styles.fastLogLogo}></GoogleLogo>
-            <Text style={styles.fastLogText}>Continue with Google</Text>
-          </Pressable>
-          <Pressable style={styles.fastLogButton}>
-            <AppleLogo style={styles.fastLogLogo}></AppleLogo>
-            <Text style={styles.fastLogText}>Continue with Google</Text>
-          </Pressable>
-        </View>
+        <Pressable style={styles.fastLogButton}>
+          <GoogleLogo style={styles.fastLogLogo}></GoogleLogo>
+          <Text style={styles.fastLogText}>Continue with Google</Text>
+        </Pressable>
+        <Pressable style={styles.fastLogButton}>
+          <AppleLogo style={styles.fastLogLogo}></AppleLogo>
+          <Text style={styles.fastLogText}>Continue with Google</Text>
+        </Pressable>
+
         <View style={styles.orContainer}>
           <View style={styles.grayLine}></View>
           <Text style={styles.orText}>or</Text>
           <View style={styles.grayLine}></View>
+        </View>
+        <Pressable
+          onPress={() => navigation.navigate(`SignUp`)}
+          style={styles.fastLogButton}
+        >
+          <Text style={styles.fastLogText}>Create account</Text>
+        </Pressable>
+        <View style={styles.logInTextContainer}>
+          <Text style={styles.orText}>Have an account already?</Text>
+          <Pressable onPress={() => navigation.navigate(`LogIn`)}>
+            <Text style={styles.logInText}>Log in</Text>
+          </Pressable>
         </View>
       </View>
     </View>
@@ -35,7 +47,7 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     height: Dimensions.get("window").height,
     width: Dimensions.get("window").width,
-    paddingTop: "10%",
+    paddingTop: "18%",
     alignItems: "center",
     paddingLeft: "8%",
     paddingRight: "8%",
@@ -56,16 +68,16 @@ const styles = StyleSheet.create({
   },
   fastLogButton: {
     width: "100%",
-    height: "18%",
+    height: "8%",
     backgroundColor: "white",
     borderRadius: 50,
     flexDirection: "row",
     alignItems: "center",
-    paddingLeft: "20%",
+    justifyContent: "center",
     gap: 25,
   },
   xLogo: {
-    marginBottom: "40%",
+    marginBottom: "35%",
   },
   fastLogLogo: {
     width: "10%",
@@ -79,15 +91,15 @@ const styles = StyleSheet.create({
   orContainer: {
     flexDirection: "row",
     width: "100%",
-    height: 1,
-    position: "absolute",
-    top: "19%",
-    color: "rgb(46,48,51)",
+    height: "auto",
+    gap: 5,
+    alignItems: "center",
+    justifyContent: "center",
   },
   grayLine: {
     height: "10%",
-    width: "40%",
-    borderColor: "rgb(46,48,51)",
+    width: "43%",
+    borderColor: " rgb(136,138,141)",
     borderStyle: "solid",
     borderWidth: 1,
   },
@@ -95,10 +107,23 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     position: "relative",
+    gap: 10,
   },
   orText: {
     fontFamily: "Inter",
-    fontSize: 20,
-    fontWeight: "900",
+    fontSize: 16,
+    fontWeight: "500",
+    color: " rgb(136,138,141)",
+  },
+  logInTextContainer: {
+    marginTop: "8%",
+    flexDirection: "row",
+    gap: 5,
+  },
+  logInText: {
+    fontFamily: "Inter",
+    fontSize: 16,
+    fontWeight: "500",
+    color: " rgb(74,152,232)",
   },
 });

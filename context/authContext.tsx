@@ -18,8 +18,8 @@ type AuthContextType = {
   setEmail: React.Dispatch<React.SetStateAction<string>>;
   setUserName: React.Dispatch<React.SetStateAction<string>>;
   username: string;
-  setBirthDate: React.Dispatch<React.SetStateAction<Date>>;
-  birthDate: Date;
+  setBirthDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
+  birthDate: Date | undefined;
 };
 export const AuthContext = React.createContext<AuthContextType>(
   {} as AuthContextType
@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }: Props) => {
   const [user, setUser] = useState<User | undefined>();
   const [email, setEmail] = useState<string>("");
   const [username, setUserName] = useState<string>("");
-  const [birthDate, setBirthDate] = useState<Date>("");
+  const [birthDate, setBirthDate] = useState<Date | undefined>();
   const navigation = useNavigation<any>();
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }: Props) => {
       const user = await AsyncStorage.getItem("@userId");
       console.log(user, "0");
       if (user) {
-        router.push("home");
+        router.push("./home");
       }
     };
     checkUser();

@@ -101,7 +101,6 @@ export function PasswordConfirm() {
               onBlur={handleBlur("confirmPassword")}
               value={values.confirmPassword}
             />
-            <Text style={{ color: "white" }}>{values.confirmPassword}</Text>
             <View
               style={{
                 width: "100%",

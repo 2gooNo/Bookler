@@ -5,23 +5,36 @@ import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { AuthProvider } from "@/context/authContext";
-import { Route } from "expo-router/build/Route";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  console.log(Route.name);
+
   return (
     <AuthProvider>
       <Tabs
-        screenOptions={({ route }) => ({
-          tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-          headerShown: false,
-          tabBarStyle: {
-            display: route.name === "index" ? "none" : "flex",
-            backgroundColor: "#CE9760",
-          },
-        })}
+        screenOptions={({ route }) => (
+          console.log(route),
+          {
+            tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+            headerShown: false,
+            tabBarStyle: {
+              display: route.name === "index" ? "none" : "flex",
+              backgroundColor: "black",
+            },
+            tabBarButton: ["index"].includes(route.name)
+              ? () => {
+                  return null;
+                }
+              : undefined,
+          }
+        )}
       >
+        <Tabs.Screen
+          name="index"
+          options={{
+            tabBarStyle: { display: "none" },
+          }}
+        />
         <Tabs.Screen
           name="home"
           options={{
@@ -46,12 +59,12 @@ export default function TabLayout() {
             ),
           }}
         />
-        <Tabs.Screen
+        {/* <Tabs.Screen
           name="index"
           options={{
             tabBarStyle: { display: "none", backgroundColor: "pink" },
           }}
-        />
+        /> */}
       </Tabs>
     </AuthProvider>
   );

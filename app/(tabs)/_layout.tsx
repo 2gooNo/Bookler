@@ -59,12 +59,6 @@ export default function TabLayout() {
             ),
           }}
         />
-        {/* <Tabs.Screen
-          name="index"
-          options={{
-            tabBarStyle: { display: "none", backgroundColor: "pink" },
-          }}
-        /> */}
       </Tabs>
     </AuthProvider>
   );

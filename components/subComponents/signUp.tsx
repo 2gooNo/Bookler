@@ -9,10 +9,7 @@ export function SignUp({ navigation }: { navigation: any }) {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const { setBirthDate, setUserName, setEmail, birthDate } =
     useContext(AuthContext);
-  const changeHandler = (val: any) => {
-    console.log(val);
-  };
-  console.log(birthDate?.toString(), "=-");
+
   return (
     <Formik
       initialValues={{

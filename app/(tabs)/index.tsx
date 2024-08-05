@@ -12,7 +12,6 @@ import { SignUp } from "@/components/subComponents/signUp";
 import { LogAndSign } from "@/components/subComponents/LogAndSign";
 import { PasswordConfirm } from "@/components/subComponents/passwordConfirm";
 
-
 function HomeScreen({ navigation }: { navigation: any }) {
   return (
     <View>
@@ -31,7 +30,7 @@ export default function HomeStackScreen() {
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen
-        name="Home"
+        name="LogAndSign"
         component={LogAndSign} // rreplace with loginAndSignUp page
         options={{ headerShown: false }}
       />

@@ -12,23 +12,15 @@ export default function TabLayout() {
   return (
     <AuthProvider>
       <Tabs
-        screenOptions={{
+        screenOptions={({ route }) => ({
           tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
           headerShown: false,
-        }}
+          tabBarStyle: {
+            display: route.name === "index" ? "none" : "flex",
+            backgroundColor: "#CE9760",
+          },
+        })}
       >
-        <Tabs.Screen
-          name="index"
-          options={{
-            title: "Index",
-            tabBarIcon: ({ color, focused }) => (
-              <TabBarIcon
-                name={focused ? "home" : "home-outline"}
-                color={color}
-              />
-            ),
-          }}
-        />
         <Tabs.Screen
           name="home"
           options={{

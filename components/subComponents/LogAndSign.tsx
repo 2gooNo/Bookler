@@ -76,10 +76,9 @@ const styles = StyleSheet.create({
     gap: 25,
   },
   xLogo: {
-    marginBottom: "35%",
-    width: "10%",
-    height: "10%",
-    backgroundColor: "green",
+    marginBottom: "10%",
+    width: "20%",
+    height: "20%",
   },
   fastLogLogo: {
     width: "10%",

@@ -51,6 +51,10 @@ export function SignUp({ navigation }: { navigation: any }) {
           <View
             style={{
               flexDirection: "column",
+              width: "100%",
+              height: "auto",
+              paddingLeft: "8%",
+              paddingRight: "10%",
             }}
           >
             <TextInput
@@ -97,9 +101,29 @@ export function SignUp({ navigation }: { navigation: any }) {
               }}
               onCancel={() => setDatePickerVisibility(false)}
             />
-            <Pressable style={styles.nextButton} onPress={() => handleSubmit()}>
-              <Text style={{ color: "white" }}>Sign in</Text>
-            </Pressable>
+            <View
+              style={{
+                width: "100%",
+                height: "auto",
+                alignItems: "flex-end",
+              }}
+            >
+              <Pressable
+                style={styles.nextButton}
+                onPress={() => handleSubmit()}
+              >
+                <Text
+                  style={{
+                    color: "black",
+                    fontFamily: "Inter",
+                    fontSize: 18,
+                    fontWeight: "600",
+                  }}
+                >
+                  Next
+                </Text>
+              </Pressable>
+            </View>
           </View>
         )}
       </Formik>
@@ -112,8 +136,8 @@ const styles = StyleSheet.create({
     height: Dimensions.get("window").height,
     width: Dimensions.get("window").width,
     paddingTop: "18%",
-    paddingLeft: "8%",
-    paddingRight: "10%",
+
+    alignItems: "center",
   },
   upperText: {
     fontFamily: "Inter",
@@ -123,6 +147,7 @@ const styles = StyleSheet.create({
     width: "100%",
     letterSpacing: 1,
     marginBottom: "20%",
+    paddingLeft: "8%",
   },
   xLogo: {
     marginBottom: "10%",
@@ -142,7 +167,15 @@ const styles = StyleSheet.create({
     marginBottom: "15%",
     color: "rgb(74,153,233)",
   },
-  nextButton: {},
+  nextButton: {
+    backgroundColor: "white",
+    paddingBottom: "2%",
+    paddingTop: "2%",
+    paddingLeft: "5%",
+    paddingRight: "5%",
+    width: "22%",
+    borderRadius: 18,
+  },
   fastLogButtons: {
     gap: 10,
     width: "100%",

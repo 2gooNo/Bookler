@@ -5,10 +5,11 @@ import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { AuthProvider } from "@/context/authContext";
+import { Route } from "expo-router/build/Route";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-
+  console.log(Route.name);
   return (
     <AuthProvider>
       <Tabs

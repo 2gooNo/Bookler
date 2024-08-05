@@ -12,22 +12,19 @@ export default function TabLayout() {
   return (
     <AuthProvider>
       <Tabs
-        screenOptions={({ route }) => (
-          console.log(route),
-          {
-            tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-            headerShown: false,
-            tabBarStyle: {
-              display: route.name === "index" ? "none" : "flex",
-              backgroundColor: "black",
-            },
-            tabBarButton: ["index"].includes(route.name)
-              ? () => {
-                  return null;
-                }
-              : undefined,
-          }
-        )}
+        screenOptions={({ route }) => ({
+          tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+          headerShown: false,
+          tabBarStyle: {
+            display: route.name === "index" ? "none" : "flex",
+            backgroundColor: "black",
+          },
+          tabBarButton: ["index"].includes(route.name)
+            ? () => {
+                return null;
+              }
+            : undefined,
+        })}
       >
         <Tabs.Screen
           name="index"

@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Pressable, Text, View, StyleSheet, Dimensions } from "react-native";
 import { AuthContext } from "@/context/authContext";
 import { useContext } from "react";

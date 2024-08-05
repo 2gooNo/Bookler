@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { useNavigation } from "@react-navigation/native";
-
+import { signOut } from "firebase/auth";
+import { auth } from "@/common";
+import { onAuthStateChanged } from "firebase/auth";
 type Props = {
   children: React.ReactNode;
 };
@@ -26,25 +28,33 @@ export const AuthContext = React.createContext<AuthContextType>(
 );
 
 export const AuthProvider = ({ children }: Props) => {
-  const [user, setUser] = useState<User | undefined>();
+  const [user, setUser] = useState<any>(auth.currentUser);
   const [email, setEmail] = useState<string>("");
   const [username, setUserName] = useState<string>("");
   const [birthDate, setBirthDate] = useState<Date | undefined>();
   const navigation = useNavigation<any>();
 
   useEffect(() => {
-    const checkUser = async () => {
-      const user = await AsyncStorage.getItem("@userId");
-      console.log(user, "0");
-      if (user) {
-        router.push("./home");
+    onAuthStateChanged(auth, (firebaseUser) => {
+      if (firebaseUser) {
+        setUser(firebaseUser);
+      } else {
       }
-    };
-    checkUser();
+    });
+    console.log(auth);
+    // const checkUser = async () => {
+    //   const user = await AsyncStorage.getItem("@userId");
+    //   console.log(user, "0");
+    //   if (user) {
+    //     router.push("./home");
+    //   }
+    // };
+    // checkUser();
   }, []);
   const onLogout = async () => {
-    await AsyncStorage.removeItem("@user");
+    // await AsyncStorage.removeItem("@user");
     setUser(undefined);
+    signOut(auth);
     navigation.navigate("index");
   };
 

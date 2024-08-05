@@ -22,6 +22,7 @@ export function SignUp({ navigation }: { navigation: any }) {
   return (
     <View style={styles.allContainer}>
       <XLogo style={styles.xLogo} />
+      <Text style={styles.upperText}>Create your account</Text>
       <Formik
         initialValues={{
           userName: "",
@@ -54,7 +55,7 @@ export function SignUp({ navigation }: { navigation: any }) {
           >
             <TextInput
               placeholder="Email"
-              style={{ backgroundColor: "green" }}
+              style={styles.input}
               onChangeText={handleChange("email")}
               onBlur={handleBlur("email")}
               value={values.email}
@@ -106,13 +107,17 @@ const styles = StyleSheet.create({
     color: "white",
     width: "100%",
     letterSpacing: 1,
-    marginBottom: "40%",
+    marginBottom: "20%",
+  },
+  xLogo: {
+    marginBottom: "10%",
   },
   fastLogButtons: {
     gap: 10,
     width: "100%",
     height: "auto",
   },
+
   fastLogButton: {
     width: "100%",
     height: "8%",
@@ -123,8 +128,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 25,
   },
-  xLogo: {
-    marginBottom: "35%",
+  input: {
+    width: "100%",
+    height: "auto",
   },
   fastLogLogo: {
     width: "10%",

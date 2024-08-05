@@ -17,7 +17,6 @@ export default function TabLayout() {
           headerShown: false,
           tabBarStyle: {
             display: route.name === "index" ? "none" : "flex",
-            backgroundColor: "#CE9760",
           },
         })}
       >

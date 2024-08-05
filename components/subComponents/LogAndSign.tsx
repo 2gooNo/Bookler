@@ -34,7 +34,7 @@ export function LogAndSign({ navigation }: any) {
         </Pressable>
         <View style={styles.logInTextContainer}>
           <Text style={styles.orText}>Have an account already?</Text>
-          <Pressable onPress={() => navigation.navigate(`LogIn`)}>
+          <Pressable onPress={() => navigation.navigate("Login")}>
             <Text style={styles.logInText}>Log in</Text>
           </Pressable>
         </View>

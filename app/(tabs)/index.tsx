@@ -4,6 +4,7 @@ import { Login } from "@/components/subComponents/logIn";
 import { SignUp } from "@/components/subComponents/signUp";
 import { LogAndSign } from "@/components/subComponents/LogAndSign";
 import { PasswordConfirm } from "@/components/subComponents/passwordConfirm";
+import { SendEmailToUser } from "@/components/subComponents/sendEmail";
 
 // import {
 //   collection,
@@ -102,11 +103,11 @@ export default function HomeStackScreen() {
         component={PasswordConfirm} // sign up page
         options={{ headerShown: false }}
       />
-      {/* <HomeStack.Screen
-        name="ForgotPassword"
-        component={HomeScreen} forgot pass word page 
+      <HomeStack.Screen
+        name="SendEmail"
+        component={SendEmailToUser}
         options={{ headerShown: false }}
-      /> */}
+      />
     </HomeStack.Navigator>
   );
 }

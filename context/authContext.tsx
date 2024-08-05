@@ -35,22 +35,26 @@ export const AuthProvider = ({ children }: Props) => {
   const navigation = useNavigation<any>();
 
   useEffect(() => {
+    setUser(auth.currentUser);
     onAuthStateChanged(auth, (firebaseUser) => {
       if (firebaseUser) {
         setUser(firebaseUser);
       } else {
       }
     });
-    console.log(auth);
+    console.log(auth, "set");
+    if (user) {
+      router.push("./home");
+    }
     // const checkUser = async () => {
     //   const user = await AsyncStorage.getItem("@userId");
     //   console.log(user, "0");
     //   if (user) {
-    //     router.push("./home");
+    //
     //   }
     // };
     // checkUser();
-  }, []);
+  }, [auth]);
   const onLogout = async () => {
     // await AsyncStorage.removeItem("@user");
     setUser(undefined);

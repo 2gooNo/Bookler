@@ -52,7 +52,6 @@ export function SignUp({ navigation }: { navigation: any }) {
         }) => (
           <View
             style={{
-              padding: 100,
               flexDirection: "column",
             }}
           >
@@ -101,9 +100,7 @@ const styles = StyleSheet.create({
     height: Dimensions.get("window").height,
     width: Dimensions.get("window").width,
     paddingTop: "18%",
-    alignItems: "center",
     paddingLeft: "8%",
-    paddingRight: "8%",
   },
   upperText: {
     fontFamily: "Inter",

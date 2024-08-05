@@ -123,6 +123,11 @@ export function SignUp({ navigation }: { navigation: any }) {
                   Next
                 </Text>
               </Pressable>
+              <Pressable onPress={() => navigation.navigate("PasswordConfirm")}>
+                <Text style={{ color: "white", marginTop: "10%" }}>
+                  Pass conf
+                </Text>
+              </Pressable>
             </View>
           </View>
         )}
@@ -175,69 +180,5 @@ const styles = StyleSheet.create({
     paddingRight: "5%",
     width: "22%",
     borderRadius: 18,
-  },
-  fastLogButtons: {
-    gap: 10,
-    width: "100%",
-    height: "auto",
-  },
-
-  fastLogButton: {
-    width: "100%",
-    height: "8%",
-    backgroundColor: "white",
-    borderRadius: 50,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 25,
-  },
-
-  fastLogLogo: {
-    width: "10%",
-    height: "60%",
-  },
-  fastLogText: {
-    fontFamily: "Inter",
-    fontWeight: "700",
-    fontSize: 15,
-  },
-  orContainer: {
-    flexDirection: "row",
-    width: "100%",
-    height: "auto",
-    gap: 5,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  grayLine: {
-    height: "10%",
-    width: "43%",
-    borderColor: " rgb(136,138,141)",
-    borderStyle: "solid",
-    borderWidth: 1,
-  },
-  choiseSection: {
-    width: "100%",
-    height: "100%",
-    position: "relative",
-    gap: 10,
-  },
-  orText: {
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontWeight: "500",
-    color: " rgb(136,138,141)",
-  },
-  logInTextContainer: {
-    marginTop: "8%",
-    flexDirection: "row",
-    gap: 5,
-  },
-  logInText: {
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontWeight: "500",
-    color: " rgb(74,152,232)",
   },
 });

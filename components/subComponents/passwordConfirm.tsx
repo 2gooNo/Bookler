@@ -1,10 +1,19 @@
-import { Button, Text, View, TextInput } from "react-native";
+import {
+  Button,
+  Text,
+  View,
+  TextInput,
+  StyleSheet,
+  Dimensions,
+  Pressable,
+} from "react-native";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "../../common/firebase";
 import { useContext } from "react";
 import { setDoc, doc } from "firebase/firestore";
 import { Formik } from "formik";
 import { AuthContext } from "@/context/authContext";
+import BooklerLogo from "@/assets/images/BooklerLogo";
 
 export function PasswordConfirm() {
   const { username, email, birthDate } = useContext(AuthContext);
@@ -58,40 +67,114 @@ export function PasswordConfirm() {
     }
   };
   return (
-    <Formik
-      initialValues={{ password: "", confirmPassword: "" }}
-      onSubmit={async (values, { setSubmitting }) => {
-        console.log(values);
-        await signUp(values);
-      }}
-    >
-      {({ handleChange, handleBlur, handleSubmit, values }) => (
-        <View
-          style={{
-            position: "relative",
-            width: "100%",
-            paddingVertical: 30,
-            justifyContent: "center",
-          }}
-        >
-          <TextInput
-            placeholder="Password"
-            style={{ backgroundColor: "green", marginTop: 100 }}
-            onChangeText={handleChange("password")}
-            onBlur={handleBlur("password")}
-            value={values.password}
-          />
-          <TextInput
-            placeholder="Confirm Password"
-            style={{ backgroundColor: "green", marginTop: 100 }}
-            onChangeText={handleChange("confirmPassword")}
-            onBlur={handleBlur("confirmPassword")}
-            value={values.confirmPassword}
-          />
-          <Text style={{ color: "white" }}>{values.confirmPassword}</Text>
-          <Button title="Next" onPress={() => handleSubmit()}></Button>
-        </View>
-      )}
-    </Formik>
+    <View style={styles.allContainer}>
+      <BooklerLogo style={styles.xLogo} />
+      <Text style={styles.upperText}>Confirm your password</Text>
+      <Formik
+        initialValues={{ password: "", confirmPassword: "" }}
+        onSubmit={async (values, { setSubmitting }) => {
+          console.log(values);
+          await signUp(values);
+        }}
+      >
+        {({ handleChange, handleBlur, handleSubmit, values }) => (
+          <View
+            style={{
+              flexDirection: "column",
+              width: "100%",
+              height: "auto",
+              paddingLeft: "8%",
+              paddingRight: "10%",
+            }}
+          >
+            <TextInput
+              placeholder="Password"
+              style={styles.input}
+              onChangeText={handleChange("password")}
+              onBlur={handleBlur("password")}
+              value={values.password}
+            />
+            <TextInput
+              placeholder="Confirm Password"
+              style={styles.input}
+              onChangeText={handleChange("confirmPassword")}
+              onBlur={handleBlur("confirmPassword")}
+              value={values.confirmPassword}
+            />
+            <Text style={{ color: "white" }}>{values.confirmPassword}</Text>
+            <View
+              style={{
+                width: "100%",
+                height: "auto",
+                alignItems: "flex-end",
+              }}
+            >
+              <Pressable
+                style={styles.nextButton}
+                onPress={() => handleSubmit()}
+              >
+                <Text
+                  style={{
+                    color: "black",
+                    fontFamily: "Inter",
+                    fontSize: 18,
+                    fontWeight: "600",
+                  }}
+                >
+                  Next
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+        )}
+      </Formik>
+    </View>
   );
 }
+const styles = StyleSheet.create({
+  allContainer: {
+    backgroundColor: "black",
+    height: Dimensions.get("window").height,
+    width: Dimensions.get("window").width,
+    paddingTop: "18%",
+
+    alignItems: "center",
+  },
+  upperText: {
+    fontFamily: "Inter",
+    fontSize: 28,
+    fontWeight: "800",
+    color: "white",
+    width: "100%",
+    letterSpacing: 1,
+    marginBottom: "20%",
+    paddingLeft: "8%",
+  },
+  xLogo: {
+    marginBottom: "10%",
+    width: "10%",
+    height: "10%",
+  },
+  input: {
+    width: "100%",
+    height: "auto",
+    paddingBottom: "3%",
+    borderBottomWidth: 1,
+    borderStyle: "solid",
+    borderColor: "rgb(98,101,105)",
+    fontFamily: "Inter",
+    fontSize: 18,
+    fontWeight: "400",
+    marginBottom: "15%",
+    color: "rgb(74,153,233)",
+  },
+  nextButton: {
+    backgroundColor: "white",
+    paddingBottom: "2%",
+    paddingTop: "2%",
+    paddingLeft: "5%",
+    paddingRight: "5%",
+    width: "22%",
+    borderRadius: 18,
+  },
+});

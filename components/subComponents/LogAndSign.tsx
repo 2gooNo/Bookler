@@ -76,7 +76,6 @@ const styles = StyleSheet.create({
     gap: 25,
   },
   xLogo: {
-    marginBottom: "10%",
     width: "20%",
     height: "20%",
   },

@@ -35,6 +35,7 @@ export const AuthProvider = ({ children }: Props) => {
   const navigation = useNavigation<any>();
 
   useEffect(() => {
+    console.log(auth);
     setUser(auth.currentUser);
     onAuthStateChanged(auth, (firebaseUser) => {
       if (firebaseUser) {

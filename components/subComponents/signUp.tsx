@@ -37,10 +37,10 @@ export function SignUp({ navigation }: { navigation: any }) {
           userName: Yup.string().required("Username is required"),
         })}
         onSubmit={(values) => {
-          navigation.navigate("PasswordConfirm");
           setBirthDate(values?.birthDate);
           setUserName(values?.userName);
           setEmail(values?.email);
+          navigation.navigate("PasswordConfirm");
         }}
       >
         {({
@@ -60,6 +60,7 @@ export function SignUp({ navigation }: { navigation: any }) {
               paddingRight: "10%",
             }}
           >
+            <Text>{errors.userName}</Text>
             <TextInput
               placeholderTextColor="rgb(98,101,105)"
               placeholder="Name"
@@ -109,12 +110,11 @@ export function SignUp({ navigation }: { navigation: any }) {
                 width: "100%",
                 height: "auto",
                 alignItems: "flex-end",
+                backgroundColor: "red",
+                position: "relative",
               }}
             >
-              <Pressable
-                style={styles.nextButton}
-                onPress={() => handleSubmit()}
-              >
+              <View style={styles.nextButton}>
                 <Text
                   style={{
                     color: "black",
@@ -125,12 +125,23 @@ export function SignUp({ navigation }: { navigation: any }) {
                 >
                   Next
                 </Text>
-              </Pressable>
-              <Pressable onPress={() => navigation.navigate("PasswordConfirm")}>
-                <Text style={{ color: "white", marginTop: "10%" }}>
-                  Pass conf
-                </Text>
-              </Pressable>
+              </View>
+              <View
+                style={{
+                  position: "absolute",
+                  right: 0,
+                  top: 0,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  paddingLeft: "3%",
+                  paddingRight: "3%",
+                  borderRadius: 18,
+                  width: "22%",
+                  height: "100%",
+                }}
+              >
+                <Button title="" onPress={() => handleSubmit()}></Button>
+              </View>
             </View>
           </View>
         )}
@@ -144,7 +155,6 @@ const styles = StyleSheet.create({
     height: Dimensions.get("window").height,
     width: Dimensions.get("window").width,
     paddingTop: "18%",
-
     alignItems: "center",
   },
   upperText: {

@@ -14,6 +14,7 @@ import { setDoc, doc } from "firebase/firestore";
 import { Formik } from "formik";
 import { AuthContext } from "@/context/authContext";
 import BooklerLogo from "@/assets/images/BooklerLogo";
+import { router } from "expo-router";
 
 export function PasswordConfirm() {
   const { username, email, birthDate } = useContext(AuthContext);
@@ -58,6 +59,7 @@ export function PasswordConfirm() {
             blockedUsers: [],
           })
         );
+        router.push("./home");
       } catch (error: any) {
         console.error(error, "-");
         alert(error.message);
@@ -106,12 +108,11 @@ export function PasswordConfirm() {
                 width: "100%",
                 height: "auto",
                 alignItems: "flex-end",
+                backgroundColor: "red",
+                position: "relative",
               }}
             >
-              <Pressable
-                style={styles.nextButton}
-                onPress={() => handleSubmit()}
-              >
+              <View style={styles.nextButton}>
                 <Text
                   style={{
                     color: "black",
@@ -122,7 +123,23 @@ export function PasswordConfirm() {
                 >
                   Next
                 </Text>
-              </Pressable>
+              </View>
+              <View
+                style={{
+                  position: "absolute",
+                  right: 0,
+                  top: 0,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  paddingLeft: "3%",
+                  paddingRight: "3%",
+                  borderRadius: 18,
+                  width: "22%",
+                  height: "100%",
+                }}
+              >
+                <Button title="" onPress={() => handleSubmit()}></Button>
+              </View>
             </View>
           </View>
         )}

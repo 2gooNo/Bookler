@@ -25,6 +25,7 @@ export function Login({ navigation }: { navigation: any }) {
       .then((userCredential) => {
         const user = userCredential.user;
       })
+
       .catch((error) => {
         console.log(error);
         alert(
@@ -141,7 +142,7 @@ export function Login({ navigation }: { navigation: any }) {
                   Forgot password
                 </Text>
               </Pressable>
-              <Pressable
+              {/* <Pressable
                 style={styles.nextButton}
                 onPress={() => handleSubmit()}
               >
@@ -155,7 +156,12 @@ export function Login({ navigation }: { navigation: any }) {
                 >
                   Next
                 </Text>
-              </Pressable>
+              </Pressable> */}
+              <Button
+                color={"white"}
+                title={"next"}
+                onPress={() => handleSubmit()}
+              ></Button>
             </View>
           </View>
         )}

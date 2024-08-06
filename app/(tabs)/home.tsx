@@ -1,7 +1,8 @@
 import { Pressable, Text, View, StyleSheet, Dimensions } from "react-native";
 import { AuthContext } from "@/context/authContext";
 import { useContext } from "react";
-export default function HomePage() {
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+function PostPage() {
   const { onLogout } = useContext(AuthContext);
   return (
     <View style={styles.allContainer}>
@@ -9,6 +10,23 @@ export default function HomePage() {
         <Text style={{ backgroundColor: "blue" }}> log out </Text>
       </Pressable>
     </View>
+  );
+}
+const HomeStack = createNativeStackNavigator();
+export default function HomeStackScreen() {
+  return (
+    <HomeStack.Navigator>
+      <HomeStack.Screen
+        name="HomePage"
+        component={PostPage} //place for random posts
+        options={{ headerShown: false }}
+      />
+      {/* <HomeStack.Screen
+        name="BookPage"
+        component={} // place for book communities and recommending book
+        options={{ headerShown: false }}
+      /> */}
+    </HomeStack.Navigator>
   );
 }
 

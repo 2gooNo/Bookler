@@ -16,8 +16,12 @@ export default function TabLayout() {
           tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
           headerShown: false,
           tabBarStyle: {
-            display: route.name === "index" ? "none" : "flex",
+            display:
+              route.name === "index" || "createPost" == route.name
+                ? "none"
+                : "flex",
             backgroundColor: "black",
+            paddingTop: 5,
           },
           tabBarButton: ["index"].includes(route.name)
             ? () => {
@@ -45,12 +49,48 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
-          name="explore"
+          name="books"
           options={{
-            title: "Explore",
+            title: "Books",
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon
-                name={focused ? "code-slash" : "code-slash-outline"}
+                name={focused ? "book" : "book-outline"}
+                color={color}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="createPost"
+          options={{
+            title: "Create",
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon
+                name={focused ? "add" : "add-outline"}
+                color={color}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="inbox"
+          options={{
+            title: "Inbox",
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon
+                name={focused ? "mail" : "mail-outline"}
+                color={color}
+              />
+            ),
+          }}
+        />{" "}
+        <Tabs.Screen
+          name="profile"
+          options={{
+            title: "Profile",
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon
+                name={focused ? "person" : "person-outline"}
                 color={color}
               />
             ),

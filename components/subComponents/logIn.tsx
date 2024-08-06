@@ -2,10 +2,11 @@ import BooklerLogo from "@/assets/images/BooklerLogo";
 import NotSeePassIcon from "@/assets/images/NotSeePassIcon";
 import SeePassIcon from "@/assets/images/SeePassIcon";
 import { auth } from "@/common";
+import { AuthContext } from "@/context/authContext";
 import { router } from "expo-router";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { Formik } from "formik";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   Pressable,
   View,
@@ -19,11 +20,13 @@ import {
 import * as Yup from "yup";
 
 export function Login({ navigation }: { navigation: any }) {
+  const { setUser } = useContext(AuthContext);
   const [seePassword, setSeePassword] = useState(true);
   const logInWithPassword = (values: any) => {
     signInWithEmailAndPassword(auth, values.email, values.password)
       .then((userCredential) => {
         const user = userCredential.user;
+        setUser(user);
         router.push("./home");
       })
 

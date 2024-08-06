@@ -79,7 +79,7 @@ export function PasswordConfirm() {
           await signUp(values);
         }}
       >
-        {({ handleChange, handleBlur, handleSubmit, values }) => (
+        {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
           <View
             style={{
               flexDirection: "column",
@@ -89,26 +89,42 @@ export function PasswordConfirm() {
               paddingRight: "10%",
             }}
           >
-            <TextInput
-              placeholder="Password"
-              style={styles.input}
-              onChangeText={handleChange("password")}
-              onBlur={handleBlur("password")}
-              value={values.password}
-            />
-            <TextInput
-              placeholder="Confirm Password"
-              style={styles.input}
-              onChangeText={handleChange("confirmPassword")}
-              onBlur={handleBlur("confirmPassword")}
-              value={values.confirmPassword}
-            />
+            <View style={{ marginBottom: "10%", gap: 10 }}>
+              <TextInput
+                placeholder="Password"
+                style={[
+                  styles.input,
+                  errors.password == undefined || errors.password == ""
+                    ? { borderColor: "rgb(98,101,105)" }
+                    : { borderColor: "red" },
+                ]}
+                onChangeText={handleChange("password")}
+                onBlur={handleBlur("password")}
+                value={values.password}
+              />
+              <Text style={{ color: "red" }}>{errors.password}</Text>
+            </View>
+            <View style={{ marginBottom: "10%", gap: 10 }}>
+              <TextInput
+                placeholder="Confirm Password"
+                style={[
+                  styles.input,
+                  errors.confirmPassword == undefined ||
+                  errors.confirmPassword == ""
+                    ? { borderColor: "rgb(98,101,105)" }
+                    : { borderColor: "red" },
+                ]}
+                onChangeText={handleChange("confirmPassword")}
+                onBlur={handleBlur("confirmPassword")}
+                value={values.confirmPassword}
+              />
+              <Text style={{ color: "red" }}>{errors.confirmPassword}</Text>
+            </View>
             <View
               style={{
                 width: "100%",
                 height: "auto",
                 alignItems: "flex-end",
-                backgroundColor: "red",
                 position: "relative",
               }}
             >
@@ -172,7 +188,6 @@ const styles = StyleSheet.create({
     height: "10%",
   },
   input: {
-    width: "100%",
     height: "auto",
     paddingBottom: "3%",
     borderBottomWidth: 1,
@@ -181,7 +196,6 @@ const styles = StyleSheet.create({
     fontFamily: "Inter",
     fontSize: 18,
     fontWeight: "400",
-    marginBottom: "15%",
     color: "rgb(74,153,233)",
   },
   nextButton: {

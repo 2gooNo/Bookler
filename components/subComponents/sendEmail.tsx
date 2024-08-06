@@ -51,13 +51,21 @@ export function SendEmailToUser() {
               paddingRight: "10%",
             }}
           >
-            <TextInput
-              placeholder="Email"
-              onChangeText={handleChange("email")}
-              onBlur={handleBlur("email")}
-              value={values.email}
-              style={styles.input}
-            />
+            <View style={{ marginBottom: "10%", gap: 10 }}>
+              <TextInput
+                placeholder="Email"
+                onChangeText={handleChange("email")}
+                onBlur={handleBlur("email")}
+                value={values.email}
+                style={[
+                  styles.input,
+                  errors.email == undefined || errors.email == ""
+                    ? { borderColor: "rgb(98,101,105)" }
+                    : { borderColor: "red" },
+                ]}
+              />
+              <Text style={{ color: "red" }}>{errors.email}</Text>
+            </View>
             <View
               style={{
                 width: "100%",
@@ -113,7 +121,6 @@ const styles = StyleSheet.create({
     height: "10%",
   },
   input: {
-    width: "100%",
     height: "auto",
     paddingBottom: "3%",
     borderBottomWidth: 1,
@@ -122,7 +129,6 @@ const styles = StyleSheet.create({
     fontFamily: "Inter",
     fontSize: 18,
     fontWeight: "400",
-    marginBottom: "15%",
     color: "rgb(74,153,233)",
   },
   nextButton: {

@@ -8,14 +8,11 @@ import { onAuthStateChanged } from "firebase/auth";
 type Props = {
   children: React.ReactNode;
 };
-type User = {
-  id: string;
-};
 
 type AuthContextType = {
-  user: User | undefined;
+  user: any | undefined;
   onLogout: () => void;
-  setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
+  setUser: React.Dispatch<React.SetStateAction<any | undefined>>;
   email: string;
   setEmail: React.Dispatch<React.SetStateAction<string>>;
   setUserName: React.Dispatch<React.SetStateAction<string>>;
@@ -35,9 +32,6 @@ export const AuthProvider = ({ children }: Props) => {
   const navigation = useNavigation<any>();
 
   useEffect(() => {
-    console.log(auth);
-    setUser(auth.currentUser);
-
     onAuthStateChanged(auth, (firebaseUser) => {
       if (firebaseUser) {
         setUser(firebaseUser);

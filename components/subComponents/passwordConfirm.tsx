@@ -17,19 +17,11 @@ import BooklerLogo from "@/assets/images/BooklerLogo";
 import { router } from "expo-router";
 
 export function PasswordConfirm() {
-  const { username, email, birthDate } = useContext(AuthContext);
+  const { username, email, birthDate, setUser } = useContext(AuthContext);
   const signUp = async (values: {
     password: string;
     confirmPassword: string;
   }) => {
-    console.log(
-      values.password == values.confirmPassword,
-      username,
-      email,
-      birthDate,
-      values.confirmPassword,
-      values
-    );
     if (values.password == values.confirmPassword && values.password) {
       try {
         const userCredential = await createUserWithEmailAndPassword(
@@ -59,6 +51,7 @@ export function PasswordConfirm() {
             blockedUsers: [],
           })
         );
+        setUser(user);
         router.push("./home");
       } catch (error: any) {
         console.error(error, "-");

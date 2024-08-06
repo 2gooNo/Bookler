@@ -5,6 +5,10 @@ import { SignUp } from "@/components/subComponents/signUp";
 import { LogAndSign } from "@/components/subComponents/LogAndSign";
 import { PasswordConfirm } from "@/components/subComponents/passwordConfirm";
 import { SendEmailToUser } from "@/components/subComponents/sendEmail";
+import { auth } from "@/common";
+import { useEffect, useState } from "react";
+import { router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // import {
 //   collection,
@@ -81,34 +85,51 @@ import { SendEmailToUser } from "@/components/subComponents/sendEmail";
 
 const HomeStack = createNativeStackNavigator();
 export default function HomeStackScreen() {
-  return (
-    <HomeStack.Navigator>
-      <HomeStack.Screen
-        name="LogAndSign"
-        component={LogAndSign} // rreplace with loginAndSignUp page
-        options={{ headerShown: false }}
-      />
-      <HomeStack.Screen
-        name="Login"
-        component={Login} // log in
-        options={{ headerShown: false }}
-      />
-      <HomeStack.Screen
-        name="SignUp"
-        component={SignUp} // sign up page
-        options={{ headerShown: false }}
-      />
-      <HomeStack.Screen
-        name="PasswordConfirm"
-        component={PasswordConfirm} // sign up page
-        options={{ headerShown: false }}
-      />
-      <HomeStack.Screen
-        name="SendEmail"
-        component={SendEmailToUser}
-        options={{ headerShown: false }}
-      />
-    </HomeStack.Navigator>
-  );
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    auth.onAuthStateChanged(
+      (user) => {
+        if (user) {
+          router.push("./home");
+        } else {
+          setLoading(false);
+        }
+      },
+      (error) => {
+        alert(error);
+      }
+    );
+  }, [auth.currentUser]);
+  if (!loading) {
+    return (
+      <HomeStack.Navigator>
+        <HomeStack.Screen
+          name="LogAndSign"
+          component={LogAndSign} // rreplace with loginAndSignUp page
+          options={{ headerShown: false }}
+        />
+        <HomeStack.Screen
+          name="Login"
+          component={Login} // log in
+          options={{ headerShown: false }}
+        />
+        <HomeStack.Screen
+          name="SignUp"
+          component={SignUp} // sign up page
+          options={{ headerShown: false }}
+        />
+        <HomeStack.Screen
+          name="PasswordConfirm"
+          component={PasswordConfirm} // sign up page
+          options={{ headerShown: false }}
+        />
+        <HomeStack.Screen
+          name="SendEmail"
+          component={SendEmailToUser}
+          options={{ headerShown: false }}
+        />
+      </HomeStack.Navigator>
+    );
+  }
 }
 const styles = StyleSheet.create({});

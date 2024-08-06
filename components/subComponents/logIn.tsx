@@ -2,6 +2,7 @@ import BooklerLogo from "@/assets/images/BooklerLogo";
 import NotSeePassIcon from "@/assets/images/NotSeePassIcon";
 import SeePassIcon from "@/assets/images/SeePassIcon";
 import { auth } from "@/common";
+import { router } from "expo-router";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { Formik } from "formik";
 import { useState } from "react";
@@ -20,10 +21,10 @@ import * as Yup from "yup";
 export function Login({ navigation }: { navigation: any }) {
   const [seePassword, setSeePassword] = useState(true);
   const logInWithPassword = (values: any) => {
-    console.log(values);
     signInWithEmailAndPassword(auth, values.email, values.password)
       .then((userCredential) => {
         const user = userCredential.user;
+        router.push("./home");
       })
 
       .catch((error) => {

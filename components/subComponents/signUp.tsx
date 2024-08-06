@@ -7,7 +7,7 @@ import {
   TextInput,
   Button,
 } from "react-native";
-import { ErrorMessage, Formik } from "formik";
+import { Formik } from "formik";
 import { useContext, useState } from "react";
 import { AuthContext } from "@/context/authContext";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -31,6 +31,10 @@ export function SignUp({ navigation }: { navigation: any }) {
         }}
         validationSchema={Yup.object({
           birthDate: Yup.date().required("Birthdate is required"),
+          email: Yup.string()
+            .email("Invalid email")
+            .required("Email is required"),
+          userName: Yup.string().required("Username is required"),
         })}
         onSubmit={(values) => {
           setBirthDate(values?.birthDate);

@@ -60,41 +60,64 @@ export function SignUp({ navigation }: { navigation: any }) {
               paddingRight: "10%",
             }}
           >
-            <Text>{errors.userName}</Text>
-            <TextInput
-              placeholderTextColor="rgb(98,101,105)"
-              placeholder="Name"
-              style={styles.input}
-              onChangeText={handleChange("userName")}
-              onBlur={handleBlur("userName")}
-              value={values.userName}
-            />
-            <TextInput
-              placeholder="Email"
-              placeholderTextColor={"rgb(98,101,105)"}
-              style={styles.input}
-              onChangeText={handleChange("email")}
-              onBlur={handleBlur("email")}
-              value={values.email}
-            />
-            <Pressable
-              style={styles.input}
-              onPress={() => setDatePickerVisibility(true)}
-            >
-              <Text
-                style={{
-                  color:
-                    values?.birthDate == ""
-                      ? `rgb(98,101,105)`
-                      : "rgb(74,153,233)",
-                  fontSize: 18,
-                }}
+            <View style={{ marginBottom: "10%", gap: 10 }}>
+              <TextInput
+                placeholderTextColor="rgb(98,101,105)"
+                placeholder="Name"
+                style={[
+                  styles.input,
+                  errors.userName == undefined || errors.userName == ""
+                    ? { borderColor: "rgb(98,101,105)" }
+                    : { borderColor: "red" },
+                ]}
+                onChangeText={handleChange("userName")}
+                onBlur={handleBlur("userName")}
+                value={values.userName}
+              />
+              <Text style={{ color: "red" }}>{errors.userName}</Text>
+            </View>
+            <View style={{ marginBottom: "10%", gap: 10 }}>
+              <TextInput
+                placeholder="Email"
+                placeholderTextColor={"rgb(98,101,105)"}
+                style={[
+                  styles.input,
+                  errors.email == undefined || errors.email == ""
+                    ? { borderColor: "rgb(98,101,105)" }
+                    : { borderColor: "red" },
+                ]}
+                onChangeText={handleChange("email")}
+                onBlur={handleBlur("email")}
+                value={values.email}
+              />
+              <Text style={{ color: "red" }}>{errors.email}</Text>
+            </View>
+            <View style={{ marginBottom: "10%", gap: 10 }}>
+              <Pressable
+                style={[
+                  styles.input,
+                  errors.birthDate == undefined || errors.birthDate == ""
+                    ? { borderColor: "rgb(98,101,105)" }
+                    : { borderColor: "red" },
+                ]}
+                onPress={() => setDatePickerVisibility(true)}
               >
-                {values?.birthDate == ""
-                  ? "Date of birth"
-                  : new Date(values.birthDate).toLocaleDateString()}
-              </Text>
-            </Pressable>
+                <Text
+                  style={{
+                    color:
+                      values?.birthDate == ""
+                        ? `rgb(98,101,105)`
+                        : "rgb(74,153,233)",
+                    fontSize: 18,
+                  }}
+                >
+                  {values?.birthDate == ""
+                    ? "Date of birth"
+                    : new Date(values.birthDate).toLocaleDateString()}
+                </Text>
+              </Pressable>
+              <Text style={{ color: "red" }}>{errors.birthDate}</Text>
+            </View>
 
             <DateTimePickerModal
               isVisible={isDatePickerVisible}
@@ -110,7 +133,6 @@ export function SignUp({ navigation }: { navigation: any }) {
                 width: "100%",
                 height: "auto",
                 alignItems: "flex-end",
-                backgroundColor: "red",
                 position: "relative",
               }}
             >
@@ -173,7 +195,6 @@ const styles = StyleSheet.create({
     height: "10%",
   },
   input: {
-    width: "100%",
     height: "auto",
     paddingBottom: "3%",
     borderBottomWidth: 1,
@@ -182,7 +203,6 @@ const styles = StyleSheet.create({
     fontFamily: "Inter",
     fontSize: 18,
     fontWeight: "400",
-    marginBottom: "15%",
     color: "rgb(74,153,233)",
   },
   nextButton: {

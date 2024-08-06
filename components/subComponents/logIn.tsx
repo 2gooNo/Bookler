@@ -71,64 +71,87 @@ export function Login({ navigation }: { navigation: any }) {
               paddingRight: "10%",
             }}
           >
-            <TextInput
-              placeholder="Email"
-              onChangeText={handleChange("email")}
-              style={styles.input}
-              onBlur={handleBlur("email")}
-              value={values.email}
-            ></TextInput>
+            <View style={{ marginBottom: "10%", gap: 10 }}>
+              <TextInput
+                placeholder="Email"
+                onChangeText={handleChange("email")}
+                style={[
+                  styles.input,
+                  errors.email == undefined || errors.email == ""
+                    ? { borderColor: "rgb(98,101,105)" }
+                    : { borderColor: "red" },
+                ]}
+                onBlur={handleBlur("email")}
+                value={values.email}
+              ></TextInput>
+              <Text style={{ color: "red" }}>{errors.email}</Text>
+            </View>
             <View
               style={{
-                flexDirection: "row",
                 width: "100%",
                 height: "17%",
-                borderBottomWidth: 1,
-                borderStyle: "solid",
-                borderColor: "rgb(98,101,105)",
                 marginBottom: "15%",
-                justifyContent: "space-between",
-                paddingRight: "5%",
+                gap: 10,
               }}
             >
-              <TextInput
+              <View
                 style={{
-                  height: "auto",
-                  paddingBottom: "3%",
-                  fontFamily: "Inter",
-                  fontSize: 18,
-                  fontWeight: "400",
-                  color: "rgb(74,153,233)",
-                  paddingRight: "20%",
-                }}
-                placeholder="Password"
-                onChangeText={handleChange("password")}
-                onBlur={handleBlur("password")}
-                value={values.password}
-                secureTextEntry={seePassword}
-              ></TextInput>
-              <Pressable
-                onPress={() => setSeePassword(!seePassword)}
-                style={{
-                  width: "10%",
+                  flexDirection: "row",
+                  width: "100%",
                   height: "100%",
+                  borderBottomWidth: 1,
+                  borderStyle: "solid",
+                  borderColor: `${
+                    errors.password == undefined || errors.password == ""
+                      ? "rgb(98,101,105)"
+                      : "red"
+                  }`,
+
+                  justifyContent: "space-between",
+                  paddingRight: "5%",
                 }}
               >
-                {seePassword ? (
-                  <NotSeePassIcon style={styles.passVisibilityIcon} />
-                ) : (
-                  <SeePassIcon style={styles.passVisibilityIcon} />
-                )}
-              </Pressable>
+                <TextInput
+                  style={{
+                    height: "auto",
+                    paddingBottom: "3%",
+                    fontFamily: "Inter",
+                    fontSize: 18,
+                    fontWeight: "400",
+                    color: "rgb(74,153,233)",
+                    paddingRight: "20%",
+                  }}
+                  placeholder="Password"
+                  onChangeText={handleChange("password")}
+                  onBlur={handleBlur("password")}
+                  value={values.password}
+                  secureTextEntry={seePassword}
+                ></TextInput>
+
+                <Pressable
+                  onPress={() => setSeePassword(!seePassword)}
+                  style={{
+                    width: "10%",
+                    height: "100%",
+                  }}
+                >
+                  {seePassword ? (
+                    <NotSeePassIcon style={styles.passVisibilityIcon} />
+                  ) : (
+                    <SeePassIcon style={styles.passVisibilityIcon} />
+                  )}
+                </Pressable>
+              </View>
+              <Text style={{ color: "red" }}>{errors.password}</Text>
             </View>
             <View
               style={{
                 width: "100%",
                 height: "auto",
                 alignItems: "center",
-                flexDirection: "row",
-                justifyContent: "flex-end",
-                gap: 70,
+                flexDirection: "row-reverse",
+                justifyContent: "space-between",
+                position: "relative",
               }}
             >
               <Pressable onPress={() => navigation.navigate("SendEmail")}>
@@ -143,10 +166,7 @@ export function Login({ navigation }: { navigation: any }) {
                   Forgot password
                 </Text>
               </Pressable>
-              {/* <Pressable
-                style={styles.nextButton}
-                onPress={() => handleSubmit()}
-              >
+              <View style={styles.nextButton}>
                 <Text
                   style={{
                     color: "black",
@@ -157,12 +177,23 @@ export function Login({ navigation }: { navigation: any }) {
                 >
                   Next
                 </Text>
-              </Pressable> */}
-              <Button
-                color={"white"}
-                title={"next"}
-                onPress={() => handleSubmit()}
-              ></Button>
+              </View>
+              <View
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  paddingLeft: "3%",
+                  paddingRight: "3%",
+                  borderRadius: 18,
+                  width: "22%",
+                  height: "100%",
+                }}
+              >
+                <Button title="" onPress={() => handleSubmit()}></Button>
+              </View>
             </View>
           </View>
         )}
@@ -204,7 +235,7 @@ const styles = StyleSheet.create({
     fontFamily: "Inter",
     fontSize: 18,
     fontWeight: "400",
-    marginBottom: "15%",
+
     color: "rgb(74,153,233)",
   },
   nextButton: {

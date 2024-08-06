@@ -31,6 +31,10 @@ export function SignUp({ navigation }: { navigation: any }) {
         }}
         validationSchema={Yup.object({
           birthDate: Yup.date().required("Birthdate is required"),
+          email: Yup.string()
+            .email("Invalid email")
+            .required("Email is required"),
+          userName: Yup.string().required("Username is required"),
         })}
         onSubmit={(values) => {
           console.log(values.birthDate);

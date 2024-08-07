@@ -1,5 +1,6 @@
 "use client";
 
+import { EditProfileModal } from "@/components/subComponents/EditProfileModal";
 import { AuthContext } from "@/context/authContext";
 import { useContext, useEffect } from "react";
 import { Dimensions, StyleSheet, View, Text, Pressable } from "react-native";
@@ -48,9 +49,7 @@ export default function Profile() {
         {year}
         {stringMonth()}
       </Text>
-      <Pressable>
-        <Text>Edit profile</Text>
-      </Pressable>
+      <EditProfileModal></EditProfileModal>
     </View>
   );
 }

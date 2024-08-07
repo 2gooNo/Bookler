@@ -5,12 +5,25 @@ import { useNavigation } from "@react-navigation/native";
 import { signOut } from "firebase/auth";
 import { auth } from "@/common";
 import { onAuthStateChanged } from "firebase/auth";
+import { db } from "@/common";
+import {
+  collection,
+  DocumentData,
+  limit,
+  onSnapshot,
+  Query,
+  query,
+  where,
+  getDoc,
+} from "firebase/firestore";
 type Props = {
   children: React.ReactNode;
 };
 
 type AuthContextType = {
   user: any | undefined;
+  userData: any | undefined;
+  setUserData: React.Dispatch<React.SetStateAction<any>>;
   onLogout: () => void;
   setUser: React.Dispatch<React.SetStateAction<any | undefined>>;
   email: string;
@@ -26,6 +39,7 @@ export const AuthContext = React.createContext<AuthContextType>(
 
 export const AuthProvider = ({ children }: Props) => {
   const [user, setUser] = useState<any>(auth.currentUser);
+  const [userData, setUserData] = useState<any>();
   const [email, setEmail] = useState<string>("");
   const [username, setUserName] = useState<string>("");
   const [birthDate, setBirthDate] = useState<Date | undefined | string>();
@@ -35,6 +49,15 @@ export const AuthProvider = ({ children }: Props) => {
     onAuthStateChanged(auth, (firebaseUser) => {
       if (firebaseUser) {
         setUser(firebaseUser);
+        const q = query(
+          collection(db, "users"),
+          where("userId", "==", firebaseUser.uid)
+        );
+        onSnapshot(q, (snapshot) => {
+          const userInfo = snapshot.docs.map((doc) => {
+            setUserData(doc.data());
+          });
+        });
       }
     });
   }, [auth]);
@@ -57,6 +80,8 @@ export const AuthProvider = ({ children }: Props) => {
         setEmail,
         birthDate,
         setBirthDate,
+        userData,
+        setUserData,
       }}
     >
       {children}
@@ -67,3 +92,6 @@ export const AuthProvider = ({ children }: Props) => {
 export const useAuth = (): AuthContextType => {
   return React.useContext(AuthContext);
 };
+function getDocs(q: Query<DocumentData, DocumentData>) {
+  throw new Error("Function not implemented.");
+}

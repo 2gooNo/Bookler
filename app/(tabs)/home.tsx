@@ -17,7 +17,7 @@ export default function HomeStackScreen() {
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen
-        name="HomePage"
+        name="PostPage"
         component={PostPage} //place for random posts
         options={{ headerShown: false }}
       />

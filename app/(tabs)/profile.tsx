@@ -2,12 +2,12 @@
 
 import { AuthContext } from "@/context/authContext";
 import { useContext, useEffect } from "react";
-import { Dimensions, StyleSheet, View, Text } from "react-native";
+import { Dimensions, StyleSheet, View, Text, Pressable } from "react-native";
 
 export default function Profile() {
   const { userData } = useContext(AuthContext);
   useEffect(() => {
-    console.log("user", userData);
+    console.log("hahah", userData);
   }, [userData]);
   const date = userData.birthDate.toDate();
   const formattedDate = date.toLocaleString();
@@ -48,6 +48,9 @@ export default function Profile() {
         {year}
         {stringMonth()}
       </Text>
+      <Pressable>
+        <Text>Edit profile</Text>
+      </Pressable>
     </View>
   );
 }

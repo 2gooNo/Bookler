@@ -23,6 +23,7 @@ export function Login({ navigation }: { navigation: any }) {
   const { setUser } = useContext(AuthContext);
   const [seePassword, setSeePassword] = useState(true);
   const logInWithPassword = (values: any) => {
+    console.log(values);
     signInWithEmailAndPassword(auth, values.email, values.password)
       .then((userCredential) => {
         const user = userCredential.user;

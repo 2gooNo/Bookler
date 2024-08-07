@@ -15,7 +15,7 @@ export default function HashTagSelect() {
   const [tags, setTags] = useState<DocumentData[] | undefined>();
   const [newTag, setNewTag] = useState<string | undefined>();
   const searchTags = (value: string) => {
-    console.log(value.length, "-");
+    console.log(value.length, "-", value);
     if (value.length !== 0) {
       const q = query(
         collection(db, "tags"),
@@ -28,23 +28,22 @@ export default function HashTagSelect() {
         const tagInfo = snapshot.docs.map((doc) => {
           return doc.data();
         });
-        if (tagInfo) {
+        if (tagInfo[0]) {
+          console.log(tagInfo);
           setTags(tagInfo);
         } else {
+          setTags([]);
           setNewTag(value);
         }
       });
+    } else {
+      setTags([]);
+      setNewTag(undefined);
     }
   };
   return (
     <View>
-      <Pressable
-        onPress={() => router.push("./home")}
-        style={{ backgroundColor: "purple" }}
-      >
-        <Text style={{ color: "white" }}>Go back</Text>
-      </Pressable>
-      <View style={{ flexDirection: "row" }}>
+      <View style={{ flexDirection: "row", gap: 10 }}>
         {tags?.map((tag, index) => (
           <Text style={{ color: "white" }}>{tag?.tagName}</Text>
         ))}
@@ -53,6 +52,7 @@ export default function HashTagSelect() {
       <TextInput
         onChangeText={(value) => searchTags(value)}
         style={{ backgroundColor: "green" }}
+        onSubmitEditing={(event) => alert(event.nativeEvent.text)}
       ></TextInput>
     </View>
   );

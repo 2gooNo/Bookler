@@ -6,9 +6,14 @@ import { ExternalLink } from "@/components/ExternalLink";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { Camera } from "@/components/subComponents/Camera";
 
 export default function BookCommunities() {
-  return <View></View>;
+  return (
+    <View
+      style={{ backgroundColor: "green", width: "100%", height: "100%" }}
+    ></View>
+  );
 }
 
 const styles = StyleSheet.create({

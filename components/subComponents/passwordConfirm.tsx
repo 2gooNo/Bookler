@@ -33,22 +33,20 @@ export function PasswordConfirm() {
 
         await updateProfile(user, {
           displayName: username,
-          photoURL:
-            "https://nestcore-my.sharepoint.com/:i:/g/personal/24hp0317_nest_edu_mn/Ee1NrTdhXkdKp0hTe772thIBnSYMc49xd4xomsNuuHkEzQ?e=12hgEQ",
         }).then(() =>
           setDoc(doc(db, "users", user.uid), {
             userId: user.uid,
             userName: username,
             email: email,
             birthDate: birthDate,
-            photoUrl:
-              "https://nestcore-my.sharepoint.com/:i:/g/personal/24hp0317_nest_edu_mn/Ee1NrTdhXkdKp0hTe772thIBnSYMc49xd4xomsNuuHkEzQ?e=12hgEQ",
+            photoUrl: "",
             banner: "",
             favorites: [],
             friends: [],
             books: [],
             description: "",
             blockedUsers: [],
+            defaultLang: "en",
           })
         );
         setUser(user);

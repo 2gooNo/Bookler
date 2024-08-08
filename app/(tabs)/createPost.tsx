@@ -1,5 +1,6 @@
 import { CreatePostButton } from "@/components/subComponents/CreatePostButton";
 import HashTagSelect from "@/components/subComponents/HashTagSelect";
+import { PhotoSelector } from "@/components/subComponents/PhotoSelector";
 import { router } from "expo-router";
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
@@ -19,6 +20,7 @@ export default function CreatePost() {
         selectedTags={selectedTags}
         setSelectedTags={setSelectedTags}
       />
+      <PhotoSelector />
     </View>
   );
 }

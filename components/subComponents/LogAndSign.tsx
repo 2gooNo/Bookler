@@ -2,22 +2,28 @@ import AppleLogo from "@/assets/images/AppleLogo";
 import GoogleLogo from "@/assets/images/GoogleLogo";
 import BooklerLogo from "@/assets/images/BooklerLogo";
 import { View, StyleSheet, Text, Pressable, Dimensions } from "react-native";
+import { homeTranslation } from "@/localization/translate";
+import { useContext } from "react";
+import { LangContext } from "@/context/langContext";
 
 export function LogAndSign({ navigation }: any) {
+  const { lang } = useContext(LangContext);
   return (
     <View style={styles.allContainer}>
       <BooklerLogo style={styles.xLogo} />
-      <Text style={styles.upperText}>
-        See what's happening in the world right now
-      </Text>
+      <Text style={styles.upperText}>{homeTranslation[lang]["upperText"]}</Text>
       <View style={styles.choiseSection}>
         <Pressable style={styles.fastLogButton}>
           <GoogleLogo style={styles.fastLogLogo}></GoogleLogo>
-          <Text style={styles.fastLogText}>Continue with Google</Text>
+          <Text style={styles.fastLogText}>
+            {homeTranslation[lang]["signGoogle"]}
+          </Text>
         </Pressable>
         <Pressable style={styles.fastLogButton}>
           <AppleLogo style={styles.fastLogLogo}></AppleLogo>
-          <Text style={styles.fastLogText}>Continue with Google</Text>
+          <Text style={styles.fastLogText}>
+            {homeTranslation[lang]["signApple"]}
+          </Text>
         </Pressable>
 
         <View style={styles.orContainer}>
@@ -29,12 +35,18 @@ export function LogAndSign({ navigation }: any) {
           onPress={() => navigation.navigate(`SignUp`)}
           style={styles.fastLogButton}
         >
-          <Text style={styles.fastLogText}>Create account</Text>
+          <Text style={styles.fastLogText}>
+            {homeTranslation[lang]["createAccount"]}
+          </Text>
         </Pressable>
         <View style={styles.logInTextContainer}>
-          <Text style={styles.orText}>Have an account already?</Text>
+          <Text style={styles.orText}>
+            {homeTranslation[lang]["alreadyHaveAcc"]}
+          </Text>
           <Pressable onPress={() => navigation.navigate("Login")}>
-            <Text style={styles.logInText}>Log in</Text>
+            <Text style={styles.logInText}>
+              {homeTranslation[lang]["logIn"]}
+            </Text>
           </Pressable>
         </View>
       </View>
@@ -53,10 +65,9 @@ const styles = StyleSheet.create({
   },
   upperText: {
     fontFamily: "Inter",
-    fontSize: 28,
+    fontSize: 27,
     fontWeight: "800",
     color: "white",
-    width: "100%",
     letterSpacing: 1,
     marginBottom: "40%",
   },

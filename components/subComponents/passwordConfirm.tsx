@@ -44,7 +44,7 @@ export function PasswordConfirm() {
             favorites: [],
             friends: [],
             books: [],
-            description: "",
+            bio: "",
             blockedUsers: [],
             defaultLang: "en",
           })

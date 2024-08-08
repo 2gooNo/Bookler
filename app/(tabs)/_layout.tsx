@@ -6,13 +6,19 @@ import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { AuthProvider } from "@/context/authContext";
 import { PostProvider } from "@/context/createPostContext";
+import { LangProvider } from "@/context/langContext";
+
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
   return (
     <AuthProvider>
-      <PostProvider>
+
+ 
+
+      <LangProvider>
+     <PostProvider>
         <Tabs
           screenOptions={({ route }) => ({
             tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
@@ -99,7 +105,11 @@ export default function TabLayout() {
             }}
           />
         </Tabs>
+
       </PostProvider>
+
+      </LangProvider>
+
     </AuthProvider>
   );
 }

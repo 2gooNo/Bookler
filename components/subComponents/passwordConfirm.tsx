@@ -46,6 +46,7 @@ export function PasswordConfirm() {
             books: [],
             bio: "",
             blockedUsers: [],
+            defaultLang: "en",
           })
         );
         setUser(user);

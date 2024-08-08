@@ -18,7 +18,7 @@ export const LangProvider = ({ children }: Props) => {
   const [lang, setLang] = useState<"en" | "mn">("mn");
   useEffect(() => {
     if (!auth?.currentUser) {
-      setLang("en");
+      setLang("mn");
     } else if (auth?.currentUser) {
       setLang(userData?.defaultLang);
     }

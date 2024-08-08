@@ -44,7 +44,8 @@
     "react-native-swipe-gestures": "^1.0.5",
     "react-native-tags-input": "^1.0.10",
     "react-native-web": "~0.19.10",
-    "yup": "^1.4.0"
+    "yup": "^1.4.0",
+    "expo-image-picker": "~15.0.7"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

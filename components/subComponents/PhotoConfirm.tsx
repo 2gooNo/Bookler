@@ -5,7 +5,7 @@ import { Image, Pressable, Text, View } from "react-native";
 import * as MediaLibrary from "expo-media-library";
 
 export function PhotoConfirm({ navigation }: { navigation: any }) {
-  const { takenMedia, setTakenMedia, setImages } = useContext(PostContext);
+  const { takenMedia, setTakenMedia, setMedia } = useContext(PostContext);
   console.log(takenMedia);
   return (
     <View>
@@ -22,7 +22,7 @@ export function PhotoConfirm({ navigation }: { navigation: any }) {
         style={{ backgroundColor: "green", height: 100, width: 100 }}
         onPress={() => {
           navigation.navigate("CreatePost");
-          setImages((prev) => [...prev, takenMedia]);
+          setMedia((prev) => [...prev, takenMedia]);
           MediaLibrary.createAssetAsync(takenMedia);
           setTakenMedia("");
         }}
@@ -36,6 +36,7 @@ export function PhotoConfirm({ navigation }: { navigation: any }) {
         ></Image>
       ) : (
         <Video
+          isMuted={false}
           shouldPlay={true}
           style={{ height: "100%", width: "100%" }}
           source={{ uri: takenMedia }}

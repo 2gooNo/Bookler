@@ -4,16 +4,19 @@ import HashTagSelect from "@/components/subComponents/HashTagSelect";
 import { PhotoSelector } from "@/components/subComponents/PhotoSelector";
 import { PostContext } from "@/context/createPostContext";
 import { router } from "expo-router";
-import { useContext, useState } from "react";
-import { Image, Pressable, Text, View } from "react-native";
+import { useContext } from "react";
+import { Image, Pressable, ScrollView, Text, View } from "react-native";
 import { Camera } from "@/components/subComponents/Camera";
 import { PhotoConfirm } from "@/components/subComponents/PhotoConfirm";
+import { BodyTextInput } from "@/components/subComponents/BodyTextInput";
+import { TitleInput } from "@/components/subComponents/TitleInput";
+import { Video } from "expo-av";
 
 export function CreatePost({ navigation }: { navigation: any }) {
-  const { images } = useContext(PostContext);
+  const { media } = useContext(PostContext);
 
   return (
-    <View style={{ paddingVertical: "30%" }}>
+    <ScrollView style={{ paddingVertical: "30%" }}>
       <Pressable
         onPress={() => router.push("./home")}
         style={{ backgroundColor: "purple" }}
@@ -27,17 +30,35 @@ export function CreatePost({ navigation }: { navigation: any }) {
         <Text style={{ color: "white" }}>Camera</Text>
       </Pressable>
       <View style={{ flexDirection: "row", flexWrap: "wrap", width: "100%" }}>
-        {images.map((image, index) => (
-          <Image
-            style={{ height: 200, width: "50%" }}
-            source={{ uri: image }}
-          ></Image>
+        {media.map((media, index) => (
+          <View
+            style={{ flexDirection: "row", flexWrap: "wrap", width: "100%" }}
+          >
+            {media.slice(-4) == ".jpg" ? (
+              <Image
+                key={index}
+                style={{ height: 200, width: "50%" }}
+                source={{ uri: media }}
+              ></Image>
+            ) : (
+              <Video
+                key={index}
+                // posterSource={ImageProps[media]}
+                shouldPlay={false}
+                isMuted={false}
+                style={{ height: 200, width: "50%" }}
+                source={{ uri: media }}
+              ></Video>
+            )}
+          </View>
         ))}
       </View>
+      <TitleInput />
+      <BodyTextInput />
       <CreatePostButton />
       <HashTagSelect />
       <PhotoSelector />
-    </View>
+    </ScrollView>
   );
 }
 const HomeStack = createNativeStackNavigator();

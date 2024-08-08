@@ -4,7 +4,7 @@ import { useContext, useState } from "react";
 import { PostContext } from "@/context/createPostContext";
 
 export function PhotoSelector() {
-  const { setImages } = useContext(PostContext);
+  const { setMedia } = useContext(PostContext);
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -17,7 +17,7 @@ export function PhotoSelector() {
       console.log(result?.assets);
       result?.assets.forEach((image) => {
         console.log(image);
-        setImages((prev) => [...prev, image.uri]);
+        setMedia((prev) => [...prev, image.uri]);
       });
     }
   };

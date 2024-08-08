@@ -1,10 +1,42 @@
+import UserIcon from "@/assets/images/UserIcon";
 import React, { useState } from "react";
-import { Modal, StyleSheet, Text, Pressable } from "react-native";
+import {
+  Modal,
+  StyleSheet,
+  Text,
+  Pressable,
+  View,
+  TextInput,
+  Image,
+} from "react-native";
 
 import GestureRecognizer from "react-native-swipe-gestures";
+import { getDatabase, ref, set } from "firebase/database";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "@/common";
 
-export function EditProfileModal() {
+export function EditProfileModal(user: any) {
+  console.log("user", user);
+
   const [modalVisible, setModalVisible] = useState(false);
+  const [inputVals, setInputVals] = useState({
+    banner: `${user.user.banner}`,
+    bio: `${user.user.bio}`,
+    photoUrl: `${user.user.photoUrl}`,
+    userName: `${user.user.userName}`,
+  });
+
+  async function updateUser() {
+    const profilePic = doc(db, "users", user.user.userId);
+
+    await updateDoc(profilePic, {
+      // banner: inputVals.banner,
+      bio: inputVals.bio,
+      // photoUrl: inputVals.photoUrl,
+      userName: inputVals.userName,
+    });
+    console.log("done");
+  }
 
   return (
     <GestureRecognizer
@@ -17,17 +49,63 @@ export function EditProfileModal() {
         presentationStyle="formSheet"
         visible={modalVisible}
       >
-        <Pressable
-          style={[styles.button, styles.buttonOpen]}
-          onPress={() => setModalVisible(false)}
-        >
-          <Text style={styles.textStyle}>Close Modal</Text>
-        </Pressable>
-        <Text style={styles.textStyle}>Swipe Down Please</Text>
-        {/* 
-        en dotor edit profile yum hiih 
-        bas dooshoo scroll hiij close hiij boln
-        */}
+        <View style={styles.allContainer}>
+          <Pressable
+            style={[styles.button, styles.buttonOpen]}
+            onPress={() => setModalVisible(false)}
+          >
+            <Text style={styles.textStyle}>Close Modal</Text>
+          </Pressable>
+          <View>
+            {user?.user?.banner == "" ? (
+              <UserIcon
+                style={{
+                  borderBlockColor: "white",
+                  borderWidth: 1,
+                  borderStyle: "solid",
+                }}
+              />
+            ) : (
+              <Image
+                width={10}
+                height={10}
+                style={styles.avatar}
+                source={user?.user?.banner}
+              />
+            )}
+            {user?.user?.photoUrl == "" ? (
+              <UserIcon />
+            ) : (
+              <Image
+                width={10}
+                height={10}
+                style={styles.avatar}
+                source={user?.user?.photoUrl}
+              />
+            )}
+            <TextInput
+              style={styles.informationInputs}
+              placeholder="Name"
+              defaultValue={user.user.userName}
+              onChangeText={(value) =>
+                setInputVals({ ...inputVals, userName: value })
+              }
+              value={inputVals.userName}
+            ></TextInput>
+            <TextInput
+              placeholder="bio"
+              style={styles.informationInputs}
+              defaultValue={user.user.bio}
+              onChangeText={(value) =>
+                setInputVals({ ...inputVals, bio: value })
+              }
+              value={inputVals.bio}
+            ></TextInput>
+          </View>
+          <Pressable onPress={updateUser}>
+            <Text style={{ color: "white" }}>edit that damn user please</Text>
+          </Pressable>
+        </View>
       </Modal>
       <Pressable
         style={[styles.button, styles.buttonOpen]}
@@ -40,6 +118,24 @@ export function EditProfileModal() {
 }
 
 const styles = StyleSheet.create({
+  allContainer: {
+    backgroundColor: "#000000",
+    height: "100%",
+    width: "100%",
+  },
+  informationInputs: {
+    color: "white",
+    borderBlockColor: "white",
+    borderWidth: 1,
+    borderStyle: "solid",
+  },
+  avatar: {
+    width: "10%",
+    height: "10%",
+    borderBlockColor: "white",
+    borderWidth: 1,
+    borderStyle: "solid",
+  },
   centeredView: {
     flex: 1,
     justifyContent: "center",

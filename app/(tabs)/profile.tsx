@@ -1,19 +1,20 @@
 "use client";
 
-import { EditProfileModal } from "@/components/subComponents/EditProfileModal";
+import { EditProfileModal } from "@/components/subComponents/editProfileModal";
 import { AuthContext } from "@/context/authContext";
 import { useContext, useEffect } from "react";
 import { Dimensions, StyleSheet, View, Text, Pressable } from "react-native";
 
 export default function Profile() {
   const { userData } = useContext(AuthContext);
+
   useEffect(() => {
     console.log("hahah", userData);
   }, [userData]);
-  const date = userData.birthDate.toDate();
-  const formattedDate = date.toLocaleString();
-  const year = formattedDate.split(",")[0].split(".")[0];
-  const numberMonth = formattedDate.split(",")[0].split(".")[1];
+  const date = userData?.birthDate.toDate();
+  const formattedDate = date?.toLocaleString();
+  const year = formattedDate?.split(",")[0].split(".")[0];
+  const numberMonth = formattedDate?.split(",")[0]?.split(".")[1];
   function stringMonth() {
     if (numberMonth == "01") {
       return "January";
@@ -44,12 +45,12 @@ export default function Profile() {
 
   return (
     <View style={styles.allContainer}>
-      <Text style={{ color: "white" }}>{userData.userName}</Text>
+      <Text style={{ color: "white" }}>{userData?.userName}</Text>
       <Text style={{ color: "white" }}>
         {year}
         {stringMonth()}
       </Text>
-      <EditProfileModal></EditProfileModal>
+      <EditProfileModal user={userData}></EditProfileModal>
     </View>
   );
 }

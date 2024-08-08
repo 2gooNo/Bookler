@@ -47,6 +47,7 @@ export function PasswordConfirm() {
             bio: "",
             blockedUsers: [],
             defaultLang: "en",
+            colorScheme: "dark",
           })
         );
         setUser(user);

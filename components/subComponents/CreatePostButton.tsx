@@ -7,7 +7,7 @@ import { Pressable, Text } from "react-native";
 
 export function CreatePostButton() {
   const { user } = useContext(AuthContext);
-  const { selectedTags, images, title, bodyText } = useContext(PostContext);
+  const { selectedTags, media, title, bodyText } = useContext(PostContext);
   const CreatePost = async () => {
     try {
       const docRef = await addDoc(collection(db, "posts"), {
@@ -15,7 +15,7 @@ export function CreatePostButton() {
         userRef: doc(db, "users", user.uid),
         bodyText: bodyText,
         title: title,
-        images: images,
+        media: media,
         tags: selectedTags,
       });
 

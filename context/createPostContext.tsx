@@ -9,8 +9,8 @@ type SelectedTagsType = {
 type PostContextType = {
   setSelectedTags: React.Dispatch<React.SetStateAction<SelectedTagsType[]>>;
   selectedTags: SelectedTagsType[];
-  setImages: React.Dispatch<React.SetStateAction<string[]>>;
-  images: string[];
+  setMedia: React.Dispatch<React.SetStateAction<string[]>>;
+  media: string[];
   setTakenMedia: React.Dispatch<React.SetStateAction<string>>;
   takenMedia: string;
   setTitle: React.Dispatch<React.SetStateAction<string>>;
@@ -24,7 +24,7 @@ export const PostContext = React.createContext<PostContextType>(
 
 export const PostProvider = ({ children }: Props) => {
   const [selectedTags, setSelectedTags] = useState<SelectedTagsType[]>([]);
-  const [images, setImages] = useState<string[]>([]);
+  const [media, setMedia] = useState<string[]>([]);
   const [title, setTitle] = useState<string>("");
   const [bodyText, setBodyText] = useState<string>("");
   const [takenMedia, setTakenMedia] = useState<string>("");
@@ -33,8 +33,8 @@ export const PostProvider = ({ children }: Props) => {
       value={{
         selectedTags,
         setSelectedTags,
-        images,
-        setImages,
+        media,
+        setMedia,
         setTakenMedia,
         takenMedia,
         title,

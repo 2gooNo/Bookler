@@ -18,12 +18,12 @@ export function SendEmailToUser() {
     console.log(values);
     sendPasswordResetEmail(auth, values.email)
       .then(() => {
-        alert("an email has been sent to this email ");
+        alert("An email has been sent to this email ");
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        alert("this email is invalid");
+        alert("This email is invalid");
       });
   };
   return (
@@ -53,6 +53,7 @@ export function SendEmailToUser() {
           >
             <View style={{ marginBottom: "10%", gap: 10 }}>
               <TextInput
+                keyboardType="email-address"
                 placeholder="Email"
                 onChangeText={handleChange("email")}
                 onBlur={handleBlur("email")}

@@ -17,6 +17,10 @@ type PostContextType = {
   title: string;
   setBodyText: React.Dispatch<React.SetStateAction<string>>;
   bodyText: string;
+  setLinkUrl: React.Dispatch<React.SetStateAction<string>>;
+  linkUrl: string;
+  setLinkComponent: React.Dispatch<React.SetStateAction<boolean>>;
+  linkComponent: boolean;
 };
 export const PostContext = React.createContext<PostContextType>(
   {} as PostContextType
@@ -28,6 +32,8 @@ export const PostProvider = ({ children }: Props) => {
   const [title, setTitle] = useState<string>("");
   const [bodyText, setBodyText] = useState<string>("");
   const [takenMedia, setTakenMedia] = useState<string>("");
+  const [linkUrl, setLinkUrl] = useState<string>("");
+  const [linkComponent, setLinkComponent] = useState<boolean>(false);
   return (
     <PostContext.Provider
       value={{
@@ -41,6 +47,10 @@ export const PostProvider = ({ children }: Props) => {
         setTitle,
         bodyText,
         setBodyText,
+        linkUrl,
+        setLinkUrl,
+        linkComponent,
+        setLinkComponent,
       }}
     >
       {children}

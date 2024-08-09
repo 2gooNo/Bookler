@@ -4,7 +4,7 @@ import { Login } from "@/components/subComponents/logIn";
 import { SignUp } from "@/components/subComponents/signUp";
 import { LogAndSign } from "@/components/subComponents/LogAndSign";
 import { PasswordConfirm } from "@/components/subComponents/passwordConfirm";
-import { SendEmailToUser } from "@/components/subComponents/sendEmail";
+import { SendEmailToUser } from "@/components/subComponents/ForgotPassword";
 import { auth } from "@/common";
 import { useEffect, useState } from "react";
 import { router } from "expo-router";

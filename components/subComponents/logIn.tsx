@@ -77,6 +77,7 @@ export function Login({ navigation }: { navigation: any }) {
           >
             <View style={{ marginBottom: "10%", gap: 10 }}>
               <TextInput
+                keyboardType="email-address"
                 placeholder="Email"
                 onChangeText={handleChange("email")}
                 style={[

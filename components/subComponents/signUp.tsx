@@ -78,6 +78,7 @@ export function SignUp({ navigation }: { navigation: any }) {
             </View>
             <View style={{ marginBottom: "10%", gap: 10 }}>
               <TextInput
+                keyboardType="email-address"
                 placeholder="Email"
                 placeholderTextColor={"rgb(98,101,105)"}
                 style={[

@@ -1,6 +1,6 @@
 import { Pressable, Text, View, StyleSheet, Dimensions } from "react-native";
 import { AuthContext } from "@/context/authContext";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { homeTranslation } from "@/localization/translate";
 import { LangContext } from "@/context/langContext";
@@ -12,7 +12,7 @@ function PostPage() {
     <View style={styles.allContainer}>
       <Pressable onPress={() => onLogout()}>
         <Text style={{ backgroundColor: "blue" }}>
-          {homeTranslation[lang]["logOutBtn"]}
+          {homeTranslation?.[lang]?.["logOutBtn"]}
         </Text>
       </Pressable>
     </View>

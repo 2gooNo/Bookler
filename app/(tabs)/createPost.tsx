@@ -13,8 +13,11 @@ import { TitleInput } from "@/components/subComponents/TitleInput";
 import { SelectedMedia } from "@/components/subComponents/SelectedMedia";
 import { CreateDraftButton } from "@/components/subComponents/CreateDraftButton";
 import { LinkUrl } from "@/components/subComponents/LinkUrl";
+import { LangContext } from "@/context/langContext";
+import { homeTranslation } from "@/localization/translate";
 
 export function CreatePost({ navigation }: { navigation: any }) {
+  const { lang } = useContext(LangContext);
   const { media, linkComponent, setLinkComponent } = useContext(PostContext);
   return (
     <View style={{ paddingVertical: "30%" }}>
@@ -23,7 +26,9 @@ export function CreatePost({ navigation }: { navigation: any }) {
           onPress={() => router.push("./home")}
           style={{ backgroundColor: "purple" }}
         >
-          <Text style={{ color: "white" }}>Go back</Text>
+          <Text style={{ color: "white" }}>
+            {homeTranslation[lang]["goBack"]}
+          </Text>
         </Pressable>
         <CreatePostButton />
         <CreateDraftButton />

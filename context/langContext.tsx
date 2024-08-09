@@ -1,6 +1,7 @@
 import { auth } from "@/common";
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "./authContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 type Props = {
   children: React.ReactNode;
 };
@@ -19,8 +20,10 @@ export const LangProvider = ({ children }: Props) => {
   useEffect(() => {
     if (!auth?.currentUser) {
       setLang("mn");
+      AsyncStorage.setItem("language", "mn");
     } else if (auth?.currentUser) {
       setLang(userData?.defaultLang);
+      AsyncStorage.setItem("language", userData?.defaultLang);
     }
   }, [auth]);
 

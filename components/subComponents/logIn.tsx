@@ -198,8 +198,8 @@ export function Login({ navigation }: { navigation: any }) {
                   paddingLeft: "3%",
                   paddingRight: "3%",
                   borderRadius: 18,
-                  width: "22%",
                   height: "100%",
+                  width: "47%",
                 }}
               >
                 <Button title="" onPress={() => handleSubmit()}></Button>
@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
     paddingTop: "2%",
     paddingLeft: "5%",
     paddingRight: "5%",
-    width: "47%",
+
     borderRadius: 18,
   },
   passVisibilityIcon: {

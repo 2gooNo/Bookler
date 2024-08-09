@@ -15,9 +15,12 @@ import { Formik } from "formik";
 import { AuthContext } from "@/context/authContext";
 import BooklerLogo from "@/assets/images/BooklerLogo";
 import { router } from "expo-router";
+import { homeTranslation } from "@/localization/translate";
+import { LangContext } from "@/context/langContext";
 
 export function PasswordConfirm() {
   const { username, email, birthDate, setUser } = useContext(AuthContext);
+  const { lang } = useContext(LangContext);
   const signUp = async (values: {
     password: string;
     confirmPassword: string;
@@ -57,13 +60,15 @@ export function PasswordConfirm() {
         alert(error.message);
       }
     } else {
-      alert("Passwords do not match");
+      alert(`${homeTranslation[lang]["passwordsDoNotMatch"]}`);
     }
   };
   return (
     <View style={styles.allContainer}>
       <BooklerLogo style={styles.xLogo} />
-      <Text style={styles.upperText}>Confirm your password</Text>
+      <Text style={styles.upperText}>
+        {homeTranslation[lang]["confirmYourPassword"]}
+      </Text>
       <Formik
         initialValues={{ password: "", confirmPassword: "" }}
         onSubmit={async (values, { setSubmitting }) => {
@@ -83,7 +88,7 @@ export function PasswordConfirm() {
           >
             <View style={{ marginBottom: "10%", gap: 10 }}>
               <TextInput
-                placeholder="Password"
+                placeholder={homeTranslation[lang]["password"]}
                 style={[
                   styles.input,
                   errors.password == undefined || errors.password == ""
@@ -98,7 +103,7 @@ export function PasswordConfirm() {
             </View>
             <View style={{ marginBottom: "10%", gap: 10 }}>
               <TextInput
-                placeholder="Confirm Password"
+                placeholder={homeTranslation[lang]["confirmPassword"]}
                 style={[
                   styles.input,
                   errors.confirmPassword == undefined ||
@@ -129,7 +134,7 @@ export function PasswordConfirm() {
                     fontWeight: "600",
                   }}
                 >
-                  Next
+                  {homeTranslation[lang]["next"]}
                 </Text>
               </View>
               <View
@@ -142,7 +147,7 @@ export function PasswordConfirm() {
                   paddingLeft: "3%",
                   paddingRight: "3%",
                   borderRadius: 18,
-                  width: "22%",
+                  width: "47%",
                   height: "100%",
                 }}
               >

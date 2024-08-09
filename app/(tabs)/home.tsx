@@ -7,7 +7,6 @@ import { LangContext } from "@/context/langContext";
 function PostPage() {
   const { onLogout } = useContext(AuthContext);
   const { lang } = useContext(LangContext);
-  console.log(lang);
 
   return (
     <View style={styles.allContainer}>

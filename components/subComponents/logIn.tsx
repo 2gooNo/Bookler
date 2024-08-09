@@ -3,6 +3,8 @@ import NotSeePassIcon from "@/assets/images/NotSeePassIcon";
 import SeePassIcon from "@/assets/images/SeePassIcon";
 import { auth } from "@/common";
 import { AuthContext } from "@/context/authContext";
+import { LangContext } from "@/context/langContext";
+import { homeTranslation } from "@/localization/translate";
 import { router } from "expo-router";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { Formik } from "formik";
@@ -21,6 +23,7 @@ import * as Yup from "yup";
 
 export function Login({ navigation }: { navigation: any }) {
   const { setUser } = useContext(AuthContext);
+  const { lang } = useContext(LangContext);
   const [seePassword, setSeePassword] = useState(true);
   const logInWithPassword = (values: any) => {
     console.log(values);
@@ -34,7 +37,7 @@ export function Login({ navigation }: { navigation: any }) {
       .catch((error) => {
         console.log(error);
         alert(
-          "Either your password, email is wrong, Or this account does not exist "
+          `${homeTranslation[lang]["eitherYourPasswordEmailIsWrongOrThisAccountDoesNotExist"]}`
         );
         const errorCode = error.code;
         const errorMessage = error.message;
@@ -44,15 +47,17 @@ export function Login({ navigation }: { navigation: any }) {
     <View style={styles.allContainer}>
       <BooklerLogo style={styles.xLogo} />
       <Text style={styles.upperText}>
-        To get started, first enter your email and password
+        {homeTranslation[lang]["toGetStartedFirstEnterYourEmailAndPassword"]}
       </Text>
       <Formik
         initialValues={{ email: "", password: "" }}
         validationSchema={Yup.object({
           email: Yup.string()
-            .email("Invalid email")
-            .required("Email is required"),
-          password: Yup.string().required("Password is required"),
+            .email(`${homeTranslation[lang]["invalidEmail"]}`)
+            .required(`${homeTranslation[lang]["emailIsRequired"]}`),
+          password: Yup.string().required(
+            `${homeTranslation[lang]["passwordIsRequired"]}`
+          ),
         })}
         onSubmit={(values) => {
           logInWithPassword(values);
@@ -78,7 +83,7 @@ export function Login({ navigation }: { navigation: any }) {
             <View style={{ marginBottom: "10%", gap: 10 }}>
               <TextInput
                 keyboardType="email-address"
-                placeholder="Email"
+                placeholder={homeTranslation[lang]["email"]}
                 onChangeText={handleChange("email")}
                 style={[
                   styles.input,
@@ -126,7 +131,7 @@ export function Login({ navigation }: { navigation: any }) {
                     color: "rgb(74,153,233)",
                     paddingRight: "20%",
                   }}
-                  placeholder="Password"
+                  placeholder={homeTranslation[lang]["password"]}
                   onChangeText={handleChange("password")}
                   onBlur={handleBlur("password")}
                   value={values.password}
@@ -168,7 +173,7 @@ export function Login({ navigation }: { navigation: any }) {
                     fontWeight: "400",
                   }}
                 >
-                  Forgot password
+                  {homeTranslation[lang]["forgotPassword"]}
                 </Text>
               </Pressable>
               <View style={styles.nextButton}>
@@ -180,7 +185,7 @@ export function Login({ navigation }: { navigation: any }) {
                     fontWeight: "600",
                   }}
                 >
-                  Next
+                  {homeTranslation[lang]["next"]}
                 </Text>
               </View>
               <View
@@ -249,7 +254,7 @@ const styles = StyleSheet.create({
     paddingTop: "2%",
     paddingLeft: "5%",
     paddingRight: "5%",
-    width: "22%",
+    width: "47%",
     borderRadius: 18,
   },
   passVisibilityIcon: {

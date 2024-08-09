@@ -17,6 +17,9 @@ export default function TabLayout() {
         <PostProvider>
           <Tabs
             screenOptions={({ route }) => ({
+              tabBarLabel: () => {
+                return null;
+              },
               tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
               headerShown: false,
               tabBarStyle: {
@@ -72,6 +75,7 @@ export default function TabLayout() {
                   <TabBarIcon
                     name={focused ? "add" : "add-outline"}
                     color={color}
+                    size={40}
                   />
                 ),
               }}

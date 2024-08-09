@@ -13,35 +13,62 @@ import {
 } from "firebase/firestore";
 import { useContext, useState } from "react";
 import { Platform, Pressable, Text } from "react-native";
-import { MediaUploader } from "./ImageUploader";
+import { mediaUploader } from "../../utils/image-uploader";
+import { firebaseActions } from "@/utils/custom-snapshots";
 
 export function CreatePostButton() {
   const { user } = useContext(AuthContext);
+  const [isUploaded, setIsUploaded] = useState<boolean>(false);
   const { selectedTags, media, title, bodyText, linkUrl } =
     useContext(PostContext);
   const [tags, setTags] = useState<any>([]);
   const CreatePost = async () => {
     try {
-      // -----
-      // selectedTags.forEach((tag) => {
-      //   const q = query(
-      //     collection(db, "tags"),
-      //     where("tagName", "==", tag.tagName),
-      //     limit(1)
-      //   );
-      //   onSnapshot(q, (snapshot) => {
-      //     const tagInfo = snapshot.docs.map((doc) => ({
-      //       id: doc.id,
-      //       tagName: doc.data().tagName,
-      //     }));
+      // await Promise.resolve(
+      //   selectedTags.map(async (tag) => {
+      //     const q = query(
+      //       collection(db, "tags"),
+      //       where("tagName", "==", tag.tagName),
+      //       limit(1)
+      //     );
+      //     console.log(q);
+      //     const tagInfo = await firebaseActions(q);
+      //     console.log(tagInfo, "===");
       //     if (tagInfo?.[0]?.id) {
       //       setTags((prev: any) => [...prev, tagInfo[0]]);
       //       console.log("push id");
-      //     } else CreateNewTag(tag.tagName);
-      //   });
-      // });
-      // -----
-      const uploadedMedia = await MediaUploader(media);
+      //       setIsUploaded(true);
+      //     } else {
+      //       await CreateNewTag(tag.tagName);
+      //     }
+      //     return;
+      //   })
+      // );
+
+      selectedTags.forEach(async (tag, index) => {
+        const q = query(
+          collection(db, "tags"),
+          where("tagName", "==", tag.tagName),
+          limit(1)
+        );
+
+        onSnapshot(q, async (snapshot) => {
+          const tagInfo = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            tagName: doc.data().tagName,
+          }));
+
+          if (tagInfo?.[0]?.id) {
+            setTags((prev: any) => [...prev, tagInfo[0]]);
+
+            setIsUploaded(true);
+          } else {
+            await CreateNewTag(tag.tagName);
+          }
+        });
+      });
+      console.log(tags, "---");
+      const uploadedMedia = await mediaUploader(media);
       console.log(uploadedMedia, "-");
 
       // -----
@@ -69,7 +96,7 @@ export function CreatePostButton() {
       // alert("Subcollection document written with ID: ");
     } catch (err) {}
   };
-  console.log(tags, "---");
+
   const CreateNewTag = async (tagName: string) => {
     const docRef = await addDoc(collection(db, "tags"), {
       tagName: tagName,

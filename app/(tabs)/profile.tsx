@@ -4,10 +4,14 @@ import { EditProfileModal } from "@/components/subComponents/editProfileModal";
 import { AuthContext } from "@/context/authContext";
 import { useContext, useEffect, useState } from "react";
 import { Dimensions, StyleSheet, View, Text, Pressable } from "react-native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useNavigation } from "expo-router";
+import { useRoute } from "@react-navigation/native";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/common";
 
-export default function Profile() {
+
+export function Profile({ navigation }: { navigation: any }) {
   const { userData } = useContext(AuthContext);
   const [isEn, setIsEn] = useState(
     userData?.defaultLang == "en" ? true : false
@@ -60,10 +64,17 @@ export default function Profile() {
         {year}
         {stringMonth()}
       </Text>
+
+      <Pressable
+        onPress={() => navigation.navigate("EditProfile")}
+        style={{ backgroundColor: "green", height: 10, width: 100 }}
+      ></Pressable>
+   
+
       <Pressable onPress={(() => setIsEn(!isEn), updateUser())}>
         <Text style={{ color: "white" }}>{isEn ? "en" : "mn"}</Text>
       </Pressable>
-      <EditProfileModal user={userData}></EditProfileModal>
+
     </View>
   );
 }
@@ -118,3 +129,40 @@ const styles = StyleSheet.create({
     color: "white",
   },
 });
+
+const HomeStack = createNativeStackNavigator();
+
+export default function HomeStackScreen() {
+  const navigation = useNavigation();
+  const route = useRoute();
+
+  useEffect(() => {
+    const routeIndex = navigation?.getState()?.routes?.[5].state?.index;
+    const shouldHideTabBar = routeIndex === 1;
+    navigation.setOptions({
+      tabBarStyle: {
+        display: shouldHideTabBar ? "none" : "flex",
+      },
+    });
+  }, [navigation, route]);
+  return (
+    <HomeStack.Navigator>
+      <HomeStack.Screen
+        name="Profile"
+        component={Profile}
+        options={{ headerShown: false }}
+      />
+
+      <HomeStack.Screen
+        name="EditProfile"
+        component={EditProfileModal}
+        options={{
+          animation: "slide_from_bottom",
+          headerShown: false,
+          gestureDirection: "vertical",
+          presentation: "modal",
+        }}
+      />
+    </HomeStack.Navigator>
+  );
+}

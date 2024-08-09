@@ -2,15 +2,16 @@
 
 import { EditProfileModal } from "@/components/subComponents/editProfileModal";
 import { AuthContext } from "@/context/authContext";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Dimensions, StyleSheet, View, Text, Pressable } from "react-native";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "@/common";
 
 export default function Profile() {
   const { userData } = useContext(AuthContext);
-
-  useEffect(() => {
-    console.log("hahah", userData);
-  }, [userData]);
+  const [isEn, setIsEn] = useState(
+    userData?.defaultLang == "en" ? true : false
+  );
   const date = userData?.birthDate.toDate();
   const formattedDate = date?.toLocaleString();
   const year = formattedDate?.split(",")[0].split(".")[0];
@@ -43,6 +44,15 @@ export default function Profile() {
     }
   }
 
+  async function updateUser() {
+    const profilePic = doc(db, "users", userData?.userId);
+
+    await updateDoc(profilePic, {
+      defaultLang: isEn ? "en" : "mn",
+    });
+    console.log("done");
+  }
+
   return (
     <View style={styles.allContainer}>
       <Text style={{ color: "white" }}>{userData?.userName}</Text>
@@ -50,6 +60,9 @@ export default function Profile() {
         {year}
         {stringMonth()}
       </Text>
+      <Pressable onPress={(() => setIsEn(!isEn), updateUser())}>
+        <Text style={{ color: "white" }}>{isEn ? "en" : "mn"}</Text>
+      </Pressable>
       <EditProfileModal user={userData}></EditProfileModal>
     </View>
   );

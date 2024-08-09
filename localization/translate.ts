@@ -25,8 +25,12 @@ export const homeTranslation = {
       "Эхлэхийн тулд эхлээд имэйл болон нууц үгээ оруулна уу",
     passwordIsRequired: "Нууц үг шаардлагатай",
     forgotPassword: "Нууц үгээ мартсан",
-    home: "Нүүр",
-    books: "Номнууд",
+    goBack: "Буцах",
+    post: "Пост",
+    draft: "Ноороглох",
+    // home: "Нүүр",
+    // books: "Номнууд",
+    // create:""
   },
   en: {
     logOutBtn: "Log out",
@@ -54,7 +58,11 @@ export const homeTranslation = {
       "To get started, first enter your email and password",
     passwordIsRequired: "Password is required",
     forgotPassword: "Forgot password",
-    home: "Home",
-    books: "Books",
+    goBack: "Go back",
+    post: "Post",
+    draft: "Draft",
+    // home: "Home",
+    // books: "Books",
+    // create:"Create"
   },
 };

@@ -14,8 +14,11 @@ import {
 import { useContext, useState } from "react";
 import { Platform, Pressable, Text } from "react-native";
 import { MediaUploader } from "./ImageUploader";
+import { homeTranslation } from "@/localization/translate";
+import { LangContext } from "@/context/langContext";
 
 export function CreatePostButton() {
+  const { lang } = useContext(LangContext);
   const { user } = useContext(AuthContext);
   const { selectedTags, media, title, bodyText, linkUrl } =
     useContext(PostContext);
@@ -78,7 +81,7 @@ export function CreatePostButton() {
   };
   return (
     <Pressable onPress={() => CreatePost()} style={{ backgroundColor: "pink" }}>
-      <Text>Post</Text>
+      <Text>{homeTranslation[lang]["post"]}</Text>
     </Pressable>
   );
 }

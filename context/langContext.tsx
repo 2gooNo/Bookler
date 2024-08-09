@@ -20,10 +20,8 @@ export const LangProvider = ({ children }: Props) => {
   useEffect(() => {
     if (!auth?.currentUser) {
       setLang("mn");
-      AsyncStorage.setItem("language", "mn");
     } else if (auth?.currentUser) {
       setLang(userData?.defaultLang);
-      AsyncStorage.setItem("language", userData?.defaultLang);
     }
   }, [auth]);
 

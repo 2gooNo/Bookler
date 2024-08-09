@@ -5,60 +5,58 @@ import { PhotoSelector } from "@/components/subComponents/PhotoSelector";
 import { PostContext } from "@/context/createPostContext";
 import { router } from "expo-router";
 import { useContext } from "react";
-import { Image, Pressable, ScrollView, Text, View } from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import { Camera } from "@/components/subComponents/Camera";
 import { PhotoConfirm } from "@/components/subComponents/PhotoConfirm";
 import { BodyTextInput } from "@/components/subComponents/BodyTextInput";
 import { TitleInput } from "@/components/subComponents/TitleInput";
-import { Video } from "expo-av";
+import { SelectedMedia } from "@/components/subComponents/SelectedMedia";
+import { CreateDraftButton } from "@/components/subComponents/CreateDraftButton";
+import { LinkUrl } from "@/components/subComponents/LinkUrl";
 
 export function CreatePost({ navigation }: { navigation: any }) {
-  const { media } = useContext(PostContext);
-
+  const { media, linkComponent, setLinkComponent } = useContext(PostContext);
   return (
-    <ScrollView style={{ paddingVertical: "30%" }}>
-      <Pressable
-        onPress={() => router.push("./home")}
-        style={{ backgroundColor: "purple" }}
-      >
-        <Text style={{ color: "white" }}>Go back</Text>
-      </Pressable>
-      <Pressable
-        onPress={() => navigation.navigate("Camera")}
-        style={{ backgroundColor: "purple", height: 100 }}
-      >
-        <Text style={{ color: "white" }}>Camera</Text>
-      </Pressable>
-      <View style={{ flexDirection: "row", flexWrap: "wrap", width: "100%" }}>
-        {media.map((media, index) => (
-          <View
-            style={{ flexDirection: "row", flexWrap: "wrap", width: "100%" }}
-          >
-            {media.slice(-4) == ".jpg" ? (
-              <Image
-                key={index}
-                style={{ height: 200, width: "50%" }}
-                source={{ uri: media }}
-              ></Image>
-            ) : (
-              <Video
-                key={index}
-                // posterSource={ImageProps[media]}
-                shouldPlay={false}
-                isMuted={false}
-                style={{ height: 200, width: "50%" }}
-                source={{ uri: media }}
-              ></Video>
-            )}
-          </View>
-        ))}
+    <View style={{ paddingVertical: "30%" }}>
+      <View style={{ flexDirection: "row" }}>
+        <Pressable
+          onPress={() => router.push("./home")}
+          style={{ backgroundColor: "purple" }}
+        >
+          <Text style={{ color: "white" }}>Go back</Text>
+        </Pressable>
+        <CreatePostButton />
+        <CreateDraftButton />
       </View>
-      <TitleInput />
-      <BodyTextInput />
-      <CreatePostButton />
-      <HashTagSelect />
-      <PhotoSelector />
-    </ScrollView>
+      <ScrollView horizontal={false}>
+        <TitleInput />
+        {linkComponent && <LinkUrl />}
+        <View style={{ flexDirection: "row", flexWrap: "wrap", width: "100%" }}>
+          {media.map((media, index) => (
+            <SelectedMedia value={media} key={index} />
+          ))}
+        </View>
+        <BodyTextInput />
+      </ScrollView>
+      <View style={{ flexDirection: "column" }}>
+        <HashTagSelect />
+        <View style={{ flexDirection: "row" }}>
+          <PhotoSelector />
+          <Pressable
+            onPress={() => navigation.navigate("Camera")}
+            style={{ backgroundColor: "purple", height: 100 }}
+          >
+            <Text style={{ color: "white" }}>Camera</Text>
+          </Pressable>
+          <Pressable
+            onPress={() => setLinkComponent(!linkComponent)}
+            style={{ backgroundColor: "purple", height: 100 }}
+          >
+            <Text style={{ color: "white" }}>Link</Text>
+          </Pressable>
+        </View>
+      </View>
+    </View>
   );
 }
 const HomeStack = createNativeStackNavigator();

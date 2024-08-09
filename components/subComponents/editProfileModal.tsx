@@ -11,7 +11,6 @@ import {
 } from "react-native";
 
 import GestureRecognizer from "react-native-swipe-gestures";
-import { getDatabase, ref, set } from "firebase/database";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/common";
 

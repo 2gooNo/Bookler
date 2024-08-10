@@ -10,12 +10,12 @@ import { useRoute } from "@react-navigation/native";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/common";
 
-
 export function Profile({ navigation }: { navigation: any }) {
   const { userData } = useContext(AuthContext);
   const [isEn, setIsEn] = useState(
     userData?.defaultLang == "en" ? true : false
   );
+  const [wait, setWait] = useState<boolean>();
   const date = userData?.birthDate.toDate();
   const formattedDate = date?.toLocaleString();
   const year = formattedDate?.split(",")[0].split(".")[0];
@@ -47,13 +47,36 @@ export function Profile({ navigation }: { navigation: any }) {
       return "December";
     }
   }
+  async function waitState() {
+    // console.log("working");
+
+    // const prevState = isEn;
+    console.log("1");
+
+    setIsEn(!isEn);
+    setWait(true);
+
+    // if (!prevState == isEn) {
+    //   console.log("ajilsan");
+
+    //   updateUser();
+    // }
+    console.log("3");
+  }
+  // useEffect(() => {
+  //   updateUser();
+  // }, [wait]);
 
   async function updateUser() {
+    console.log("zuvshuursun");
+
     const profilePic = doc(db, "users", userData?.userId);
+    console.log("4");
 
     await updateDoc(profilePic, {
-      defaultLang: isEn ? "en" : "mn",
+      defaultLang: !isEn ? "en" : "mn",
     });
+    setIsEn(!isEn);
     console.log("done");
   }
 
@@ -69,11 +92,9 @@ export function Profile({ navigation }: { navigation: any }) {
         onPress={() => navigation.navigate("EditProfile")}
         style={{ backgroundColor: "green", height: 10, width: 100 }}
       ></Pressable>
-      <Pressable onPress={(() => setIsEn(!isEn), updateUser())}>
-
+      <Pressable onPress={updateUser}>
         <Text style={{ color: "white" }}>{isEn ? "en" : "mn"}</Text>
       </Pressable>
-
     </View>
   );
 }

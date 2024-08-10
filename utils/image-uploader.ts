@@ -1,7 +1,7 @@
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "@/common";
 
-export const MediaUploader = async (
+export const mediaUploader = async (
   media: string[]
 ): Promise<{ url: string; type: string }[]> => {
   try {

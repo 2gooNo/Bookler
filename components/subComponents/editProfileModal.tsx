@@ -1,5 +1,5 @@
 import UserIcon from "@/assets/images/UserIcon";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Modal,
   StyleSheet,
@@ -13,20 +13,21 @@ import {
 import GestureRecognizer from "react-native-swipe-gestures";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/common";
+import { AuthContext } from "@/context/authContext";
 
-export function EditProfileModal(user: any) {
-  console.log("user", user);
+export function EditProfileModal() {
+  const { userData } = useContext(AuthContext);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [inputVals, setInputVals] = useState({
-    banner: `${user.user.banner}`,
-    bio: `${user.user.bio}`,
-    photoUrl: `${user.user.photoUrl}`,
-    userName: `${user.user.userName}`,
+    banner: `${userData?.banner}`,
+    bio: `${userData?.bio}`,
+    photoUrl: `${userData?.photoUrl}`,
+    userName: `${userData?.userName}`,
   });
 
   async function updateUser() {
-    const profilePic = doc(db, "users", user.user.userId);
+    const profilePic = doc(db, "users", userData.userId);
 
     await updateDoc(profilePic, {
       // banner: inputVals.banner,
@@ -38,81 +39,79 @@ export function EditProfileModal(user: any) {
   }
 
   return (
-    <GestureRecognizer
-      style={{ flex: 1 }}
-      // onSwipeUp={() => setModalVisible(true)}
-      onSwipeDown={() => setModalVisible(false)}
-    >
-      <Modal
-        animationType="slide"
-        presentationStyle="formSheet"
-        visible={modalVisible}
-      >
-        <View style={styles.allContainer}>
-          <Pressable
-            style={[styles.button, styles.buttonOpen]}
-            onPress={() => setModalVisible(false)}
-          >
-            <Text style={styles.textStyle}>Close Modal</Text>
-          </Pressable>
-          <View>
-            {user?.user?.banner == "" ? (
-              <UserIcon
-                style={{
-                  borderBlockColor: "white",
-                  borderWidth: 1,
-                  borderStyle: "solid",
-                }}
-              />
-            ) : (
-              <Image
-                width={10}
-                height={10}
-                style={styles.avatar}
-                source={user?.user?.banner}
-              />
-            )}
-            {user?.user?.photoUrl == "" ? (
-              <UserIcon />
-            ) : (
-              <Image
-                width={10}
-                height={10}
-                style={styles.avatar}
-                source={user?.user?.photoUrl}
-              />
-            )}
-            <TextInput
-              style={styles.informationInputs}
-              placeholder="Name"
-              defaultValue={user.user.userName}
-              onChangeText={(value) =>
-                setInputVals({ ...inputVals, userName: value })
-              }
-              value={inputVals.userName}
-            ></TextInput>
-            <TextInput
-              placeholder="bio"
-              style={styles.informationInputs}
-              defaultValue={user.user.bio}
-              onChangeText={(value) =>
-                setInputVals({ ...inputVals, bio: value })
-              }
-              value={inputVals.bio}
-            ></TextInput>
-          </View>
-          <Pressable onPress={updateUser}>
-            <Text style={{ color: "white" }}>edit that damn user please</Text>
-          </Pressable>
-        </View>
-      </Modal>
+    // <GestureRecognizer
+    //   style={{ flex: 1 }}
+    //   // onSwipeUp={() => setModalVisible(true)}
+    //   onSwipeDown={() => setModalVisible(false)}
+    // >
+    //   <Modal
+    //     animationType="slide"
+    //     presentationStyle="formSheet"
+    //     visible={modalVisible}
+    //   >
+    <View style={styles.allContainer}>
       <Pressable
         style={[styles.button, styles.buttonOpen]}
-        onPress={() => setModalVisible(true)}
+        onPress={() => setModalVisible(false)}
       >
-        <Text style={styles.textStyle}>Show Modal</Text>
+        <Text style={styles.textStyle}>Close Modal</Text>
       </Pressable>
-    </GestureRecognizer>
+      <View>
+        {userData?.banner == "" ? (
+          <UserIcon
+            style={{
+              borderBlockColor: "white",
+              borderWidth: 1,
+              borderStyle: "solid",
+            }}
+          />
+        ) : (
+          <Image
+            width={10}
+            height={10}
+            style={styles.avatar}
+            source={userData?.banner}
+          />
+        )}
+        {userData.photoUrl == "" ? (
+          <UserIcon />
+        ) : (
+          <Image
+            width={10}
+            height={10}
+            style={styles.avatar}
+            source={userData.photoUrl}
+          />
+        )}
+        <TextInput
+          style={styles.informationInputs}
+          placeholder="Name"
+          defaultValue={userData.userName}
+          onChangeText={(value) =>
+            setInputVals({ ...inputVals, userName: value })
+          }
+          value={inputVals.userName}
+        ></TextInput>
+        <TextInput
+          placeholder="bio"
+          style={styles.informationInputs}
+          defaultValue={userData.bio}
+          onChangeText={(value) => setInputVals({ ...inputVals, bio: value })}
+          value={inputVals.bio}
+        ></TextInput>
+      </View>
+      <Pressable onPress={updateUser}>
+        <Text style={{ color: "white" }}>edit that damn user please</Text>
+      </Pressable>
+    </View>
+    //   </Modal>
+    //   <Pressable
+    //     style={[styles.button, styles.buttonOpen]}
+    //     onPress={() => setModalVisible(true)}
+    //   >
+    //     <Text style={styles.textStyle}>Show Modal</Text>
+    //   </Pressable>
+    // </GestureRecognizer>
   );
 }
 

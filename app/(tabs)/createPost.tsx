@@ -44,7 +44,13 @@ export function CreatePost({ navigation }: { navigation: any }) {
         <BodyTextInput />
       </ScrollView>
       <View style={{ flexDirection: "column" }}>
-        <HashTagSelect />
+        <Pressable
+          onPress={() => navigation.navigate("HashtagSelect")}
+          style={{ backgroundColor: "purple", height: 100 }}
+        >
+          <Text style={{ color: "white" }}>Hashtag select</Text>
+        </Pressable>
+        {/* <HashTagSelect /> */}
         <View style={{ flexDirection: "row" }}>
           <PhotoSelector />
           <Pressable
@@ -70,18 +76,28 @@ export default function HomeStackScreen() {
     <HomeStack.Navigator>
       <HomeStack.Screen
         name="CreatePost"
-        component={CreatePost} // rreplace with loginAndSignUp page
+        component={CreatePost}
         options={{ headerShown: false }}
       />
       <HomeStack.Screen
         name="Camera"
-        component={Camera} // log in
+        component={Camera}
         options={{ headerShown: false }}
       />
       <HomeStack.Screen
         name="PhotoConfirm"
-        component={PhotoConfirm} // log in
+        component={PhotoConfirm}
         options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
+        name="HashtagSelect"
+        component={HashTagSelect}
+        options={{
+          animation: "slide_from_bottom",
+          headerShown: false,
+          gestureDirection: "vertical",
+          presentation: "transparentModal",
+        }}
       />
     </HomeStack.Navigator>
   );

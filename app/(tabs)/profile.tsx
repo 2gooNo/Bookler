@@ -60,7 +60,7 @@ export default function Profile() {
         {year}
         {stringMonth()}
       </Text>
-      <Pressable onPress={(() => setIsEn(!isEn), updateUser())}>
+      <Pressable onPress={() => updateUser()}>
         <Text style={{ color: "white" }}>{isEn ? "en" : "mn"}</Text>
       </Pressable>
       <EditProfileModal user={userData}></EditProfileModal>

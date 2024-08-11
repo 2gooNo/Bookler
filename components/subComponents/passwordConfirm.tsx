@@ -6,6 +6,8 @@ import {
   StyleSheet,
   Dimensions,
   Pressable,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "../../common/firebase";
@@ -64,100 +66,102 @@ export function PasswordConfirm() {
     }
   };
   return (
-    <View style={styles.allContainer}>
-      <BooklerLogo style={styles.xLogo} />
-      <Text style={styles.upperText}>
-        {homeTranslation[lang]["confirmYourPassword"]}
-      </Text>
-      <Formik
-        initialValues={{ password: "", confirmPassword: "" }}
-        onSubmit={async (values, { setSubmitting }) => {
-          console.log(values);
-          await signUp(values);
-        }}
-      >
-        {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
-          <View
-            style={{
-              flexDirection: "column",
-              width: "100%",
-              height: "auto",
-              paddingLeft: "8%",
-              paddingRight: "10%",
-            }}
-          >
-            <View style={{ marginBottom: "10%", gap: 10 }}>
-              <TextInput
-                placeholder={homeTranslation[lang]["password"]}
-                style={[
-                  styles.input,
-                  errors.password == undefined || errors.password == ""
-                    ? { borderColor: "rgb(98,101,105)" }
-                    : { borderColor: "red" },
-                ]}
-                onChangeText={handleChange("password")}
-                onBlur={handleBlur("password")}
-                value={values.password}
-              />
-              <Text style={{ color: "red" }}>{errors.password}</Text>
-            </View>
-            <View style={{ marginBottom: "10%", gap: 10 }}>
-              <TextInput
-                placeholder={homeTranslation[lang]["confirmPassword"]}
-                style={[
-                  styles.input,
-                  errors.confirmPassword == undefined ||
-                  errors.confirmPassword == ""
-                    ? { borderColor: "rgb(98,101,105)" }
-                    : { borderColor: "red" },
-                ]}
-                onChangeText={handleChange("confirmPassword")}
-                onBlur={handleBlur("confirmPassword")}
-                value={values.confirmPassword}
-              />
-              <Text style={{ color: "red" }}>{errors.confirmPassword}</Text>
-            </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View style={styles.allContainer}>
+        <BooklerLogo style={styles.xLogo} />
+        <Text style={styles.upperText}>
+          {homeTranslation[lang]["confirmYourPassword"]}
+        </Text>
+        <Formik
+          initialValues={{ password: "", confirmPassword: "" }}
+          onSubmit={async (values, { setSubmitting }) => {
+            console.log(values);
+            await signUp(values);
+          }}
+        >
+          {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
             <View
               style={{
+                flexDirection: "column",
                 width: "100%",
                 height: "auto",
-                alignItems: "flex-end",
-                position: "relative",
+                paddingLeft: "8%",
+                paddingRight: "10%",
               }}
             >
-              <View style={styles.nextButton}>
-                <Text
-                  style={{
-                    color: "black",
-                    fontFamily: "Inter",
-                    fontSize: 18,
-                    fontWeight: "600",
-                  }}
-                >
-                  {homeTranslation[lang]["next"]}
-                </Text>
+              <View style={{ marginBottom: "10%", gap: 10 }}>
+                <TextInput
+                  placeholder={homeTranslation[lang]["password"]}
+                  style={[
+                    styles.input,
+                    errors.password == undefined || errors.password == ""
+                      ? { borderColor: "rgb(98,101,105)" }
+                      : { borderColor: "red" },
+                  ]}
+                  onChangeText={handleChange("password")}
+                  onBlur={handleBlur("password")}
+                  value={values.password}
+                />
+                <Text style={{ color: "red" }}>{errors.password}</Text>
+              </View>
+              <View style={{ marginBottom: "10%", gap: 10 }}>
+                <TextInput
+                  placeholder={homeTranslation[lang]["confirmPassword"]}
+                  style={[
+                    styles.input,
+                    errors.confirmPassword == undefined ||
+                    errors.confirmPassword == ""
+                      ? { borderColor: "rgb(98,101,105)" }
+                      : { borderColor: "red" },
+                  ]}
+                  onChangeText={handleChange("confirmPassword")}
+                  onBlur={handleBlur("confirmPassword")}
+                  value={values.confirmPassword}
+                />
+                <Text style={{ color: "red" }}>{errors.confirmPassword}</Text>
               </View>
               <View
                 style={{
-                  position: "absolute",
-                  right: 0,
-                  top: 0,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  paddingLeft: "3%",
-                  paddingRight: "3%",
-                  borderRadius: 18,
-                  width: "47%",
-                  height: "100%",
+                  width: "100%",
+                  height: "auto",
+                  alignItems: "flex-end",
+                  position: "relative",
                 }}
               >
-                <Button title="" onPress={() => handleSubmit()}></Button>
+                <View style={styles.nextButton}>
+                  <Text
+                    style={{
+                      color: "black",
+                      fontFamily: "Inter",
+                      fontSize: 18,
+                      fontWeight: "600",
+                    }}
+                  >
+                    {homeTranslation[lang]["next"]}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    top: 0,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    paddingLeft: "3%",
+                    paddingRight: "3%",
+                    borderRadius: 18,
+                    width: "47%",
+                    height: "100%",
+                  }}
+                >
+                  <Button title="" onPress={() => handleSubmit()}></Button>
+                </View>
               </View>
             </View>
-          </View>
-        )}
-      </Formik>
-    </View>
+          )}
+        </Formik>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 const styles = StyleSheet.create({

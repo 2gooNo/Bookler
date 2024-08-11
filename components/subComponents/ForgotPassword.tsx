@@ -5,10 +5,12 @@ import { Formik } from "formik";
 import {
   Button,
   Dimensions,
+  Keyboard,
   Pressable,
   StyleSheet,
   Text,
   TextInput,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import * as Yup from "yup";
@@ -27,73 +29,75 @@ export function SendEmailToUser() {
       });
   };
   return (
-    <View style={styles.allContainer}>
-      <BooklerLogo style={styles.xLogo} />
-      <Text style={styles.upperText}>Recover your account</Text>
-      <Formik
-        initialValues={{ email: "" }}
-        validationSchema={Yup.object({
-          email: Yup.string()
-            .email("Invalid email")
-            .required("Email is required"),
-        })}
-        onSubmit={(values) => {
-          sendEmail(values);
-        }}
-      >
-        {({ handleChange, handleBlur, handleSubmit, errors, values }) => (
-          <View
-            style={{
-              flexDirection: "column",
-              width: "100%",
-              height: "auto",
-              paddingLeft: "8%",
-              paddingRight: "10%",
-            }}
-          >
-            <View style={{ marginBottom: "10%", gap: 10 }}>
-              <TextInput
-                keyboardType="email-address"
-                placeholder="Email"
-                onChangeText={handleChange("email")}
-                onBlur={handleBlur("email")}
-                value={values.email}
-                style={[
-                  styles.input,
-                  errors.email == undefined || errors.email == ""
-                    ? { borderColor: "rgb(98,101,105)" }
-                    : { borderColor: "red" },
-                ]}
-              />
-              <Text style={{ color: "red" }}>{errors.email}</Text>
-            </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View style={styles.allContainer}>
+        <BooklerLogo style={styles.xLogo} />
+        <Text style={styles.upperText}>Recover your account</Text>
+        <Formik
+          initialValues={{ email: "" }}
+          validationSchema={Yup.object({
+            email: Yup.string()
+              .email("Invalid email")
+              .required("Email is required"),
+          })}
+          onSubmit={(values) => {
+            sendEmail(values);
+          }}
+        >
+          {({ handleChange, handleBlur, handleSubmit, errors, values }) => (
             <View
               style={{
+                flexDirection: "column",
                 width: "100%",
                 height: "auto",
-                alignItems: "flex-end",
+                paddingLeft: "8%",
+                paddingRight: "10%",
               }}
             >
-              <Pressable
-                style={styles.nextButton}
-                onPress={() => handleSubmit()}
+              <View style={{ marginBottom: "10%", gap: 10 }}>
+                <TextInput
+                  keyboardType="email-address"
+                  placeholder="Email"
+                  onChangeText={handleChange("email")}
+                  onBlur={handleBlur("email")}
+                  value={values.email}
+                  style={[
+                    styles.input,
+                    errors.email == undefined || errors.email == ""
+                      ? { borderColor: "rgb(98,101,105)" }
+                      : { borderColor: "red" },
+                  ]}
+                />
+                <Text style={{ color: "red" }}>{errors.email}</Text>
+              </View>
+              <View
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  alignItems: "flex-end",
+                }}
               >
-                <Text
-                  style={{
-                    color: "black",
-                    fontFamily: "Inter",
-                    fontSize: 18,
-                    fontWeight: "600",
-                  }}
+                <Pressable
+                  style={styles.nextButton}
+                  onPress={() => handleSubmit()}
                 >
-                  Send email
-                </Text>
-              </Pressable>
+                  <Text
+                    style={{
+                      color: "black",
+                      fontFamily: "Inter",
+                      fontSize: 18,
+                      fontWeight: "600",
+                    }}
+                  >
+                    Send email
+                  </Text>
+                </Pressable>
+              </View>
             </View>
-          </View>
-        )}
-      </Formik>
-    </View>
+          )}
+        </Formik>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 

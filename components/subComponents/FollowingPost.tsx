@@ -1,5 +1,5 @@
 import { View } from "react-native";
 
 export function FollowingPost() {
-  return <View></View>;
+  return <View style={{ backgroundColor: "pink", flex: 1 }}></View>;
 }

@@ -16,18 +16,18 @@ import { useNavigation } from "expo-router";
 import { PostPage } from "@/components/subComponents/PostPage";
 import { FollowingPost } from "@/components/subComponents/FollowingPost";
 
-const CustomHeaderTitle = ({ navigation }: any) => {
+const CustomHeaderTitle = ({ navigation, index }: any) => {
   return (
     <View style={{ flexDirection: "row" }}>
       <Button
-        onPress={() => navigation.navigate("Following")}
-        title="Following"
-        color="#fff"
-      />
-      <Button
         onPress={() => navigation.navigate("PostPage")}
         title="For you"
-        color={"white"}
+        color={index == 0 || !index ? "white" : "grey"}
+      />
+      <Button
+        onPress={() => navigation.navigate("Following")}
+        title="Following"
+        color={index == 1 ? "white" : "grey"}
       />
     </View>
   );
@@ -35,39 +35,50 @@ const CustomHeaderTitle = ({ navigation }: any) => {
 
 const HomeStack = createNativeStackNavigator();
 export default function HomeStackScreen() {
-  const navigation = useNavigation();
+  const navigationUsed = useNavigation();
   const route = useRoute();
-  console.log(route.name, navigation);
+  const index = navigationUsed.getState()?.routes?.[1]?.state?.index;
+  console.log(index);
   return (
     <HomeStack.Navigator>
-      <HomeStack.Screen
-        name="Following"
-        component={FollowingPost}
-        options={({ navigation }) => ({
-          headerStyle: {
-            backgroundColor: "transparent",
-          },
-          headerTitleStyle: {
-            fontWeight: "bold",
-          },
-          headerTitle: () => <CustomHeaderTitle navigation={navigation} />,
-          headerTitleAlign: "center",
-          headerLeft: () => null,
-        })}
-      />
       <HomeStack.Screen
         name="PostPage"
         component={PostPage}
         options={({ navigation }) => ({
+          gestureEnabled: true,
+          gestureDirection: "horizontal",
+          animation: "slide_from_left",
           headerStyle: {
             backgroundColor: "transparent",
           },
           headerTitleStyle: {
             fontWeight: "bold",
           },
-          headerTitle: () => <CustomHeaderTitle navigation={navigation} />,
+          headerTitle: () => "",
           headerTitleAlign: "center",
-          headerLeft: () => null,
+          headerLeft: () => (
+            <CustomHeaderTitle navigation={navigation} index={index} />
+          ),
+        })}
+      />
+      <HomeStack.Screen
+        name="Following"
+        component={FollowingPost}
+        options={({ navigation }) => ({
+          gestureEnabled: true,
+          gestureDirection: "horizontal",
+          animation: "slide_from_right",
+          headerStyle: {
+            backgroundColor: "transparent",
+          },
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+          headerTitle: () => "",
+          headerTitleAlign: "center",
+          headerLeft: () => (
+            <CustomHeaderTitle navigation={navigation} index={index} />
+          ),
         })}
       />
     </HomeStack.Navigator>

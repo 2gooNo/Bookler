@@ -72,6 +72,7 @@ export default function TabLayout() {
             options={{
               tabBarIcon: ({ color, focused }) => (
                 <TabBarIcon
+                  size={30}
                   name={focused ? "add" : "add-outline"}
                   color={color}
                 />

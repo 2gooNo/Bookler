@@ -111,13 +111,14 @@ export default function HashTagSelect({ navigation }: { navigation: any }) {
       style={{
         // flexDirection: "column",
         flexDirection: "column",
-        height: "100%",
+        height: "50%",
         width: "100%",
         justifyContent: "flex-start",
-        backgroundColor: "yellow",
+        backgroundColor: "pink",
+        bottom: 0,
       }}
     >
-      <Pressable
+      {/* <Pressable
         onPress={() => navigation.navigate("CreatePost")}
         style={{
           backgroundColor: "transparent",
@@ -125,17 +126,19 @@ export default function HashTagSelect({ navigation }: { navigation: any }) {
           minHeight: "40%",
           maxHeight: "65%",
         }}
-      ></Pressable>
+      ></Pressable> */}
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{
-          height: "35%",
-          // maxHeight: "60%",
-          backgroundColor: "blue",
-        }}
-        contentContainerStyle={{
-          height: "60%",
-        }}
+        style={
+          {
+            // height: "35%",
+            // maxHeight: "60%",
+            // backgroundColor: "blue",
+          }
+        }
+        // contentContainerStyle={{
+        //   height: "60%",
+        // }}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View
@@ -143,7 +146,7 @@ export default function HashTagSelect({ navigation }: { navigation: any }) {
               flexDirection: "column",
               gap: 10,
               height: "100%",
-              backgroundColor: "purple",
+              // backgroundColor: "purple",
             }}
           >
             <View style={{ flexDirection: "row", gap: 10 }}>

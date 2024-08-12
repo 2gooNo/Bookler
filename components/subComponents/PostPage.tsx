@@ -1,23 +1,114 @@
 import { AuthContext } from "@/context/authContext";
 import { LangContext } from "@/context/langContext";
 import { homeTranslation } from "@/localization/translate";
-import { useContext } from "react";
-import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
+import { useContext, useEffect, useState } from "react";
+import {
+  Dimensions,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import {
+  GestureHandlerRootView,
+  PanGestureHandler,
+} from "react-native-gesture-handler";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  onSnapshot,
+  query,
+} from "firebase/firestore";
+import { db } from "@/common";
 
-export function PostPage() {
+export function PostPage({ navigation }: { navigation: any }) {
   const { onLogout } = useContext(AuthContext);
   const { lang } = useContext(LangContext);
+  const [posts, setPosts] = useState<any[]>([]);
+  const getPostsAndUserInfo = async () => {
+    const q = query(collection(db, "posts"));
 
+    onSnapshot(q, async (snapshot) => {
+      const userPromises = snapshot.docs.map((postDoc) => {
+        const postData = [postDoc.data(), postDoc.id];
+
+        const userRef = postData?.[0]?.userRef;
+
+        return getDoc(userRef)
+          .then((userDoc) => {
+            if (userDoc.exists()) {
+              return {
+                post: postData,
+                user: userDoc.data(),
+              };
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+            return {
+              post: postData,
+              user: null,
+            };
+          });
+      });
+      console.log(console.log(userPromises, "--"));
+      try {
+        const results = await Promise.all(userPromises);
+        console.log(results, ")");
+        setPosts(results);
+      } catch (error) {
+        console.error(error);
+      }
+      try {
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  };
+  useEffect(() => {
+    getPostsAndUserInfo();
+  }, []);
+  const onSwipe = (event: any) => {
+    const translationX = event.nativeEvent.translationX;
+    console.log(translationX);
+    if (translationX > 100) {
+      console.log("swipe");
+    } else if (translationX < -70) {
+      navigation.navigate("Following");
+    }
+  };
   return (
-    <View style={styles.allContainer}>
-      <Pressable onPress={() => onLogout()}>
-        <Text style={{ backgroundColor: "blue" }}>
-          {homeTranslation?.[lang]?.["logOutBtn"]}
-        </Text>
-      </Pressable>
-    </View>
+    <GestureHandlerRootView>
+      <PanGestureHandler
+        onGestureEvent={onSwipe}
+        onHandlerStateChange={onSwipe}
+      >
+        <FlatList
+          data={posts}
+          renderItem={({ item }) => <ListItem item={item} />}
+        >
+          <Pressable onPress={() => onLogout()}>
+            <Text style={{ backgroundColor: "blue" }}>
+              {homeTranslation?.[lang]?.["logOutBtn"]}
+            </Text>
+          </Pressable>
+        </FlatList>
+      </PanGestureHandler>
+    </GestureHandlerRootView>
   );
 }
+const ListItem = ({ item }: { item: any }) => {
+  console.log(item);
+  return (
+    <View>
+      <Text style={{ color: "white" }}>{item?.post?.[0]?.title || ""}</Text>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   allContainer: {
     backgroundColor: "black",

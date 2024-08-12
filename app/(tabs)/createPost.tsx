@@ -4,7 +4,7 @@ import HashTagSelect from "@/components/subComponents/HashTagSelect";
 import { PhotoSelector } from "@/components/subComponents/PhotoSelector";
 import { PostContext } from "@/context/createPostContext";
 import { router } from "expo-router";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { Camera } from "@/components/subComponents/Camera";
 import { PhotoConfirm } from "@/components/subComponents/PhotoConfirm";
@@ -15,12 +15,30 @@ import { CreateDraftButton } from "@/components/subComponents/CreateDraftButton"
 import { LinkUrl } from "@/components/subComponents/LinkUrl";
 import { LangContext } from "@/context/langContext";
 import { homeTranslation } from "@/localization/translate";
+import Modal from "react-native-modal";
 
 export function CreatePost({ navigation }: { navigation: any }) {
   const { lang } = useContext(LangContext);
   const { media, linkComponent, setLinkComponent } = useContext(PostContext);
+  const [isVisible, setIsVisible] = useState(true);
   return (
     <View style={{ paddingVertical: "30%" }}>
+      <Modal
+        onBackdropPress={() => setIsVisible(false)}
+        isVisible={isVisible}
+        onSwipeComplete={() => setIsVisible(false)}
+        swipeDirection={"down"}
+      >
+        <View
+          style={{
+            backgroundColor: "green",
+            height: 100,
+          }}
+        >
+          <Text>I am the modal content!</Text>
+        </View>
+      </Modal>
+
       <View style={{ flexDirection: "row" }}>
         <Pressable
           onPress={() => router.push("./home")}
@@ -45,6 +63,7 @@ export function CreatePost({ navigation }: { navigation: any }) {
       </ScrollView>
       <View style={{ flexDirection: "column" }}>
         <Pressable
+          // onPress={() => setIsVisible(true)}
           onPress={() => navigation.navigate("HashtagSelect")}
           style={{ backgroundColor: "purple", height: 100 }}
         >
@@ -72,6 +91,33 @@ export function CreatePost({ navigation }: { navigation: any }) {
 }
 const HomeStack = createNativeStackNavigator();
 export default function HomeStackScreen() {
+  // const options = {
+  //   animation: "slide_from_bottom",
+  //   headerShown: false,
+  //   // gestureDirection: "vertical",
+  //   gestureEnabled: true,
+  //   presentation: "modal",
+  // };
+  const transparentModalOptions = {
+    headerShown: false,
+    cardStyle: { backgroundColor: "transparent" },
+    cardOverlayEnabled: true,
+    cardStyleInterpolator: ({ current: { progress } }: any) => ({
+      cardStyle: {
+        opacity: progress.interpolate({
+          inputRange: [0, 0.5, 0.9, 1],
+          outputRange: [0, 0.25, 0.7, 1],
+        }),
+      },
+      overlayStyle: {
+        opacity: progress.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, 0.5],
+          extrapolate: "clamp",
+        }),
+      },
+    }),
+  };
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen
@@ -93,10 +139,9 @@ export default function HomeStackScreen() {
         name="HashtagSelect"
         component={HashTagSelect}
         options={{
+          ...transparentModalOptions,
           animation: "slide_from_bottom",
-          headerShown: false,
           gestureDirection: "vertical",
-          presentation: "transparentModal",
         }}
       />
     </HomeStack.Navigator>

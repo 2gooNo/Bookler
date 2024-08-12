@@ -18,12 +18,16 @@ import { db } from "@/common";
 import { AuthContext } from "@/context/authContext";
 import { mediaUploader } from "@/utils/image-uploader";
 import { SelectedMedia } from "./SelectedMedia";
+import BannerIcon from "@/assets/images/BannerIcon";
 
 export function EditProfileModal() {
   const { userData } = useContext(AuthContext);
-  const [photos, setPhotos] = useState<any>(
-    userData?.photoUrl == "" ? "" : userData?.photoUrl
-  );
+  const [photos, setPhotos] = useState<any>({
+    profileUrl: userData?.photoUrl == "" ? "" : userData?.photoUrl,
+    profileUri: "",
+    bannerUrl: userData?.banner == "" ? "" : userData?.banner,
+    bannerUri: "",
+  });
   const [modalVisible, setModalVisible] = useState(false);
   const [inputVals, setInputVals] = useState({
     banner: `${userData?.banner}`,
@@ -33,74 +37,83 @@ export function EditProfileModal() {
   });
 
   async function updateUser() {
-    const uploadedMedia = await mediaUploader([photos]);
+    const uploadedMedia = [
+      photos?.profileUri == ""
+        ? photos?.profileUrl
+        : await mediaUploader([photos?.profileUri]),
+      photos?.bannerUri == ""
+        ? photos?.bannerUrl
+        : await mediaUploader([photos?.bannerUri]),
+    ];
     console.log(uploadedMedia);
 
     const profilePic = doc(db, "users", userData.userId);
 
     await updateDoc(profilePic, {
-      // banner: inputVals.banner,
+      banner:
+        photos?.bannerUri == "" ? userData?.banner : uploadedMedia[1][0].url,
       bio: inputVals.bio,
-      photoUrl: uploadedMedia[0].url,
+      photoUrl:
+        photos?.profileUri == "" ? userData?.photoUrl : uploadedMedia[0][0].url,
       userName: inputVals.userName,
     });
     console.log("done");
   }
-  const pickImage = async () => {
+  const pickImage = async (isBanner: boolean) => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
+      // allowsEditing: true,
       allowsMultipleSelection: true,
+      // aspect: [4, 3],
       quality: 1,
     });
     if (!result.canceled) {
       console.log(result?.assets);
       result?.assets.forEach((image) => {
-        console.log(image);
-        setPhotos(image.uri);
+        if (isBanner) {
+          setPhotos({ ...photos, bannerUrl: "", bannerUri: image?.uri });
+        } else {
+          setPhotos({ ...photos, profileUrl: "", profileUri: image?.uri });
+        }
       });
     }
   };
   return (
-    // <GestureRecognizer
-    //   style={{ flex: 1 }}
-    //   // onSwipeUp={() => setModalVisible(true)}
-    //   onSwipeDown={() => setModalVisible(false)}
-    // >
-    //   <Modal
-    //     animationType="slide"
-    //     presentationStyle="formSheet"
-    //     visible={modalVisible}
-    //   >
     <View style={styles.allContainer}>
-      <Pressable
-        style={[styles.button, styles.buttonOpen]}
-        onPress={() => setModalVisible(false)}
-      >
-        <Text style={styles.textStyle}>Close Modal</Text>
-      </Pressable>
       <View>
-        {/* {userData?.banner == "" ? (
-          <UserIcon
-            style={{
-              borderBlockColor: "white",
-              borderWidth: 1,
-              borderStyle: "solid",
-            }}
-          />
-        ) : (
-          <Image
-            width={10}
-            height={10}
-            style={styles.avatar}
-            source={userData?.banner}
-          />
-        )} */}
-        {photos == "" ? (
-          <Pressable onPress={pickImage}>
-            <UserIcon />
+        {photos?.bannerUri == "" && photos?.bannerUrl == "" ? (
+          <Pressable onPress={() => pickImage(true)}>
+            <BannerIcon />
+          </Pressable>
+        ) : photos?.bannerUrl == "" ? (
+          <Pressable onPress={() => pickImage(true)}>
+            <SelectedMedia value={photos?.bannerUri} />
           </Pressable>
         ) : (
-          <Image source={photos} />
+          <Pressable onPress={() => pickImage(true)}>
+            <Image
+              width={100}
+              height={100}
+              source={{ uri: photos?.bannerUrl }}
+            />
+          </Pressable>
+        )}
+        {photos?.profileUri == "" && photos?.profileUrl == "" ? (
+          <Pressable onPress={() => pickImage(false)}>
+            <UserIcon />
+          </Pressable>
+        ) : photos?.profileUrl == "" ? (
+          <Pressable onPress={() => pickImage(false)}>
+            <SelectedMedia value={photos?.profileUri} />
+          </Pressable>
+        ) : (
+          <Pressable onPress={() => pickImage(false)}>
+            <Image
+              width={100}
+              height={100}
+              source={{ uri: photos?.profileUrl }}
+            />
+          </Pressable>
         )}
         <TextInput
           style={styles.informationInputs}
@@ -123,14 +136,6 @@ export function EditProfileModal() {
         <Text style={{ color: "white" }}>edit that damn user please</Text>
       </Pressable>
     </View>
-    //   </Modal>
-    //   <Pressable
-    //     style={[styles.button, styles.buttonOpen]}
-    //     onPress={() => setModalVisible(true)}
-    //   >
-    //     <Text style={styles.textStyle}>Show Modal</Text>
-    //   </Pressable>
-    // </GestureRecognizer>
   );
 }
 

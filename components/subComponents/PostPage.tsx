@@ -23,6 +23,7 @@ import {
   query,
 } from "firebase/firestore";
 import { db } from "@/common";
+import { PostCard } from "./PostCard";
 
 export function PostPage({ navigation }: { navigation: any }) {
   const { onLogout } = useContext(AuthContext);
@@ -88,7 +89,7 @@ export function PostPage({ navigation }: { navigation: any }) {
       >
         <FlatList
           data={posts}
-          renderItem={({ item }) => <ListItem item={item} />}
+          renderItem={({ item }) => <PostCard item={item} />}
         >
           <Pressable onPress={() => onLogout()}>
             <Text style={{ backgroundColor: "blue" }}>
@@ -100,14 +101,6 @@ export function PostPage({ navigation }: { navigation: any }) {
     </GestureHandlerRootView>
   );
 }
-const ListItem = ({ item }: { item: any }) => {
-  console.log(item);
-  return (
-    <View>
-      <Text style={{ color: "white" }}>{item?.post?.[0]?.title || ""}</Text>
-    </View>
-  );
-};
 
 const styles = StyleSheet.create({
   allContainer: {

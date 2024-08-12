@@ -3,6 +3,7 @@ import { AuthContext } from "@/context/authContext";
 import { PostContext } from "@/context/createPostContext";
 import { LangContext } from "@/context/langContext";
 import { homeTranslation } from "@/localization/translate";
+import { router } from "expo-router";
 import { addDoc, collection, doc } from "firebase/firestore";
 import { useContext } from "react";
 import { Pressable, Text } from "react-native";
@@ -10,7 +11,18 @@ import { Pressable, Text } from "react-native";
 export function CreateDraftButton() {
   const { user } = useContext(AuthContext);
   const { lang } = useContext(LangContext);
-  const { selectedTags, media, title, bodyText } = useContext(PostContext);
+  const {
+    selectedTags,
+    media,
+    title,
+    bodyText,
+    linkUrl,
+    setBodyText,
+    setTitle,
+    setMedia,
+    setSelectedTags,
+    setLinkUrl,
+  } = useContext(PostContext);
   const CreateDraft = async () => {
     try {
       const docRef = await addDoc(collection(db, "drafts"), {
@@ -20,6 +32,14 @@ export function CreateDraftButton() {
         title: title,
         media: media,
         tags: selectedTags,
+        link: linkUrl,
+      }).then((res) => {
+        setBodyText("");
+        setTitle("");
+        setMedia([]);
+        setSelectedTags([]);
+        setLinkUrl("");
+        router.push("/home");
       });
     } catch (err) {}
   };

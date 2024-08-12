@@ -13,20 +13,26 @@ import { homeTranslation } from "@/localization/translate";
 import { LangContext } from "@/context/langContext";
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
-function PostPage() {
-  const { onLogout } = useContext(AuthContext);
-  const { lang } = useContext(LangContext);
+import { PostPage } from "@/components/subComponents/PostPage";
+import { FollowingPost } from "@/components/subComponents/FollowingPost";
 
+const CustomHeaderTitle = ({ navigation }: any) => {
   return (
-    <View style={styles.allContainer}>
-      <Pressable onPress={() => onLogout()}>
-        <Text style={{ backgroundColor: "blue" }}>
-          {homeTranslation?.[lang]?.["logOutBtn"]}
-        </Text>
-      </Pressable>
+    <View style={{ flexDirection: "row" }}>
+      <Button
+        onPress={() => navigation.navigate("Following")}
+        title="Following"
+        color="#fff"
+      />
+      <Button
+        onPress={() => navigation.navigate("PostPage")}
+        title="For you"
+        color={"white"}
+      />
     </View>
   );
-}
+};
+
 const HomeStack = createNativeStackNavigator();
 export default function HomeStackScreen() {
   const navigation = useNavigation();
@@ -35,126 +41,35 @@ export default function HomeStackScreen() {
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen
-        name="PostPage"
-        component={PostPage}
-        options={{
-          // title: "",
-          // headerBackButtonMenuEnabled: true,
+        name="Following"
+        component={FollowingPost}
+        options={({ navigation }) => ({
           headerStyle: {
             backgroundColor: "transparent",
           },
-          // headerTintColor: "#fff",
           headerTitleStyle: {
             fontWeight: "bold",
           },
-          headerTitle: () => (
-            <View style={{ flexDirection: "row" }}>
-              <Button
-                // onPress={() => navigation.jumpTo("PostPage")}
-                title="Posts"
-                color={"white"}
-              />
-              <Button
-                // onPress={() => navigation.navigate("PostPage")}
-                title="Books"
-                color="#fff"
-              />
-            </View>
-          ),
+          headerTitle: () => <CustomHeaderTitle navigation={navigation} />,
           headerTitleAlign: "center",
-        }}
+          headerLeft: () => null,
+        })}
       />
-      {/* <HomeStack.Screen
-        name="BookPage"
-        component={} // place for book communities and recommending book
-        options={{ headerShown: false }}
-      /> */}
+      <HomeStack.Screen
+        name="PostPage"
+        component={PostPage}
+        options={({ navigation }) => ({
+          headerStyle: {
+            backgroundColor: "transparent",
+          },
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+          headerTitle: () => <CustomHeaderTitle navigation={navigation} />,
+          headerTitleAlign: "center",
+          headerLeft: () => null,
+        })}
+      />
     </HomeStack.Navigator>
   );
 }
-
-const styles = StyleSheet.create({
-  allContainer: {
-    backgroundColor: "black",
-    height: Dimensions.get("window").height,
-    width: Dimensions.get("window").width,
-    paddingTop: "18%",
-    alignItems: "center",
-    paddingLeft: "8%",
-    paddingRight: "8%",
-  },
-  upperText: {
-    fontFamily: "Inter",
-    fontSize: 28,
-    fontWeight: "800",
-    color: "white",
-    width: "100%",
-    letterSpacing: 1,
-    marginBottom: "40%",
-  },
-  fastLogButtons: {
-    gap: 10,
-    width: "100%",
-    height: "auto",
-  },
-  fastLogButton: {
-    width: "100%",
-    height: "8%",
-    backgroundColor: "white",
-    borderRadius: 50,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 25,
-  },
-  xLogo: {
-    marginBottom: "35%",
-  },
-  fastLogLogo: {
-    width: "10%",
-    height: "60%",
-  },
-  fastLogText: {
-    fontFamily: "Inter",
-    fontWeight: "700",
-    fontSize: 15,
-  },
-  orContainer: {
-    flexDirection: "row",
-    width: "100%",
-    height: "auto",
-    gap: 5,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  grayLine: {
-    height: "10%",
-    width: "43%",
-    borderColor: " rgb(136,138,141)",
-    borderStyle: "solid",
-    borderWidth: 1,
-  },
-  choiseSection: {
-    width: "100%",
-    height: "100%",
-    position: "relative",
-    gap: 10,
-  },
-  orText: {
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontWeight: "500",
-    color: " rgb(136,138,141)",
-  },
-  logInTextContainer: {
-    marginTop: "8%",
-    flexDirection: "row",
-    gap: 5,
-  },
-  logInText: {
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontWeight: "500",
-    color: " rgb(74,152,232)",
-  },
-});

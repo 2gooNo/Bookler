@@ -5,7 +5,16 @@ import { PhotoSelector } from "@/components/subComponents/PhotoSelector";
 import { PostContext } from "@/context/createPostContext";
 import { router } from "expo-router";
 import { useContext, useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import {
+  Dimensions,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { Camera } from "@/components/subComponents/Camera";
 import { PhotoConfirm } from "@/components/subComponents/PhotoConfirm";
 import { BodyTextInput } from "@/components/subComponents/BodyTextInput";
@@ -19,33 +28,35 @@ import Modal from "react-native-modal";
 
 export function CreatePost({ navigation }: { navigation: any }) {
   const { lang } = useContext(LangContext);
-  const { media, linkComponent, setLinkComponent } = useContext(PostContext);
-  const [isVisible, setIsVisible] = useState(true);
+  const { media, linkComponent, setLinkComponent, selectedTags } =
+    useContext(PostContext);
+  const [isVisible, setIsVisible] = useState(false);
+  const { width, height } = Dimensions.get("window");
   return (
     <View style={{ paddingVertical: "30%" }}>
       <Modal
+        avoidKeyboard={true}
+        deviceWidth={width}
         onBackdropPress={() => setIsVisible(false)}
         isVisible={isVisible}
         onSwipeComplete={() => setIsVisible(false)}
         swipeDirection={"down"}
+        style={{
+          margin: 0,
+          flex: 1,
+        }}
       >
-        <View
-          style={{
-            backgroundColor: "green",
-            height: 100,
-          }}
-        >
-          <Text>I am the modal content!</Text>
+        <View style={{ flex: 1, justifyContent: "flex-end" }}>
+          <HashTagSelect setIsVisible={setIsVisible} />
         </View>
       </Modal>
-
       <View style={{ flexDirection: "row" }}>
         <Pressable
           onPress={() => router.push("./home")}
           style={{ backgroundColor: "purple" }}
         >
           <Text style={{ color: "white" }}>
-            {homeTranslation[lang]["goBack"]}
+            {homeTranslation?.[lang]?.["goBack"]}
           </Text>
         </Pressable>
         <CreatePostButton />
@@ -62,9 +73,12 @@ export function CreatePost({ navigation }: { navigation: any }) {
         <BodyTextInput />
       </ScrollView>
       <View style={{ flexDirection: "column" }}>
+        {selectedTags.map((tag, index) => (
+          <Text key={index}>{tag.tagName}</Text>
+        ))}
         <Pressable
-          // onPress={() => setIsVisible(true)}
-          onPress={() => navigation.navigate("HashtagSelect")}
+          onPress={() => setIsVisible(true)}
+          // onPress={() => navigation.navigate("HashtagSelect")}
           style={{ backgroundColor: "purple", height: 100 }}
         >
           <Text style={{ color: "white" }}>Hashtag select</Text>
@@ -135,7 +149,7 @@ export default function HomeStackScreen() {
         component={PhotoConfirm}
         options={{ headerShown: false }}
       />
-      <HomeStack.Screen
+      {/* <HomeStack.Screen
         name="HashtagSelect"
         component={HashTagSelect}
         options={{
@@ -143,7 +157,7 @@ export default function HomeStackScreen() {
           animation: "slide_from_bottom",
           gestureDirection: "vertical",
         }}
-      />
+      /> */}
     </HomeStack.Navigator>
   );
 }

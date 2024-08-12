@@ -1,7 +1,7 @@
 import { db } from "@/common";
 import { PostContext } from "@/context/createPostContext";
 import { collection, onSnapshot, query } from "firebase/firestore";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Dimensions,
   Keyboard,
@@ -14,7 +14,7 @@ import {
   View,
 } from "react-native";
 
-export default function HashTagSelect({ navigation }: { navigation: any }) {
+export default function HashTagSelect({ setIsVisible }: any) {
   const { selectedTags, setSelectedTags } = useContext(PostContext);
   const [allTags, setAllTags] = useState<any[]>([]);
   const [suggestedTags, setSuggestedTags] = useState<any[]>([]);
@@ -87,6 +87,27 @@ export default function HashTagSelect({ navigation }: { navigation: any }) {
   //     console.log(docSnap.data());
   //     setSelectedTags((prev: any) => [...prev, [docSnap.data(), docSnap.id]]);
   //   };
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      () => {
+        setIsKeyboardVisible(true);
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        setIsKeyboardVisible(false);
+      }
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
   const removeSelectedTag = (value: string) => {
     setSelectedTags((prev: any) => {
       if (prev.includes(value)) {
@@ -107,71 +128,55 @@ export default function HashTagSelect({ navigation }: { navigation: any }) {
   };
   const { height } = Dimensions.get("window");
   return (
-    <View
+    // <View
+    //   style={{
+    //     flexDirection: "column",
+    //     flex: 1,
+    //   }}
+    // >
+
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{
-        // flexDirection: "column",
-        flexDirection: "column",
-        height: "50%",
-        width: "100%",
-        justifyContent: "flex-start",
-        backgroundColor: "pink",
-        bottom: 0,
+        height: height * 0.3,
+        backgroundColor: "blue",
       }}
     >
-      {/* <Pressable
-        onPress={() => navigation.navigate("CreatePost")}
-        style={{
-          backgroundColor: "transparent",
-          height: "65%",
-          minHeight: "40%",
-          maxHeight: "65%",
-        }}
-      ></Pressable> */}
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={
-          {
-            // height: "35%",
-            // maxHeight: "60%",
-            // backgroundColor: "blue",
-          }
-        }
-        // contentContainerStyle={{
-        //   height: "60%",
-        // }}
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-          <View
-            style={{
-              flexDirection: "column",
-              gap: 10,
-              height: "100%",
-              // backgroundColor: "purple",
-            }}
-          >
-            <View style={{ flexDirection: "row", gap: 10 }}>
-              {selectedTags?.map((tag: any, index: any) => (
-                <Pressable onPress={() => removeSelectedTag(tag?.tagName)}>
-                  <Text style={{ color: "white", backgroundColor: "gray" }}>
-                    {tag?.tagName}
-                  </Text>
-                </Pressable>
-              ))}
-              {suggestedTags?.map((tag, index) => (
-                <Pressable onPress={() => selectTag(tag?.tagName)}>
-                  <Text style={{ color: "white" }}>{tag?.tagName}</Text>
-                </Pressable>
-              ))}
-              <Text style={{ color: "white" }}>{newTag}</Text>
-            </View>
-            <TextInput
-              onChangeText={(value) => searchTags(value)}
-              style={{ backgroundColor: "green" }}
-              onSubmitEditing={(event) => selectTag(event.nativeEvent.text)}
-            ></TextInput>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <View
+          style={{
+            flexDirection: "column",
+            gap: 10,
+            height: "100%",
+            justifyContent: "center",
+          }}
+        >
+          <TextInput
+            onChangeText={(value) => searchTags(value)}
+            style={{ backgroundColor: "green", padding: 10 }}
+            onSubmitEditing={(event) => selectTag(event.nativeEvent.text)}
+          />
+          <View style={{ flexDirection: "row", gap: 10 }}>
+            {selectedTags?.map((tag, index) => (
+              <Pressable
+                key={index}
+                onPress={() => removeSelectedTag(tag?.tagName)}
+              >
+                <Text style={{ color: "white", backgroundColor: "gray" }}>
+                  {tag?.tagName}
+                </Text>
+              </Pressable>
+            ))}
+            {suggestedTags?.map((tag, index) => (
+              <Pressable key={index} onPress={() => selectTag(tag?.tagName)}>
+                <Text style={{ color: "white" }}>{tag?.tagName}</Text>
+              </Pressable>
+            ))}
+            <Text style={{ color: "white" }}>{newTag}</Text>
           </View>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
-    </View>
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
+    // </View>
   );
 }

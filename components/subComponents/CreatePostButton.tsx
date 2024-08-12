@@ -18,14 +18,24 @@ import { mediaUploader } from "../../utils/image-uploader";
 import { firebaseActions } from "@/utils/custom-snapshots";
 import { homeTranslation } from "@/localization/translate";
 import { LangContext } from "@/context/langContext";
-
+import { router } from "expo-router";
 
 export function CreatePostButton() {
   const { lang } = useContext(LangContext);
   const { user } = useContext(AuthContext);
   const [isUploaded, setIsUploaded] = useState<boolean>(false);
-  const { selectedTags, media, title, bodyText, linkUrl } =
-    useContext(PostContext);
+  const {
+    selectedTags,
+    media,
+    title,
+    bodyText,
+    linkUrl,
+    setBodyText,
+    setMedia,
+    setSelectedTags,
+    setTitle,
+    setLinkUrl,
+  } = useContext(PostContext);
   const [tags, setTags] = useState<any>([]);
   const CreatePost = async () => {
     try {
@@ -98,6 +108,13 @@ export function CreatePostButton() {
           likedBy: doc(db, "users", user.uid),
           type: +1,
         });
+        setBodyText("");
+        setTitle("");
+        setMedia([]);
+        setLinkUrl("");
+        setSelectedTags([]);
+        setLinkUrl("");
+        router.push("/home");
         alert("Subcollection document written with ID: ");
       }
     } catch (err) {}

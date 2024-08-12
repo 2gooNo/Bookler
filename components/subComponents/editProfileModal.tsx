@@ -8,16 +8,22 @@ import {
   View,
   TextInput,
   Image,
+  Button,
 } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 
 import GestureRecognizer from "react-native-swipe-gestures";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/common";
 import { AuthContext } from "@/context/authContext";
+import { mediaUploader } from "@/utils/image-uploader";
+import { SelectedMedia } from "./SelectedMedia";
 
 export function EditProfileModal() {
   const { userData } = useContext(AuthContext);
-
+  const [photos, setPhotos] = useState<any>(
+    userData?.photoUrl == "" ? "" : userData?.photoUrl
+  );
   const [modalVisible, setModalVisible] = useState(false);
   const [inputVals, setInputVals] = useState({
     banner: `${userData?.banner}`,
@@ -27,17 +33,33 @@ export function EditProfileModal() {
   });
 
   async function updateUser() {
+    const uploadedMedia = await mediaUploader([photos]);
+    console.log(uploadedMedia);
+
     const profilePic = doc(db, "users", userData.userId);
 
     await updateDoc(profilePic, {
       // banner: inputVals.banner,
       bio: inputVals.bio,
-      // photoUrl: inputVals.photoUrl,
+      photoUrl: uploadedMedia[0].url,
       userName: inputVals.userName,
     });
     console.log("done");
   }
-
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsMultipleSelection: true,
+      quality: 1,
+    });
+    if (!result.canceled) {
+      console.log(result?.assets);
+      result?.assets.forEach((image) => {
+        console.log(image);
+        setPhotos(image.uri);
+      });
+    }
+  };
   return (
     // <GestureRecognizer
     //   style={{ flex: 1 }}
@@ -57,7 +79,7 @@ export function EditProfileModal() {
         <Text style={styles.textStyle}>Close Modal</Text>
       </Pressable>
       <View>
-        {userData?.banner == "" ? (
+        {/* {userData?.banner == "" ? (
           <UserIcon
             style={{
               borderBlockColor: "white",
@@ -72,16 +94,13 @@ export function EditProfileModal() {
             style={styles.avatar}
             source={userData?.banner}
           />
-        )}
-        {userData.photoUrl == "" ? (
-          <UserIcon />
+        )} */}
+        {photos == "" ? (
+          <Pressable onPress={pickImage}>
+            <UserIcon />
+          </Pressable>
         ) : (
-          <Image
-            width={10}
-            height={10}
-            style={styles.avatar}
-            source={userData.photoUrl}
-          />
+          <Image source={photos} />
         )}
         <TextInput
           style={styles.informationInputs}

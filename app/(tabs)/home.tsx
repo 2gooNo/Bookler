@@ -1,9 +1,18 @@
-import { Pressable, Text, View, StyleSheet, Dimensions } from "react-native";
+import {
+  Pressable,
+  Text,
+  View,
+  StyleSheet,
+  Dimensions,
+  Button,
+} from "react-native";
 import { AuthContext } from "@/context/authContext";
 import { useContext } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { homeTranslation } from "@/localization/translate";
 import { LangContext } from "@/context/langContext";
+import { useRoute } from "@react-navigation/native";
+import { useNavigation } from "expo-router";
 function PostPage() {
   const { onLogout } = useContext(AuthContext);
   const { lang } = useContext(LangContext);
@@ -20,12 +29,40 @@ function PostPage() {
 }
 const HomeStack = createNativeStackNavigator();
 export default function HomeStackScreen() {
+  const navigation = useNavigation();
+  const route = useRoute();
+  console.log(route.name, navigation);
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen
         name="PostPage"
-        component={PostPage} //place for random posts
-        options={{ headerShown: false }}
+        component={PostPage}
+        options={{
+          // title: "",
+          // headerBackButtonMenuEnabled: true,
+          headerStyle: {
+            backgroundColor: "transparent",
+          },
+          // headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+          headerTitle: () => (
+            <View style={{ flexDirection: "row" }}>
+              <Button
+                // onPress={() => navigation.jumpTo("PostPage")}
+                title="Posts"
+                color={"white"}
+              />
+              <Button
+                // onPress={() => navigation.navigate("PostPage")}
+                title="Books"
+                color="#fff"
+              />
+            </View>
+          ),
+          headerTitleAlign: "center",
+        }}
       />
       {/* <HomeStack.Screen
         name="BookPage"

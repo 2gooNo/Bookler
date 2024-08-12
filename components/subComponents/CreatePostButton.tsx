@@ -13,10 +13,15 @@ import {
 } from "firebase/firestore";
 import { useContext, useState } from "react";
 import { Platform, Pressable, Text } from "react-native";
+
 import { mediaUploader } from "../../utils/image-uploader";
 import { firebaseActions } from "@/utils/custom-snapshots";
+import { homeTranslation } from "@/localization/translate";
+import { LangContext } from "@/context/langContext";
+
 
 export function CreatePostButton() {
+  const { lang } = useContext(LangContext);
   const { user } = useContext(AuthContext);
   const [isUploaded, setIsUploaded] = useState<boolean>(false);
   const { selectedTags, media, title, bodyText, linkUrl } =
@@ -106,7 +111,7 @@ export function CreatePostButton() {
   };
   return (
     <Pressable onPress={() => CreatePost()} style={{ backgroundColor: "pink" }}>
-      <Text>Post</Text>
+      <Text>{homeTranslation[lang]["post"]}</Text>
     </Pressable>
   );
 }

@@ -1,14 +1,16 @@
 import { PostContext } from "@/context/createPostContext";
 import { useContext } from "react";
-import { TextInput } from "react-native";
+import { Keyboard, TextInput, TouchableWithoutFeedback } from "react-native";
 
 export function BodyTextInput() {
   const { setBodyText, bodyText } = useContext(PostContext);
   return (
-    <TextInput
-      value={bodyText}
-      placeholder="Body"
-      onChangeText={(e) => setBodyText(e)}
-    ></TextInput>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <TextInput
+        value={bodyText}
+        placeholder="Body"
+        onChangeText={(e) => setBodyText(e)}
+      ></TextInput>
+    </TouchableWithoutFeedback>
   );
 }

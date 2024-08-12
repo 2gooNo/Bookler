@@ -1,12 +1,15 @@
 import { db } from "@/common";
 import { AuthContext } from "@/context/authContext";
 import { PostContext } from "@/context/createPostContext";
+import { LangContext } from "@/context/langContext";
+import { homeTranslation } from "@/localization/translate";
 import { addDoc, collection, doc } from "firebase/firestore";
 import { useContext } from "react";
 import { Pressable, Text } from "react-native";
 
 export function CreateDraftButton() {
   const { user } = useContext(AuthContext);
+  const { lang } = useContext(LangContext);
   const { selectedTags, media, title, bodyText } = useContext(PostContext);
   const CreateDraft = async () => {
     try {
@@ -25,7 +28,7 @@ export function CreateDraftButton() {
       onPress={() => CreateDraft()}
       style={{ backgroundColor: "pink" }}
     >
-      <Text> Draft</Text>
+      <Text> {homeTranslation[lang]["draft"]}</Text>
     </Pressable>
   );
 }

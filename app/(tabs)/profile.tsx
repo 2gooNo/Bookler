@@ -90,7 +90,7 @@ export function Profile({ navigation }: { navigation: any }) {
 
       <Pressable
         onPress={() => navigation.navigate("EditProfile")}
-        style={{ backgroundColor: "green", height: 10, width: 100 }}
+        style={{ backgroundColor: "green", height: 100, width: 100 }}
       ></Pressable>
       <Pressable onPress={updateUser}>
         <Text style={{ color: "white" }}>{isEn ? "en" : "mn"}</Text>

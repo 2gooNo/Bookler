@@ -76,29 +76,30 @@ export function CreatePostButton() {
       const uploadedMedia = await mediaUploader(media);
       console.log(uploadedMedia, "-");
 
-      // -----
-      // const docRef = await addDoc(collection(db, "posts"), {
-      //   userId: user.uid,
-      //   userRef: doc(db, "users", user.uid),
-      //   bodyText: bodyText,
-      //   title: title,
-      //   media: media,
-      //   tags: selectedTags,
-      //   link: linkUrl,
-      // });
-      // const likesCollectionRef = collection(
-      //   doc(db, "posts", docRef.id),
-      //   "likes"
-      // );
-      // const commentCollectionRef = collection(
-      //   doc(db, "posts", docRef.id),
-      //   "comments"
-      // );
-      // const subDocRef = await addDoc(likesCollectionRef, {
-      //   likedBy: doc(db, "users", user.uid),
-      //   type: +1,
-      // });
-      // alert("Subcollection document written with ID: ");
+      if (tags.length == selectedTags.length && uploadedMedia) {
+        const docRef = await addDoc(collection(db, "posts"), {
+          userId: user.uid,
+          userRef: doc(db, "users", user.uid),
+          bodyText: bodyText,
+          title: title,
+          media: uploadedMedia,
+          tags: tags,
+          link: linkUrl,
+        });
+        const likesCollectionRef = collection(
+          doc(db, "posts", docRef.id),
+          "likes"
+        );
+        const commentCollectionRef = collection(
+          doc(db, "posts", docRef.id),
+          "comments"
+        );
+        const subDocRef = await addDoc(likesCollectionRef, {
+          likedBy: doc(db, "users", user.uid),
+          type: +1,
+        });
+        alert("Subcollection document written with ID: ");
+      }
     } catch (err) {}
   };
 

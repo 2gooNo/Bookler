@@ -87,16 +87,17 @@ export function PostPage({ navigation }: { navigation: any }) {
         onGestureEvent={onSwipe}
         onHandlerStateChange={onSwipe}
       >
-        <FlatList
-          data={posts}
-          renderItem={({ item }) => <PostCard item={item} />}
-        >
+        <View>
           <Pressable onPress={() => onLogout()}>
             <Text style={{ backgroundColor: "blue" }}>
               {homeTranslation?.[lang]?.["logOutBtn"]}
             </Text>
           </Pressable>
-        </FlatList>
+          <FlatList
+            data={posts}
+            renderItem={({ item }) => <PostCard item={item} />}
+          />
+        </View>
       </PanGestureHandler>
     </GestureHandlerRootView>
   );

@@ -20,24 +20,26 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-
 import * as Yup from "yup";
 
 export function Login({ navigation }: { navigation: any }) {
   const { setUser } = useContext(AuthContext);
   const { lang } = useContext(LangContext);
   const [seePassword, setSeePassword] = useState(true);
+  const [canSubmit, setCanSubmit] = useState<boolean>(true);
+
   const logInWithPassword = (values: any) => {
-    console.log(values);
+    setCanSubmit(false);
     signInWithEmailAndPassword(auth, values.email, values.password)
       .then((userCredential) => {
         const user = userCredential.user;
         setUser(user);
+        setCanSubmit(true);
         router.push("./home");
       })
 
       .catch((error) => {
-        console.log(error);
+        setCanSubmit(true);
         alert(
           `${homeTranslation[lang]["eitherYourPasswordEmailIsWrongOrThisAccountDoesNotExist"]}`
         );
@@ -96,6 +98,7 @@ export function Login({ navigation }: { navigation: any }) {
                   ]}
                   onBlur={handleBlur("email")}
                   value={values.email}
+                  onSubmitEditing={() => canSubmit && handleSubmit()}
                 ></TextInput>
                 <Text style={{ color: "red" }}>{errors.email}</Text>
               </View>
@@ -139,6 +142,7 @@ export function Login({ navigation }: { navigation: any }) {
                     onBlur={handleBlur("password")}
                     value={values.password}
                     secureTextEntry={seePassword}
+                    onSubmitEditing={() => canSubmit && handleSubmit()}
                   ></TextInput>
 
                   <Pressable
@@ -205,7 +209,10 @@ export function Login({ navigation }: { navigation: any }) {
                     width: "47%",
                   }}
                 >
-                  <Button title="" onPress={() => handleSubmit()}></Button>
+                  <Button
+                    title=""
+                    onPress={() => canSubmit && handleSubmit()}
+                  ></Button>
                 </View>
               </View>
             </View>

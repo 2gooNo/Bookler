@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "../../common/firebase";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { setDoc, doc } from "firebase/firestore";
 import { Formik } from "formik";
 import { AuthContext } from "@/context/authContext";
@@ -23,11 +23,14 @@ import { LangContext } from "@/context/langContext";
 export function PasswordConfirm() {
   const { username, email, birthDate, setUser } = useContext(AuthContext);
   const { lang } = useContext(LangContext);
+  const [canSubmit, setCanSubmit] = useState<boolean>(true);
+
   const signUp = async (values: {
     password: string;
     confirmPassword: string;
   }) => {
     if (values.password == values.confirmPassword && values.password) {
+      setCanSubmit(false);
       try {
         const userCredential = await createUserWithEmailAndPassword(
           auth,
@@ -57,8 +60,9 @@ export function PasswordConfirm() {
         );
         setUser(user);
         router.push("./home");
+        setCanSubmit(true);
       } catch (error: any) {
-        console.error(error, "-");
+        setCanSubmit(true);
         alert(error.message);
       }
     } else {
@@ -101,6 +105,7 @@ export function PasswordConfirm() {
                   onChangeText={handleChange("password")}
                   onBlur={handleBlur("password")}
                   value={values.password}
+                  onSubmitEditing={() => canSubmit && handleSubmit()}
                 />
                 <Text style={{ color: "red" }}>{errors.password}</Text>
               </View>
@@ -117,6 +122,7 @@ export function PasswordConfirm() {
                   onChangeText={handleChange("confirmPassword")}
                   onBlur={handleBlur("confirmPassword")}
                   value={values.confirmPassword}
+                  onSubmitEditing={() => canSubmit && handleSubmit()}
                 />
                 <Text style={{ color: "red" }}>{errors.confirmPassword}</Text>
               </View>

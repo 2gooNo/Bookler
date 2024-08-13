@@ -44,11 +44,10 @@ export function CreatePost({ navigation }: { navigation: any }) {
         style={{
           margin: 0,
           flex: 1,
+          justifyContent: "flex-end",
         }}
       >
-        <View style={{ flex: 1, justifyContent: "flex-end" }}>
-          <HashTagSelect setIsVisible={setIsVisible} />
-        </View>
+        <HashTagSelect setIsVisible={setIsVisible} />
       </Modal>
       <View style={{ flexDirection: "row" }}>
         <Pressable

@@ -3,19 +3,28 @@
 import { EditProfileModal } from "@/components/subComponents/editProfileModal";
 import { AuthContext } from "@/context/authContext";
 import { useContext, useEffect, useState } from "react";
-import { Dimensions, StyleSheet, View, Text, Pressable } from "react-native";
+import {
+  Dimensions,
+  StyleSheet,
+  View,
+  Text,
+  Pressable,
+  Image,
+} from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useNavigation } from "expo-router";
 import { useRoute } from "@react-navigation/native";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/common";
+import BackIcon from "@/assets/images/BackIcon";
+import SearchIcon from "@/assets/images/SearchIcon";
+import CalendarIcon from "@/assets/images/CalendarIcon";
 
 export function Profile({ navigation }: { navigation: any }) {
   const { userData } = useContext(AuthContext);
   const [isEn, setIsEn] = useState(
     userData?.defaultLang == "en" ? true : false
   );
-  const [wait, setWait] = useState<boolean>();
   const date = userData?.birthDate.toDate();
   const formattedDate = date?.toLocaleString();
   const year = formattedDate?.split(",")[0].split(".")[0];
@@ -47,54 +56,84 @@ export function Profile({ navigation }: { navigation: any }) {
       return "December";
     }
   }
-  async function waitState() {
-    // console.log("working");
-
-    // const prevState = isEn;
-    console.log("1");
-
-    setIsEn(!isEn);
-    setWait(true);
-
-    // if (!prevState == isEn) {
-    //   console.log("ajilsan");
-
-    //   updateUser();
-    // }
-    console.log("3");
-  }
-  // useEffect(() => {
-  //   updateUser();
-  // }, [wait]);
-
   async function updateUser() {
-    console.log("zuvshuursun");
-
     const profilePic = doc(db, "users", userData?.userId);
-    console.log("4");
-
     await updateDoc(profilePic, {
       defaultLang: !isEn ? "en" : "mn",
     });
     setIsEn(!isEn);
-    console.log("done");
   }
 
   return (
     <View style={styles.allContainer}>
-      <Text style={{ color: "white" }}>{userData?.userName}</Text>
-      <Text style={{ color: "white" }}>
-        {year}
-        {stringMonth()}
-      </Text>
-
-      <Pressable
-        onPress={() => navigation.navigate("EditProfile")}
-        style={{ backgroundColor: "green", height: 100, width: 100 }}
-      ></Pressable>
-      <Pressable onPress={updateUser}>
-        <Text style={{ color: "white" }}>{isEn ? "en" : "mn"}</Text>
-      </Pressable>
+      <Image style={styles.banner} source={{ uri: userData?.banner }} />
+      <View style={{ width: "100%", height: "100%" }}>
+        <View style={styles.backAndSearch}>
+          <View style={styles.iconWrapper}>
+            <BackIcon style={styles.icon} />
+          </View>
+          <View style={styles.iconWrapper}>
+            <SearchIcon style={styles.icon} />
+          </View>
+        </View>
+        <View
+          style={{
+            width: "100%",
+            height: "10%",
+            justifyContent: "space-between",
+            flexDirection: "row",
+            alignItems: "flex-end",
+          }}
+        >
+          <Image
+            style={styles.profileImg}
+            source={{ uri: userData?.photoUrl }}
+          />
+          <Pressable
+            onPress={() => navigation.navigate("EditProfile")}
+            style={styles.editProfile}
+          >
+            <Text
+              style={{
+                fontFamily: "Inherit",
+                fontSize: 15,
+                fontWeight: "700",
+                color: "white",
+              }}
+            >
+              Edit Profile
+            </Text>
+          </Pressable>
+        </View>
+        <View style={{ gap: 8 }}>
+          <Text
+            style={{
+              fontFamily: "Inherit",
+              fontSize: 20,
+              fontWeight: "800",
+              color: "white",
+            }}
+          >
+            {userData?.userName}
+          </Text>
+          <View style={{ flexDirection: "row", gap: 5 }}>
+            <CalendarIcon style={{ width: "5%" }} />
+            <Text
+              style={{
+                fontFamily: "Inherit",
+                fontSize: 15,
+                fontWeight: "500",
+                color: "rgb(113, 118, 123)",
+              }}
+            >
+              Born in {stringMonth()} {year}
+            </Text>
+          </View>
+        </View>
+        {/* <Pressable onPress={updateUser}>
+          <Text style={{ color: "white" }}>{isEn ? "en" : "mn"}</Text>
+        </Pressable> */}
+      </View>
     </View>
   );
 }
@@ -104,49 +143,56 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     height: Dimensions.get("window").height,
     width: Dimensions.get("window").width,
-    paddingTop: "18%",
+    paddingTop: "12%",
+    paddingLeft: "3%",
+    paddingRight: "3%",
+    position: "relative",
+  },
+  banner: {
+    position: "absolute",
+    top: 0,
+    width: "111%",
+    height: "17%",
+  },
+  icon: {
+    width: "60%",
+    height: "60%",
+  },
+  iconWrapper: {
+    backgroundColor: "black",
+    width: "9%",
+    height: "100%",
+    borderRadius: 50,
+    justifyContent: "center",
     alignItems: "center",
+    opacity: 0.5,
   },
-  upperText: {
-    fontFamily: "Inter",
-    fontSize: 28,
-    fontWeight: "800",
-    color: "white",
+  backAndSearch: {
     width: "100%",
-    letterSpacing: 1,
-    marginBottom: "20%",
-    paddingLeft: "8%",
-  },
-  xLogo: {
-    marginBottom: "10%",
-    width: "10%",
-    height: "10%",
-  },
-  input: {
-    height: "auto",
-    paddingBottom: "3%",
-    borderBottomWidth: 1,
-    borderStyle: "solid",
-    borderColor: "rgb(98,101,105)",
-    fontFamily: "Inter",
-    fontSize: 18,
-    fontWeight: "400",
-
-    color: "rgb(74,153,233)",
-  },
-  nextButton: {
-    backgroundColor: "white",
-    paddingBottom: "2%",
-    paddingTop: "2%",
+    height: "4%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: "8%",
     paddingLeft: "5%",
     paddingRight: "5%",
-    width: "22%",
-    borderRadius: 18,
   },
-  passVisibilityIcon: {
-    width: "100%",
+  profileImg: {
+    width: "22%",
     height: "100%",
-    color: "white",
+    borderColor: "black",
+    borderRadius: 50,
+    borderStyle: "solid",
+    borderWidth: 4,
+  },
+  editProfile: {
+    borderColor: "rgb(83, 100, 113)",
+    borderStyle: "solid",
+    borderWidth: 1,
+    paddingTop: "2%",
+    paddingBottom: "2%",
+    paddingLeft: "4%",
+    paddingRight: "4%",
+    borderRadius: 30,
   },
 });
 

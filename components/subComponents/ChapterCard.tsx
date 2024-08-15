@@ -18,6 +18,7 @@ export function ChapterCard({
           style={{ color: "white" }}
           value={chapteer}
           onChangeText={setChapter}
+          onSubmitEditing={() => setEditing(false)}
         />
       ) : (
         <Text style={{ color: "white" }}>{chapteer}</Text>

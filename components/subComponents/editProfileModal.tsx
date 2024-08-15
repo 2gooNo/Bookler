@@ -1,19 +1,19 @@
 import UserIcon from "@/assets/images/UserIcon";
 import React, { useContext, useState } from "react";
 import {
-  Modal,
   StyleSheet,
   Text,
   Pressable,
   View,
   TextInput,
-  Image,
   Button,
+  Dimensions,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 
 import GestureRecognizer from "react-native-swipe-gestures";
 import { doc, updateDoc } from "firebase/firestore";
+import { Image } from "expo-image";
 import { db } from "@/common";
 import { AuthContext } from "@/context/authContext";
 import { mediaUploader } from "@/utils/image-uploader";
@@ -78,43 +78,92 @@ export function EditProfileModal() {
       });
     }
   };
+  console.log(photos?.bannerUrl, photos?.profileUrl, "--------");
+
   return (
     <View style={styles.allContainer}>
-      <View>
-        {photos?.bannerUri == "" && photos?.bannerUrl == "" ? (
-          <Pressable onPress={() => pickImage(true)}>
-            <BannerIcon />
-          </Pressable>
-        ) : photos?.bannerUrl == "" ? (
-          <Pressable onPress={() => pickImage(true)}>
-            <SelectedMedia value={photos?.bannerUri} />
-          </Pressable>
-        ) : (
-          <Pressable onPress={() => pickImage(true)}>
-            <Image
-              width={100}
-              height={100}
-              source={{ uri: photos?.bannerUrl }}
-            />
-          </Pressable>
-        )}
-        {photos?.profileUri == "" && photos?.profileUrl == "" ? (
-          <Pressable onPress={() => pickImage(false)}>
-            <UserIcon />
-          </Pressable>
-        ) : photos?.profileUrl == "" ? (
-          <Pressable onPress={() => pickImage(false)}>
-            <SelectedMedia value={photos?.profileUri} />
-          </Pressable>
-        ) : (
-          <Pressable onPress={() => pickImage(false)}>
-            <Image
-              width={100}
-              height={100}
-              source={{ uri: photos?.profileUrl }}
-            />
-          </Pressable>
-        )}
+      <View
+        style={{
+          height: "5%",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Text
+          style={{
+            fontFamily: "Inherit",
+            fontSize: 20,
+            fontWeight: "700",
+            color: "white",
+          }}
+        >
+          Edit profile
+        </Text>
+      </View>
+      {photos?.bannerUri == "" && photos?.bannerUrl == "" ? (
+        <Pressable onPress={() => pickImage(true)}>
+          <BannerIcon />
+        </Pressable>
+      ) : photos?.bannerUrl == "" ? (
+        <Pressable
+          style={{
+            position: "absolute",
+            top: 0,
+            width: "100%",
+            height: "18%",
+          }}
+          onPress={() => pickImage(true)}
+        >
+          <SelectedMedia value={photos?.bannerUri} />
+        </Pressable>
+      ) : (
+        <Pressable
+          style={{ height: "18%", width: "100%" }}
+          onPress={() => pickImage(true)}
+        >
+          <Image style={styles.banner} source={{ uri: photos?.bannerUrl }} />
+        </Pressable>
+      )}
+
+      {photos?.profileUri == "" && photos?.profileUrl == "" ? (
+        <Pressable onPress={() => pickImage(false)}>
+          <UserIcon />
+        </Pressable>
+      ) : photos?.profileUrl == "" ? (
+        <Pressable
+          style={{
+            width: "22%",
+            height: "10%",
+            borderColor: "black",
+            borderRadius: 50,
+            borderStyle: "solid",
+            borderWidth: 4,
+            top: "14%",
+            left: "3%",
+            position: "absolute",
+          }}
+          onPress={() => pickImage(false)}
+        >
+          <SelectedMedia value={photos?.profileUri} />
+        </Pressable>
+      ) : (
+        <Pressable
+          style={{
+            height: "10%",
+            top: "14%",
+            position: "absolute",
+            left: "3%",
+            width: "22%",
+          }}
+          onPress={() => pickImage(false)}
+        >
+          <Image
+            style={styles.profileImg}
+            source={{ uri: photos?.profileUrl }}
+          />
+        </Pressable>
+      )}
+      <View style={styles.inputs}>
         <TextInput
           style={styles.informationInputs}
           placeholder="Name"
@@ -131,10 +180,14 @@ export function EditProfileModal() {
           onChangeText={(value) => setInputVals({ ...inputVals, bio: value })}
           value={inputVals.bio}
         ></TextInput>
+
+        <Pressable
+          style={{ backgroundColor: "green", height: 100, width: 100 }}
+          onPress={updateUser}
+        >
+          <Text style={{ color: "white" }}>edit that damn user please</Text>
+        </Pressable>
       </View>
-      <Pressable onPress={updateUser}>
-        <Text style={{ color: "white" }}>edit that damn user please</Text>
-      </Pressable>
     </View>
   );
 }
@@ -142,14 +195,19 @@ export function EditProfileModal() {
 const styles = StyleSheet.create({
   allContainer: {
     backgroundColor: "#000000",
-    height: "100%",
-    width: "100%",
+    height: Dimensions.get("window").height,
+    width: Dimensions.get("window").width,
+    position: "relative",
+    alignItems: "center",
+    // paddingTop: "12%",
+    // paddingLeft: "3%",
   },
   informationInputs: {
     color: "white",
     borderBlockColor: "white",
     borderWidth: 1,
     borderStyle: "solid",
+    marginTop: 200,
   },
   avatar: {
     width: "10%",
@@ -200,4 +258,21 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center",
   },
+  banner: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    marginBottom: "10%",
+  },
+  profileImg: {
+    width: "100%",
+    height: "100%",
+    borderColor: "black",
+    borderRadius: 50,
+    borderStyle: "solid",
+    borderWidth: 4,
+  },
+  inputs: {},
 });

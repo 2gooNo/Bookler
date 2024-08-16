@@ -15,43 +15,23 @@ import { Collapsible } from "@/components/Collapsible";
 import { ExternalLink } from "@/components/ExternalLink";
 import { useContext, useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/native";
-import { useNavigation } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { CreateBook } from "@/components/subComponents/CreateBook";
 import BackIcon from "@/assets/images/BackIcon";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  onSnapshot,
-  query,
-} from "firebase/firestore";
+import { collection, onSnapshot, query } from "firebase/firestore";
 import { db } from "@/common";
-
+import BookDetail from "@/components/subComponents/BookDetails";
 export function BookCommunities({ navigation }: { navigation: any }) {
   const [bookData, setBookData] = useState<any>([]);
   useEffect(() => {
     const q = query(collection(db, "books"));
-
     onSnapshot(q, async (snapshot) => {
       const userPromises = snapshot.docs.map((postDoc) => {
-        // if (!bookData) {
-        //   setBookData(postDoc?.data());
-        // } else {
-        //   setBookData((prev: any) => [...prev, postDoc.data()]);
-        // }
         setBookData((prev: any) => [...prev, postDoc.data()]);
       });
     });
   }, []);
-
-  console.log(
-    bookData[1]?.chapters?.map((chapter: any) => {
-      chapter;
-    }),
-    "++++++++++"
-  );
 
   return (
     <View style={styles.allContainer}>
@@ -84,7 +64,8 @@ export function BookCommunities({ navigation }: { navigation: any }) {
       </View>
       <View style={{ width: "100%", height: "40%" }}>
         {bookData?.map((book: any, index: number) => (
-          <View
+          <Pressable
+            onPress={() => router.navigate(`/details/${book?.name}`)}
             style={{
               width: "100%",
               height: "30%",
@@ -127,13 +108,13 @@ export function BookCommunities({ navigation }: { navigation: any }) {
                 {book?.chapters.length} chapters
               </Text>
             </View>
-          </View>
+          </Pressable>
         ))}
       </View>
-      {/* <Pressable
+      <Pressable
         style={{ backgroundColor: "white", width: "20%", height: "15%" }}
         onPress={() => navigation.navigate("CreateBook")}
-      ></Pressable> */}
+      ></Pressable>
     </View>
   );
 }
@@ -183,6 +164,11 @@ export default function HomeStackScreen() {
       <HomeStack.Screen
         name="BookCommunities"
         component={BookCommunities}
+        options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
+        name="BookDetails"
+        component={BookDetail}
         options={{ headerShown: false }}
       />
 

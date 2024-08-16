@@ -12,18 +12,38 @@ import {
   StyleSheet,
   Dimensions,
 } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChapterCard } from "./ChapterCard";
-import { setDoc, doc, collection, addDoc } from "firebase/firestore";
+import {
+  setDoc,
+  doc,
+  collection,
+  addDoc,
+  query,
+  onSnapshot,
+} from "firebase/firestore";
 import * as ImagePicker from "expo-image-picker";
 import UserIcon from "@/assets/images/UserIcon";
 import { SelectedMedia } from "./SelectedMedia";
 import { db } from "@/common";
 import { mediaUploader } from "@/utils/image-uploader";
+import DropDownPicker from "react-native-dropdown-picker";
+import RNPickerSelect from "react-native-picker-select";
 
 export function CreateBook() {
-  const [chapters, setChapters] = useState<string[]>([]);
+  const [categories, setCategories] = useState<any>([]);
   const [bookUri, setBookUri] = useState<any>();
+  async function fetchCategory() {
+    const q = query(collection(db, "categories"));
+    onSnapshot(q, async (snapshot) => {
+      const userPromises = snapshot.docs.map((postDoc) => {
+        setCategories((prev: any) => [...prev, postDoc.data()]);
+      });
+    });
+  }
+  useEffect(() => {
+    fetchCategory();
+  }, []);
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -41,29 +61,18 @@ export function CreateBook() {
     description: string;
     chapters: never[];
     chapter: string;
+    categoryId: string;
   }) {
-    console.log("running");
-
     const uploadedMedia = await mediaUploader([bookUri]);
-    console.log(uploadedMedia);
-
     try {
-      console.log("try");
-
       const docRef = await addDoc(collection(db, "books"), {
         name: values?.bookName,
         description: values?.description,
         chapters: values?.chapters,
         bookImg: uploadedMedia[0]?.url,
+        // category:
       });
-      console.log("done");
     } catch (err) {}
-    // setDoc(doc(db, "books", values?.bookName), {
-    //   name: values?.bookName,
-    //   description: values?.description,
-    //   chapters: values?.chapters,
-    //   bookImg: uploadedMedia[0]?.url,
-    // });
   }
   return (
     <KeyboardAvoidingView
@@ -76,6 +85,7 @@ export function CreateBook() {
             description: "",
             chapters: [],
             chapter: "",
+            categoryId: "",
           }}
           onSubmit={async (values, { setSubmitting }) => {
             console.log(values);
@@ -99,6 +109,41 @@ export function CreateBook() {
                 gap: 5,
               }}
             >
+              <View
+                style={{
+                  position: "relative",
+                }}
+              >
+                <View style={styles.nextButton}>
+                  <Text
+                    style={{
+                      color: "black",
+                      fontFamily: "Inter",
+                      fontSize: 18,
+                      fontWeight: "600",
+                    }}
+                  >
+                    Add Book
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    top: 0,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    paddingLeft: "3%",
+                    paddingRight: "3%",
+                    borderRadius: 18,
+                    width: "30%",
+                    height: "100%",
+                    zIndex: 5,
+                  }}
+                >
+                  <Button title="" onPress={() => handleSubmit()}></Button>
+                </View>
+              </View>
               <TextInput
                 style={{ width: "70%", height: "7%", backgroundColor: "white" }}
                 placeholderTextColor="black"
@@ -152,44 +197,19 @@ export function CreateBook() {
                   <UserIcon />
                 </Pressable>
               )}
-              <View
-                style={{
-                  // width: "100%",
-                  // height: "auto",
-
-                  position: "relative",
-                }}
-              >
-                <View style={styles.nextButton}>
-                  <Text
-                    style={{
-                      color: "black",
-                      fontFamily: "Inter",
-                      fontSize: 18,
-                      fontWeight: "600",
-                    }}
-                  >
-                    Add Book
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    position: "absolute",
-                    right: 0,
-                    top: 0,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    paddingLeft: "3%",
-                    paddingRight: "3%",
-                    borderRadius: 18,
-                    width: "30%",
-                    height: "100%",
-                    backgroundColor: "red",
-                    zIndex: 5,
-                  }}
-                >
-                  <Button title="" onPress={() => handleSubmit()}></Button>
-                </View>
+              <View style={{ gap: 10 }}>
+                {categories?.map(
+                  (category: { name: String }, index: number) => (
+                    <Pressable
+                      key={index}
+                      onPress={() =>
+                        setFieldValue("categoryId", category?.name)
+                      }
+                    >
+                      <Text style={{ color: "white" }}>{category?.name}</Text>
+                    </Pressable>
+                  )
+                )}
               </View>
             </View>
           )}

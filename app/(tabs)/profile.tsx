@@ -12,7 +12,7 @@ import {
   Image,
 } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useNavigation } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import { useRoute } from "@react-navigation/native";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/common";
@@ -68,14 +68,12 @@ export function Profile({ navigation }: { navigation: any }) {
     <View style={styles.allContainer}>
       <Image style={styles.banner} source={{ uri: userData?.banner }} />
       <View style={{ width: "100%", height: "100%" }}>
-        <View style={styles.backAndSearch}>
-          <View style={styles.iconWrapper}>
-            <BackIcon style={styles.icon} />
-          </View>
-          <View style={styles.iconWrapper}>
-            <SearchIcon style={styles.icon} />
-          </View>
-        </View>
+        <Pressable
+          onPress={() => router?.navigate("/home")}
+          style={styles.iconWrapper}
+        >
+          <BackIcon style={styles.icon} />
+        </Pressable>
         <View
           style={{
             width: "100%",
@@ -115,6 +113,16 @@ export function Profile({ navigation }: { navigation: any }) {
             }}
           >
             {userData?.userName}
+          </Text>
+          <Text
+            style={{
+              color: "white",
+              fontFamily: "Inherit",
+              fontSize: 15,
+              fontWeight: "600",
+            }}
+          >
+            {userData?.bio}
           </Text>
           <View style={{ flexDirection: "row", gap: 5 }}>
             <CalendarIcon style={{ width: "5%" }} />
@@ -160,21 +168,14 @@ const styles = StyleSheet.create({
   },
   iconWrapper: {
     backgroundColor: "black",
-    width: "9%",
-    height: "100%",
+    width: "8.5%",
+    height: "3.7%",
     borderRadius: 50,
     justifyContent: "center",
     alignItems: "center",
     opacity: 0.5,
-  },
-  backAndSearch: {
-    width: "100%",
-    height: "4%",
-    flexDirection: "row",
-    justifyContent: "space-between",
     marginBottom: "8%",
-    paddingLeft: "5%",
-    paddingRight: "5%",
+    marginLeft: "5%",
   },
   profileImg: {
     width: "22%",
@@ -223,9 +224,9 @@ export default function HomeStackScreen() {
         name="EditProfile"
         component={EditProfileModal}
         options={{
-          animation: "slide_from_bottom",
+          // animation: "slide_from_bottom",
           headerShown: false,
-          gestureDirection: "vertical",
+          // gestureDirection: "vertical",
           presentation: "modal",
         }}
       />

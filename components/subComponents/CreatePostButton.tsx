@@ -1,6 +1,6 @@
 import { db } from "@/common";
 import { AuthContext } from "@/context/authContext";
-import { PostContext } from "@/context/createPostContext";
+import { CreatePostContext } from "@/context/createPostContext";
 import {
   addDoc,
   collection,
@@ -37,7 +37,7 @@ export function CreatePostButton() {
     setSelectedTags,
     setTitle,
     setLinkUrl,
-  } = useContext(PostContext);
+  } = useContext(CreatePostContext);
   const [tags, setTags] = useState<any>([]);
   const CreatePost = async () => {
     try {

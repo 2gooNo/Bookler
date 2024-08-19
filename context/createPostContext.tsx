@@ -22,11 +22,11 @@ type PostContextType = {
   setLinkComponent: React.Dispatch<React.SetStateAction<boolean>>;
   linkComponent: boolean;
 };
-export const PostContext = React.createContext<PostContextType>(
+export const CreatePostContext = React.createContext<PostContextType>(
   {} as PostContextType
 );
 
-export const PostProvider = ({ children }: Props) => {
+export const CreatePostProvider = ({ children }: Props) => {
   const [selectedTags, setSelectedTags] = useState<SelectedTagsType[]>([]);
   const [media, setMedia] = useState<string[]>([]);
   const [title, setTitle] = useState<string>("");
@@ -36,7 +36,7 @@ export const PostProvider = ({ children }: Props) => {
   const [linkComponent, setLinkComponent] = useState<boolean>(false);
 
   return (
-    <PostContext.Provider
+    <CreatePostContext.Provider
       value={{
         selectedTags,
         setSelectedTags,
@@ -55,10 +55,10 @@ export const PostProvider = ({ children }: Props) => {
       }}
     >
       {children}
-    </PostContext.Provider>
+    </CreatePostContext.Provider>
   );
 };
 
 export const useAuth = (): PostContextType => {
-  return React.useContext(PostContext);
+  return React.useContext(CreatePostContext);
 };

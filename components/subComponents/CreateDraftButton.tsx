@@ -1,6 +1,6 @@
 import { db } from "@/common";
 import { AuthContext } from "@/context/authContext";
-import { PostContext } from "@/context/createPostContext";
+import { CreatePostContext } from "@/context/createPostContext";
 import { LangContext } from "@/context/langContext";
 import { homeTranslation } from "@/localization/translate";
 import { router } from "expo-router";
@@ -22,7 +22,7 @@ export function CreateDraftButton() {
     setMedia,
     setSelectedTags,
     setLinkUrl,
-  } = useContext(PostContext);
+  } = useContext(CreatePostContext);
   const CreateDraft = async () => {
     try {
       await addDoc(collection(db, "drafts"), {

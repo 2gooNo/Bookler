@@ -1,7 +1,7 @@
 import { AuthContext } from "@/context/authContext";
 import { LangContext } from "@/context/langContext";
 import { homeTranslation } from "@/localization/translate";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import {
   Dimensions,
   FlatList,
@@ -33,13 +33,31 @@ import {
 } from "firebase/firestore";
 import { app, db } from "@/common";
 import { PostCard } from "./PostCard";
+import { PostOptions } from "./PostOptions";
+import BottomSheet, { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 export function PostPage({ navigation }: { navigation: any }) {
   const { onLogout } = useContext(AuthContext);
   const { lang } = useContext(LangContext);
   const [posts, setPosts] = useState<any[]>([]);
-  const [hasMore, setHasMore] = useState(true);
   const [lastVisible, setLastVisible] = useState<any>(null);
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const handleSheetChanges = useCallback((index: number) => {
+    if (index == -1) {
+      navigation.getParent().setOptions({
+        tabBarStyle: {
+          display: "flex",
+        },
+      });
+    } else if (index == 1) {
+      navigation.getParent().setOptions({
+        tabBarStyle: {
+          display: "none",
+        },
+      });
+    }
+  }, []);
+  const [postSheetData, setPostSheetData] = useState<any>();
 
   const getPostsAndUserInfo = async () => {
     const q = query(
@@ -53,7 +71,10 @@ export function PostPage({ navigation }: { navigation: any }) {
       const userPromises = snapshot.docs.map((postDoc) => {
         const postData = [postDoc.data(), postDoc.id];
 
-        const userRef = postData?.[0]?.userRef;
+        const userRef =
+          postData?.[0] && typeof postData?.[0] !== "string"
+            ? postData?.[0].userRef
+            : null;
         setLastVisible(postDoc.id);
         return getDoc(userRef)
           .then((userDoc) => {
@@ -103,22 +124,66 @@ export function PostPage({ navigation }: { navigation: any }) {
         onGestureEvent={onSwipe}
         onHandlerStateChange={onSwipe}
       >
-        <View>
-          <Pressable onPress={() => onLogout()}>
+        <View style={{ position: "relative" }}>
+          {/* <Pressable onPress={() => onLogout()}>
             <Text style={{ backgroundColor: "blue" }}>
               {homeTranslation?.[lang]?.["logOutBtn"]}
             </Text>
-          </Pressable>
+          </Pressable> */}
           <FlatList
             onEndReached={() => getPostsAndUserInfo()}
             onEndReachedThreshold={0.5}
             style={{ gap: 10 }}
             data={posts}
-            renderItem={({ item }) => <PostCard item={item} />}
+            renderItem={({ item }) => (
+              <PostCard
+                item={item}
+                bottomSheetRef={bottomSheetRef}
+                navigation={navigation}
+              />
+            )}
             ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
           />
         </View>
       </PanGestureHandler>
+      {/* <BottomSheetModalProvider> */}
+      {/* <View
+        style={{
+          height: 800,
+          width: "100%",
+          position: "absolute",
+          bottom: 0,
+          zIndex: 1000,
+        }}
+      > */}
+      <BottomSheet
+        snapPoints={[600, 400]}
+        onChange={handleSheetChanges}
+        ref={bottomSheetRef}
+        index={-1}
+        containerHeight={600}
+        enablePanDownToClose={true}
+        style={{
+          width: "100%",
+          height: "auto",
+          zIndex: 10,
+        }}
+        onClose={() =>
+          navigation.getParent().setOptions({
+            tabBarStyle: {
+              display: "flex",
+            },
+          })
+        }
+      >
+        {/* <FullWindowOverlay>
+          <View>  */}
+        <PostOptions />
+        {/* </View>
+          </FullWindowOverlay> */}
+      </BottomSheet>
+      {/* </View> */}
+      {/* </BottomSheetModalProvider> */}
     </GestureHandlerRootView>
   );
 }

@@ -15,6 +15,8 @@ import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
 import { PostPage } from "@/components/subComponents/PostPage";
 import { FollowingPost } from "@/components/subComponents/FollowingPost";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { CommentPage } from "@/components/subComponents/CommentPage";
 
 const CustomHeaderTitle = ({ navigation, index }: any) => {
   return (
@@ -61,6 +63,11 @@ export default function HomeStackScreen() {
           ),
         })}
       />
+      {/* <HomeStack.Screen
+        name="CommentPage"
+        component={CommentPage}
+        options={({ navigation }) => ({})}
+      /> */}
       <HomeStack.Screen
         name="Following"
         component={FollowingPost}

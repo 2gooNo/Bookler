@@ -11,6 +11,7 @@ import {
   Button,
   StyleSheet,
   Dimensions,
+  ScrollView,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { ChapterCard } from "./ChapterCard";
@@ -61,7 +62,7 @@ export function CreateBook() {
     description: string;
     chapters: never[];
     chapter: string;
-    categoryId: string;
+    category: string;
   }) {
     const uploadedMedia = await mediaUploader([bookUri]);
     try {
@@ -70,7 +71,7 @@ export function CreateBook() {
         description: values?.description,
         chapters: values?.chapters,
         bookImg: uploadedMedia[0]?.url,
-        // category:
+        category: values?.category,
       });
     } catch (err) {}
   }
@@ -78,14 +79,14 @@ export function CreateBook() {
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <View style={{ width: "100%", height: "100%" }}>
+      <ScrollView horizontal={false} style={styles.allContainer}>
         <Formik
           initialValues={{
             bookName: "",
             description: "",
             chapters: [],
             chapter: "",
-            categoryId: "",
+            category: "",
           }}
           onSubmit={async (values, { setSubmitting }) => {
             console.log(values);
@@ -100,15 +101,16 @@ export function CreateBook() {
             values,
             errors,
           }) => (
-            <View
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                width: "100%",
-                height: "100%",
-                gap: 5,
-              }}
-            >
+            // <View
+            //   style={{
+            //     alignItems: "center",
+            //     justifyContent: "center",
+            //     width: "100%",
+            //     height: "100%",
+            //     gap: 5,
+            //   }}
+            // >
+            <>
               <View
                 style={{
                   position: "relative",
@@ -130,22 +132,23 @@ export function CreateBook() {
                   style={{
                     position: "absolute",
                     right: 0,
-                    top: 0,
+                    top: 1,
                     justifyContent: "center",
                     alignItems: "center",
                     paddingLeft: "3%",
                     paddingRight: "3%",
                     borderRadius: 18,
                     width: "30%",
-                    height: "100%",
+                    height: 500,
                     zIndex: 5,
+                    backgroundColor: "red",
                   }}
                 >
                   <Button title="" onPress={() => handleSubmit()}></Button>
                 </View>
               </View>
               <TextInput
-                style={{ width: "70%", height: "7%", backgroundColor: "white" }}
+                style={{ width: "70%", height: 60, backgroundColor: "white" }}
                 placeholderTextColor="black"
                 placeholder="Book Name"
                 value={values?.bookName}
@@ -153,7 +156,7 @@ export function CreateBook() {
                 onBlur={handleBlur("description")}
               />
               <TextInput
-                style={{ width: "70%", height: "7%", backgroundColor: "white" }}
+                style={{ width: "70%", height: 60, backgroundColor: "white" }}
                 placeholderTextColor="black"
                 placeholder="Description"
                 value={values?.description}
@@ -165,13 +168,13 @@ export function CreateBook() {
                 value={values?.chapter}
                 placeholder="Add Chapter"
                 placeholderTextColor="black"
-                style={{ width: "70%", height: "7%", backgroundColor: "white" }}
+                style={{ width: "70%", height: 60, backgroundColor: "white" }}
               />
               <Pressable
                 style={{
                   backgroundColor: "white",
                   width: "20%",
-                  height: "10%",
+                  height: 80,
                 }}
                 onPress={() => {
                   setFieldValue("chapters", [
@@ -202,55 +205,37 @@ export function CreateBook() {
                   (category: { name: String }, index: number) => (
                     <Pressable
                       key={index}
-                      onPress={() =>
-                        setFieldValue("categoryId", category?.name)
-                      }
+                      style={{
+                        borderColor: "white",
+                        borderWidth: 1,
+                        borderStyle: "solid",
+                        height: 40,
+                      }}
+                      onPress={() => setFieldValue("category", category?.name)}
                     >
                       <Text style={{ color: "white" }}>{category?.name}</Text>
                     </Pressable>
                   )
                 )}
               </View>
-            </View>
+              {/* // </View> */}
+            </>
           )}
         </Formik>
-      </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }
 const styles = StyleSheet.create({
   allContainer: {
     backgroundColor: "black",
-    height: Dimensions.get("window").height,
+    // height: Dimensions.get("window").height,
     width: Dimensions.get("window").width,
-    paddingTop: "18%",
-    alignItems: "center",
-  },
-  upperText: {
-    fontFamily: "Inter",
-    fontSize: 28,
-    fontWeight: "800",
-    color: "white",
-    width: "100%",
-    letterSpacing: 1,
-    marginBottom: "20%",
-    paddingLeft: "8%",
-  },
-  xLogo: {
-    marginBottom: "10%",
-    width: "10%",
-    height: "10%",
-  },
-  input: {
-    height: "auto",
-    paddingBottom: "3%",
-    borderBottomWidth: 1,
-    borderStyle: "solid",
-    borderColor: "rgb(98,101,105)",
-    fontFamily: "Inter",
-    fontSize: 18,
-    fontWeight: "400",
-    color: "rgb(74,153,233)",
+    paddingTop: 50,
+    paddingLeft: "3%",
+    paddingRight: "1%",
+    position: "relative",
+    gap: 20,
   },
   nextButton: {
     backgroundColor: "white",

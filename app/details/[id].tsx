@@ -9,7 +9,7 @@ import BackIcon from "@/assets/images/BackIcon";
 export default function DetailsScreen() {
   const { id } = useLocalSearchParams();
   const [bookData, setBookData] = useState<any>();
-  const [category, setCategory] = useState<any>();
+  const [categoryData, setCategoryData] = useState<any>([]);
   async function BookFetch() {
     const q = query(collection(db, "books"), where("name", "==", id));
     onSnapshot(q, async (snapshot) => {
@@ -25,7 +25,7 @@ export default function DetailsScreen() {
     );
     onSnapshot(q, async (snapshot) => {
       const userPromises = snapshot.docs.map((postDoc) => {
-        setCategory(postDoc?.data());
+        setCategoryData((prev: any) => [...prev, postDoc.data()]);
       });
     });
   }
@@ -53,8 +53,12 @@ export default function DetailsScreen() {
       >
         {bookData?.name}
       </Text>
-      <View>
-        <Text style={{ color: "white" }}>{category}</Text>
+      <View style={styles.categories}>
+        {categoryData?.map((category: { name: string }, index: number) => (
+          <View style={styles?.category} key={index}>
+            <Text style={{ color: "white" }}>{category?.name}</Text>
+          </View>
+        ))}
       </View>
     </View>
   );
@@ -90,5 +94,14 @@ const styles = StyleSheet.create({
     opacity: 0.5,
     marginBottom: "20%",
     marginLeft: "5%",
+  },
+  categories: {
+    gap: 30,
+  },
+  category: {
+    borderColor: "white",
+    borderWidth: 1,
+    borderStyle: "solid",
+    borderRadius: 50,
   },
 });

@@ -6,7 +6,7 @@ function CalendarIcon(props: any) {
     <Svg
       viewBox="0 0 24 24"
       aria-hidden="true"
-      className="r-4qtqp9 r-1xvli5t r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-1bwzh9t r-1gs4q39"
+      className="r-4qtqp9 r-1xvli5t r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-1bwzh9t"
       fill="rgb(113, 118, 123)"
       {...props}
     >

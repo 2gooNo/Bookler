@@ -6,19 +6,18 @@ import {
   Pressable,
   View,
   TextInput,
-  Button,
   Dimensions,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-
-import GestureRecognizer from "react-native-swipe-gestures";
 import { doc, updateDoc } from "firebase/firestore";
 import { Image } from "expo-image";
 import { db } from "@/common";
 import { AuthContext } from "@/context/authContext";
 import { mediaUploader } from "@/utils/image-uploader";
+import { router } from "expo-router";
 import { SelectedMedia } from "./SelectedMedia";
 import BannerIcon from "@/assets/images/BannerIcon";
+import UploadImgIcon from "@/assets/images/UploadImageIcon";
 
 export function EditProfileModal() {
   const { userData } = useContext(AuthContext);
@@ -28,7 +27,6 @@ export function EditProfileModal() {
     bannerUrl: userData?.banner == "" ? "" : userData?.banner,
     bannerUri: "",
   });
-  const [modalVisible, setModalVisible] = useState(false);
   const [inputVals, setInputVals] = useState({
     banner: `${userData?.banner}`,
     bio: `${userData?.bio}`,
@@ -58,6 +56,7 @@ export function EditProfileModal() {
       userName: inputVals.userName,
     });
     console.log("done");
+    router.back();
   }
   const pickImage = async (isBanner: boolean) => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -78,17 +77,33 @@ export function EditProfileModal() {
       });
     }
   };
-  console.log(photos?.bannerUrl, photos?.profileUrl, "--------");
-
   return (
     <View style={styles.allContainer}>
       <View
         style={{
           height: "5%",
+          width: "100%",
           justifyContent: "center",
           alignItems: "center",
+          flexDirection: "row",
+          position: "relative",
         }}
       >
+        <Pressable
+          style={{ position: "absolute", left: "5%" }}
+          onPress={() => router.back()}
+        >
+          <Text
+            style={{
+              color: "white",
+              fontFamily: "Inherit",
+              fontSize: 19,
+              fontWeight: "500",
+            }}
+          >
+            Cancel
+          </Text>
+        </Pressable>
         <Text
           style={{
             fontFamily: "Inherit",
@@ -99,6 +114,21 @@ export function EditProfileModal() {
         >
           Edit profile
         </Text>
+        <Pressable
+          style={{ marginLeft: "10%", position: "absolute", right: "5%" }}
+          onPress={updateUser}
+        >
+          <Text
+            style={{
+              color: "white",
+              fontFamily: "Inherit",
+              fontSize: 20,
+              fontWeight: "600",
+            }}
+          >
+            Save
+          </Text>
+        </Pressable>
       </View>
       {photos?.bannerUri == "" && photos?.bannerUrl == "" ? (
         <Pressable onPress={() => pickImage(true)}>
@@ -138,7 +168,7 @@ export function EditProfileModal() {
             borderRadius: 50,
             borderStyle: "solid",
             borderWidth: 4,
-            top: "14%",
+            top: "19.5%",
             left: "3%",
             position: "absolute",
           }}
@@ -150,13 +180,16 @@ export function EditProfileModal() {
         <Pressable
           style={{
             height: "10%",
-            top: "14%",
+            top: "19.5%",
             position: "absolute",
             left: "3%",
             width: "22%",
+            justifyContent: "center",
+            alignItems: "center",
           }}
           onPress={() => pickImage(false)}
         >
+          <UploadImgIcon style={styles.uploadIcon} />
           <Image
             style={styles.profileImg}
             source={{ uri: photos?.profileUrl }}
@@ -164,29 +197,74 @@ export function EditProfileModal() {
         </Pressable>
       )}
       <View style={styles.inputs}>
-        <TextInput
-          style={styles.informationInputs}
-          placeholder="Name"
-          defaultValue={userData.userName}
-          onChangeText={(value) =>
-            setInputVals({ ...inputVals, userName: value })
-          }
-          value={inputVals.userName}
-        ></TextInput>
-        <TextInput
-          placeholder="bio"
-          style={styles.informationInputs}
-          defaultValue={userData.bio}
-          onChangeText={(value) => setInputVals({ ...inputVals, bio: value })}
-          value={inputVals.bio}
-        ></TextInput>
-
-        <Pressable
-          style={{ backgroundColor: "green", height: 100, width: 100 }}
-          onPress={updateUser}
+        <View
+          style={{
+            flexDirection: "row",
+            gap: 45,
+            width: "100%",
+            paddingLeft: "3%",
+            borderTopColor: "rgb(66, 67, 68)",
+            borderWidth: 1,
+            borderStyle: "solid",
+            paddingTop: "3%",
+            paddingBottom: "1%",
+          }}
         >
-          <Text style={{ color: "white" }}>edit that damn user please</Text>
-        </Pressable>
+          <Text
+            style={{
+              fontFamily: "Inherit",
+              fontSize: 17,
+              fontWeight: "700",
+              color: "white",
+            }}
+          >
+            Name
+          </Text>
+          <TextInput
+            style={styles.informationInputs}
+            placeholder="Add your name"
+            placeholderTextColor="rgb(131, 135, 138)"
+            defaultValue={userData.userName}
+            onChangeText={(value) =>
+              setInputVals({ ...inputVals, userName: value })
+            }
+            value={inputVals.userName}
+          ></TextInput>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            gap: 45,
+            width: "100%",
+            paddingLeft: "3%",
+            borderTopColor: "rgb(66, 67, 68)",
+            borderBottomColor: "rgb(66, 67, 68)",
+            borderWidth: 1,
+            borderStyle: "solid",
+            paddingTop: "3%",
+            paddingBottom: "3%",
+          }}
+        >
+          <Text
+            style={{
+              fontFamily: "Inherit",
+              fontSize: 17,
+              fontWeight: "700",
+              color: "white",
+              width: "12%",
+            }}
+          >
+            Bio
+          </Text>
+          <TextInput
+            placeholder="Add a bio to your profile"
+            placeholderTextColor="rgb(131, 135, 138)"
+            style={styles.informationInputs}
+            defaultValue={userData.bio}
+            onChangeText={(value) => setInputVals({ ...inputVals, bio: value })}
+            value={inputVals.bio}
+          ></TextInput>
+        </View>
       </View>
     </View>
   );
@@ -199,15 +277,11 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width,
     position: "relative",
     alignItems: "center",
-    // paddingTop: "12%",
-    // paddingLeft: "3%",
   },
   informationInputs: {
-    color: "white",
-    borderBlockColor: "white",
-    borderWidth: 1,
-    borderStyle: "solid",
-    marginTop: 200,
+    color: "rgb(94, 163, 234)",
+    fontSize: 17,
+    width: "70%",
   },
   avatar: {
     width: "10%",
@@ -258,6 +332,11 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center",
   },
+  uploadIcon: {
+    width: "40%",
+    height: "40%",
+    zIndex: 9,
+  },
   banner: {
     position: "absolute",
     top: 0,
@@ -273,6 +352,10 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     borderStyle: "solid",
     borderWidth: 4,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    zIndex: 1,
   },
-  inputs: {},
+  inputs: { width: "100%", marginTop: "18%", gap: 10 },
 });

@@ -1,5 +1,5 @@
 import { db } from "@/common";
-import { PostContext } from "@/context/createPostContext";
+import { CreatePostContext } from "@/context/createPostContext";
 import { collection, onSnapshot, query } from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
 import {
@@ -15,7 +15,7 @@ import {
 } from "react-native";
 
 export default function HashTagSelect({ setIsVisible }: any) {
-  const { selectedTags, setSelectedTags } = useContext(PostContext);
+  const { selectedTags, setSelectedTags } = useContext(CreatePostContext);
   const [allTags, setAllTags] = useState<any[]>([]);
   const [suggestedTags, setSuggestedTags] = useState<any[]>([]);
   const [newTag, setNewTag] = useState<string | undefined>();

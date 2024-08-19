@@ -11,7 +11,9 @@ export function LogAndSign({ navigation }: any) {
   return (
     <View style={styles.allContainer}>
       <BooklerLogo style={styles.xLogo} />
-      <Text style={styles.upperText}>{homeTranslation[lang]["upperText"]}</Text>
+      <Text style={styles.upperText}>
+        {homeTranslation?.[lang]?.["upperText"]}
+      </Text>
       <View style={styles.choiseSection}>
         <Pressable style={styles.fastLogButton}>
           <GoogleLogo style={styles.fastLogLogo}></GoogleLogo>

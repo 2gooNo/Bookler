@@ -2,7 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { CreatePostButton } from "@/components/subComponents/CreatePostButton";
 import HashTagSelect from "@/components/subComponents/HashTagSelect";
 import { PhotoSelector } from "@/components/subComponents/PhotoSelector";
-import { PostContext } from "@/context/createPostContext";
+import { CreatePostContext } from "@/context/createPostContext";
 import { router } from "expo-router";
 import { useContext, useState } from "react";
 import {
@@ -29,7 +29,7 @@ import Modal from "react-native-modal";
 export function CreatePost({ navigation }: { navigation: any }) {
   const { lang } = useContext(LangContext);
   const { media, linkComponent, setLinkComponent, selectedTags } =
-    useContext(PostContext);
+    useContext(CreatePostContext);
   const [isVisible, setIsVisible] = useState(false);
   const { width, height } = Dimensions.get("window");
   return (

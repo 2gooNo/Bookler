@@ -1,16 +1,30 @@
-import { useCallback, useRef } from "react";
-import { Button, Linking, Pressable, Text, View } from "react-native";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { Button, Linking, Modal, Pressable, Text, View } from "react-native";
 import BottomSheet, { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { PostOptions } from "./PostOptions";
 import Swiper from "react-native-swiper";
 import { PostCardMedia } from "./PostCardMedia";
 import { Image } from "expo-image";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import { FullWindowOverlay } from "react-native-screens";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import GestureRecognizer from "react-native-swipe-gestures";
+import { PostContext } from "@/context/postContext";
 
-export function PostCard({ item }: { item: any }) {
+export function PostCard({
+  item,
+  bottomSheetRef,
+  navigation,
+}: {
+  item: any;
+  bottomSheetRef: any;
+  navigation: any;
+}) {
+  const { setCurrentPostData } = useContext(PostContext);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  console.log(setCurrentPostData);
   const supportedURL = "https://google.com";
   const unsupportedURL = "slack://open?team=123456";
-  const bottomSheetRef = useRef<BottomSheet>(null);
-  const handleSheetChanges = useCallback((index: number) => {}, []);
 
   const handlePress = async () => {
     const supported = await Linking.canOpenURL(item?.post?.[0]?.link);
@@ -22,8 +36,15 @@ export function PostCard({ item }: { item: any }) {
     }
   };
   if (!item) return;
+
   return (
-    <View style={{ flexDirection: "column", backgroundColor: "grey" }}>
+    <GestureHandlerRootView
+      style={{
+        flexDirection: "column",
+        backgroundColor: "grey",
+        // position: "relative",
+      }}
+    >
       <View style={{ flexDirection: "row" }}>
         {item?.user?.photoUrl && (
           <Image
@@ -53,6 +74,23 @@ export function PostCard({ item }: { item: any }) {
           bottomSheetRef.current && bottomSheetRef.current.expand()
         }
       /> */}
+        <Pressable
+          onPress={() => {
+            navigation.getParent().setOptions({
+              tabBarStyle: {
+                display: "none",
+              },
+            });
+            if (bottomSheetRef.current) {
+              console.log("expand");
+              bottomSheetRef.current.expand();
+              setModalVisible(true);
+              setCurrentPostData(item);
+            }
+          }}
+        >
+          <AntDesign name="ellipsis1" size={24} color="black" />
+        </Pressable>
       </View>
       <Text style={{ color: "white" }}>{item?.post?.[0]?.title || ""}</Text>
       {item?.post?.[0]?.link && (
@@ -74,22 +112,43 @@ export function PostCard({ item }: { item: any }) {
           ))}
         </Swiper>
       )}
+      {/* <GestureRecognizer onSwipeDown={() => setModalVisible(false)}>
+        <Modal
+          presentationStyle="pageSheet"
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}
+          style={{ backgroundColor: "green" }}
+        > */}
+      {/* <BottomSheetModalProvider>
+        <BottomSheet
+          snapPoints={[200, 600]}
+          onChange={handleSheetChanges}
+          ref={bottomSheetRef}
+          index={-1}
+          containerHeight={600}
+          enablePanDownToClose={true}
+          style={{
+            width: "100%",
+            height: "auto",
+            zIndex: 10,
+          }}
+        >
+          <FullWindowOverlay>
+          <View> 
+          <PostOptions />
+          </View>
+          </FullWindowOverlay>
+        </BottomSheet>
+      </BottomSheetModalProvider> */}
 
-      {/* <BottomSheet
-        index={-1}
-        // bottomInset={0}
-        detached={true}
-        enablePanDownToClose={true}
-        containerHeight={300}
-        snapPoints={[1, 200, 600]}
-        ref={bottomSheetRef}
-        onChange={handleSheetChanges}
-        style={{ marginBottom: 0 }}
-      >
-        <PostOptions />
-      </BottomSheet> */}
+      {/* </Modal>
+      </GestureRecognizer> */}
       {item?.post?.[0]?.tags && (
-        <View>
+        <View style={{ flexDirection: "row", gap: 10 }}>
           {item?.post?.[0]?.tags.map((hashtag: any, index: number) => (
             <Pressable key={index}>
               <Text style={{ color: "#d3d3d3" }}>#{hashtag.tagName}</Text>
@@ -97,7 +156,7 @@ export function PostCard({ item }: { item: any }) {
           ))}
         </View>
       )}
-      <View style={{ flexDirection: "row" }}></View>
-    </View>
+      <View style={{ flexDirection: "row", backgroundColor: "yellow" }}></View>
+    </GestureHandlerRootView>
   );
 }

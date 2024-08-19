@@ -9,6 +9,7 @@ import {
   Dimensions,
   TextInput,
   Text,
+  ScrollView,
 } from "react-native";
 import { Image } from "expo-image";
 import { Collapsible } from "@/components/Collapsible";
@@ -24,6 +25,7 @@ import { db } from "@/common";
 import BookDetail from "@/components/subComponents/BookDetails";
 export function BookCommunities({ navigation }: { navigation: any }) {
   const [bookData, setBookData] = useState<any>([]);
+  const [ok, setOk] = useState<boolean>();
   useEffect(() => {
     const q = query(collection(db, "books"));
     onSnapshot(q, async (snapshot) => {
@@ -34,12 +36,12 @@ export function BookCommunities({ navigation }: { navigation: any }) {
   }, []);
 
   return (
-    <View style={styles.allContainer}>
+    <ScrollView horizontal={false} style={styles.allContainer}>
       <View
         style={{
           width: "100%",
           paddingRight: "5%",
-          height: "5.5%",
+          height: 50,
           paddingLeft: "2%",
           gap: 30,
           flexDirection: "row",
@@ -54,6 +56,7 @@ export function BookCommunities({ navigation }: { navigation: any }) {
             borderRadius: 35,
             backgroundColor: "rgb(33,35,40)",
             width: "85%",
+            height: "100%",
             paddingLeft: "20%",
             fontFamily: "Inherit",
             fontSize: 18,
@@ -62,13 +65,12 @@ export function BookCommunities({ navigation }: { navigation: any }) {
           }}
         />
       </View>
-      <View style={{ width: "100%", height: "40%" }}>
+      <View style={{ width: "100%", height: "auto", gap: 30 }}>
         {bookData?.map((book: any, index: number) => (
           <Pressable
             onPress={() => router.navigate(`/details/${book?.name}`)}
             style={{
               width: "100%",
-              height: "30%",
               flexDirection: "row",
               alignItems: "flex-start",
               gap: 15,
@@ -76,7 +78,7 @@ export function BookCommunities({ navigation }: { navigation: any }) {
             key={index}
           >
             <Image
-              style={{ width: "23%", height: "85%", borderRadius: 10 }}
+              style={{ width: "23%", height: 90, borderRadius: 10 }}
               source={{ uri: book?.bookImg }}
             />
             <View style={{ gap: 5 }}>
@@ -112,10 +114,10 @@ export function BookCommunities({ navigation }: { navigation: any }) {
         ))}
       </View>
       <Pressable
-        style={{ backgroundColor: "white", width: "20%", height: "15%" }}
+        style={{ backgroundColor: "white", width: "20%", height: 80 }}
         onPress={() => navigation.navigate("CreateBook")}
       ></Pressable>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -124,10 +126,11 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     height: Dimensions.get("window").height,
     width: Dimensions.get("window").width,
-    paddingTop: "12%",
+    paddingTop: 50,
     paddingLeft: "3%",
     paddingRight: "3%",
     position: "relative",
+    gap: 20,
   },
   headerImage: {
     color: "#808080",

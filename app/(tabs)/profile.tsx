@@ -63,10 +63,12 @@ export function Profile({ navigation }: { navigation: any }) {
     });
     setIsEn(!isEn);
   }
-
+  console.log(userData?.banner, "-");
   return (
     <View style={styles.allContainer}>
-      <Image style={styles.banner} source={{ uri: userData?.banner }} />
+      {userData?.banner && (
+        <Image style={styles.banner} source={{ uri: userData?.banner }} />
+      )}
       <View style={{ width: "100%", height: "100%" }}>
         <Pressable
           onPress={() => router?.navigate("/home")}
@@ -83,10 +85,12 @@ export function Profile({ navigation }: { navigation: any }) {
             alignItems: "flex-end",
           }}
         >
-          <Image
-            style={styles.profileImg}
-            source={{ uri: userData?.photoUrl }}
-          />
+          {userData?.photoUr && (
+            <Image
+              style={styles.profileImg}
+              source={{ uri: userData?.photoUrl }}
+            />
+          )}
           <Pressable
             onPress={() => navigation.navigate("EditProfile")}
             style={styles.editProfile}

@@ -25,7 +25,7 @@ export function CreateDraftButton() {
   } = useContext(PostContext);
   const CreateDraft = async () => {
     try {
-      const docRef = await addDoc(collection(db, "drafts"), {
+      await addDoc(collection(db, "drafts"), {
         userId: user.uid,
         userRef: doc(db, "users", user.uid),
         bodyText: bodyText,

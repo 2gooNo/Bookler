@@ -34,6 +34,7 @@ export const PostProvider = ({ children }: Props) => {
   const [takenMedia, setTakenMedia] = useState<string>("");
   const [linkUrl, setLinkUrl] = useState<string>("");
   const [linkComponent, setLinkComponent] = useState<boolean>(false);
+
   return (
     <PostContext.Provider
       value={{

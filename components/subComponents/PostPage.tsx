@@ -14,30 +14,47 @@ import {
   GestureHandlerRootView,
   PanGestureHandler,
 } from "react-native-gesture-handler";
+import firebase from "firebase/app";
 import {
   collection,
   doc,
+  DocumentData,
+  documentId,
+  FieldPath,
+  FieldValue,
   getDoc,
   getDocs,
+  limit,
   onSnapshot,
+  orderBy,
   query,
+  startAfter,
+  where,
 } from "firebase/firestore";
-import { db } from "@/common";
+import { app, db } from "@/common";
 import { PostCard } from "./PostCard";
 
 export function PostPage({ navigation }: { navigation: any }) {
   const { onLogout } = useContext(AuthContext);
   const { lang } = useContext(LangContext);
   const [posts, setPosts] = useState<any[]>([]);
+  const [hasMore, setHasMore] = useState(true);
+  const [lastVisible, setLastVisible] = useState<any>(null);
+
   const getPostsAndUserInfo = async () => {
-    const q = query(collection(db, "posts"));
+    const q = query(
+      collection(db, "posts"),
+      orderBy("__name__"),
+      startAfter(lastVisible || "0jYHvFadWJKkEK3RtAhU"),
+      limit(2)
+    );
 
     onSnapshot(q, async (snapshot) => {
       const userPromises = snapshot.docs.map((postDoc) => {
         const postData = [postDoc.data(), postDoc.id];
 
         const userRef = postData?.[0]?.userRef;
-
+        setLastVisible(postDoc.id);
         return getDoc(userRef)
           .then((userDoc) => {
             if (userDoc.exists()) {
@@ -48,24 +65,24 @@ export function PostPage({ navigation }: { navigation: any }) {
             }
           })
           .catch((error) => {
-            console.error(error);
             return {
               post: postData,
               user: null,
             };
           });
       });
-      console.log(console.log(userPromises, "--"));
+
       try {
         const results = await Promise.all(userPromises);
-        console.log(results, ")");
-        setPosts(results);
+        if (results) {
+          setPosts((prev) => [...prev, ...results]);
+        }
       } catch (error) {
-        console.error(error);
+        // console.error(error);
       }
       try {
       } catch (error) {
-        console.error(error);
+        // console.error(error);
       }
     });
   };
@@ -74,13 +91,12 @@ export function PostPage({ navigation }: { navigation: any }) {
   }, []);
   const onSwipe = (event: any) => {
     const translationX = event.nativeEvent.translationX;
-    console.log(translationX);
     if (translationX > 100) {
-      console.log("swipe");
     } else if (translationX < -70) {
       navigation.navigate("Following");
     }
   };
+
   return (
     <GestureHandlerRootView>
       <PanGestureHandler
@@ -94,8 +110,12 @@ export function PostPage({ navigation }: { navigation: any }) {
             </Text>
           </Pressable>
           <FlatList
+            onEndReached={() => getPostsAndUserInfo()}
+            onEndReachedThreshold={0.5}
+            style={{ gap: 10 }}
             data={posts}
             renderItem={({ item }) => <PostCard item={item} />}
+            ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
           />
         </View>
       </PanGestureHandler>

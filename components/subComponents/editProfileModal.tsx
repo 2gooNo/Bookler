@@ -62,8 +62,8 @@ export function EditProfileModal() {
   const pickImage = async (isBanner: boolean) => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
-      // allowsEditing: true,
-      allowsMultipleSelection: true,
+      allowsEditing: true,
+      allowsMultipleSelection: false,
       // aspect: [4, 3],
       quality: 1,
     });

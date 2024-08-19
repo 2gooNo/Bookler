@@ -73,7 +73,9 @@ export function CreatePost({ navigation }: { navigation: any }) {
       </ScrollView>
       <View style={{ flexDirection: "column" }}>
         {selectedTags.map((tag, index) => (
-          <Text key={index}>{tag.tagName}</Text>
+          <Text key={index} style={{ color: "white" }}>
+            #{tag.tagName}
+          </Text>
         ))}
         <Pressable
           onPress={() => setIsVisible(true)}

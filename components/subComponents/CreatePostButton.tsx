@@ -5,10 +5,12 @@ import {
   addDoc,
   collection,
   doc,
+  FieldValue,
   getDoc,
   limit,
   onSnapshot,
   query,
+  serverTimestamp,
   where,
 } from "firebase/firestore";
 import { useContext, useState } from "react";
@@ -95,6 +97,7 @@ export function CreatePostButton() {
           media: uploadedMedia,
           tags: tags,
           link: linkUrl,
+          createdAt: serverTimestamp(),
         });
         const likesCollectionRef = collection(
           doc(db, "posts", docRef.id),

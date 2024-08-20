@@ -147,14 +147,12 @@ export function EditProfileModal() {
       ) : photos?.bannerUrl == "" ? (
         <Pressable
           style={{
-            position: "absolute",
-            top: 0,
             width: "100%",
             height: "18%",
           }}
           onPress={() => pickImage(true)}
         >
-          <SelectedMedia value={photos?.bannerUri} />
+          <SelectedMedia isBanner={true} value={photos?.bannerUri} />
         </Pressable>
       ) : (
         <Pressable
@@ -181,10 +179,13 @@ export function EditProfileModal() {
             top: "19.5%",
             left: "3%",
             position: "absolute",
+            justifyContent: "center",
+            alignItems: "center",
           }}
           onPress={() => pickImage(false)}
         >
-          <SelectedMedia value={photos?.profileUri} />
+          <UploadImgIcon style={styles.uploadIcon} />
+          <SelectedMedia isBanner={false} value={photos?.profileUri} />
         </Pressable>
       ) : (
         <Pressable
@@ -348,9 +349,6 @@ const styles = StyleSheet.create({
     zIndex: 9,
   },
   banner: {
-    position: "absolute",
-    top: 0,
-    left: 0,
     width: "100%",
     height: "100%",
     marginBottom: "10%",

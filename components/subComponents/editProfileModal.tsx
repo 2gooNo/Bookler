@@ -68,7 +68,6 @@ export function EditProfileModal() {
     });
     console.log(result?.assets?.[0]?.uri);
     if (!result.canceled) {
-      // result?.assets.forEach((image) => {
       if (isBanner) {
         console.log(result?.assets, "--");
         setPhotos({
@@ -83,7 +82,6 @@ export function EditProfileModal() {
           profileUri: result?.assets?.[0]?.uri,
         });
       }
-      // });
     }
   };
   console.log(photos);

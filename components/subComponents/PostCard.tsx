@@ -176,7 +176,7 @@ export function PostCard({
             <FontAwesome name="share-square-o" size={20} color="white" />
           </Pressable>
           <Pressable
-            onPress={() => console.log("funct")}
+            onPress={() => navigation.navigate("CommentPage")}
             style={{
               flexDirection: "row",
               paddingVertical: 3,

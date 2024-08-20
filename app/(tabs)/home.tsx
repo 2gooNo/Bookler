@@ -6,7 +6,7 @@ import {
   Dimensions,
   Button,
 } from "react-native";
-import { AuthContext } from "@/context/authContext";
+import AntDesign from "@expo/vector-icons/AntDesign";
 import { useContext, useEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { homeTranslation } from "@/localization/translate";
@@ -40,7 +40,16 @@ export default function HomeStackScreen() {
   const navigationUsed = useNavigation();
   const route = useRoute();
   const index = navigationUsed.getState()?.routes?.[1]?.state?.index;
-  console.log(index);
+  const state = navigationUsed.getState();
+
+  const handlePress = () => {
+    // Check the navigation history to decide where to go back
+    const previousRoutes = state.history || [];
+    console.log(previousRoutes, "--");
+    if (previousRoutes.length > 1) {
+      navigationUsed.goBack();
+    }
+  };
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen
@@ -67,9 +76,15 @@ export default function HomeStackScreen() {
         name="CommentPage"
         component={CommentPage}
         options={({ navigation }) => ({
+          headerTitle: () => "",
+          headerLeft: () => (
+            <Pressable onPress={() => handlePress()}>
+              <AntDesign name="arrowleft" size={24} color="white" />
+            </Pressable>
+          ),
           gestureEnabled: true,
           gestureDirection: "horizontal",
-          animation: "slide_from_left",
+          animation: "slide_from_right",
         })}
       />
       <HomeStack.Screen

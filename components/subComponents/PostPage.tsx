@@ -64,7 +64,7 @@ export function PostPage({ navigation }: { navigation: any }) {
       collection(db, "posts"),
       orderBy("__name__"),
       startAfter(lastVisible || "0jYHvFadWJKkEK3RtAhU"),
-      limit(2)
+      limit(4)
     );
 
     onSnapshot(q, async (snapshot) => {

@@ -1,10 +1,10 @@
-import { PostContext } from "@/context/createPostContext";
+import { CreatePostContext } from "@/context/createPostContext";
 import { Video } from "expo-av";
 import { useContext } from "react";
 import { Image, Pressable, View } from "react-native";
 
 export function SelectedMedia({ value }: { value: string }) {
-  const { setMedia, media } = useContext(PostContext);
+  const { setMedia, media } = useContext(CreatePostContext);
   const RemoveSelectedMedia = () => {
     media.forEach((e) => {
       if (e.includes(value)) {

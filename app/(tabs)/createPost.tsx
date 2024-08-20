@@ -49,7 +49,7 @@ export function CreatePost({ navigation }: { navigation: any }) {
       >
         <Pressable
           onPress={() => router.push("./home")}
-          style={{ backgroundColor: "purple" }}
+          style={{ backgroundColor: "purple", width: 100 }}
         >
           <Text style={{ color: "white" }}>
             {homeTranslation?.[lang]?.["goBack"]}

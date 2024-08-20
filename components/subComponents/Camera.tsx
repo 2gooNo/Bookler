@@ -1,4 +1,4 @@
-import { PostContext } from "@/context/createPostContext";
+import { CreatePostContext } from "@/context/createPostContext";
 import {
   CameraView,
   CameraType,
@@ -22,7 +22,7 @@ import {
 type FlashMode = "off" | "on" | "auto";
 
 export function Camera({ navigation }: { navigation: any }) {
-  const { setTakenMedia } = useContext(PostContext);
+  const { setTakenMedia } = useContext(CreatePostContext);
   const [facing, setFacing] = useState<CameraType>("back");
   const [permission, requestPermission] = useCameraPermissions();
   const [microphonePermission, requestMicrophonePersmission] =

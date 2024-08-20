@@ -1,11 +1,11 @@
-import { PostContext } from "@/context/createPostContext";
+import { CreatePostContext } from "@/context/createPostContext";
 import { Video } from "expo-av";
 import { useContext } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 import * as MediaLibrary from "expo-media-library";
 
 export function PhotoConfirm({ navigation }: { navigation: any }) {
-  const { takenMedia, setTakenMedia, setMedia } = useContext(PostContext);
+  const { takenMedia, setTakenMedia, setMedia } = useContext(CreatePostContext);
   console.log(takenMedia);
   return (
     <View>

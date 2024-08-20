@@ -1,10 +1,10 @@
 import { Button, Image, StyleSheet, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useContext, useState } from "react";
-import { PostContext } from "@/context/createPostContext";
+import { CreatePostContext } from "@/context/createPostContext";
 
 export function PhotoSelector() {
-  const { setMedia } = useContext(PostContext);
+  const { setMedia } = useContext(CreatePostContext);
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,

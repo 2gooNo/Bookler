@@ -1,7 +1,10 @@
 import { Video } from "expo-av";
-import { Image, View } from "react-native";
+import { Dimensions, Image, View } from "react-native";
 
 export function PostCardMedia({ media }: any) {
+  const windowWidth = Dimensions.get("window").width;
+  const windowHeight = Dimensions.get("window").height;
+  console.log(media);
   return (
     <View
       style={{
@@ -14,7 +17,7 @@ export function PostCardMedia({ media }: any) {
       {media.type === "image/jpeg" ? (
         <Image
           source={{ uri: media?.url }}
-          style={{ height: 150, width: 150 }}
+          style={{ width: windowWidth * 0.75, flex: 1 }}
         />
       ) : (
         <Video

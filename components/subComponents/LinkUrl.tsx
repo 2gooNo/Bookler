@@ -1,9 +1,10 @@
-import { PostContext } from "@/context/createPostContext";
+import { CreatePostContext } from "@/context/createPostContext";
 import { useContext, useState } from "react";
 import { Pressable, Text, View, TextInput } from "react-native";
 
 export function LinkUrl() {
-  const { linkUrl, setLinkUrl, setLinkComponent } = useContext(PostContext);
+  const { linkUrl, setLinkUrl, setLinkComponent } =
+    useContext(CreatePostContext);
   const [localUrl, setLocalUrl] = useState(linkUrl);
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
   const isValidURL = (text: string) => {

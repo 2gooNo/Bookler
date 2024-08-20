@@ -16,6 +16,7 @@ import BackIcon from "@/assets/images/BackIcon";
 export default function DetailsScreen() {
   const { id } = useLocalSearchParams();
   const [bookData, setBookData] = useState<any>();
+  const [activeTab, setActiveTab] = useState(1);
   const [categoryData, setCategoryData] = useState<any>();
   async function BookFetch() {
     const q = query(collection(db, "books"), where("name", "==", id));
@@ -47,7 +48,14 @@ export default function DetailsScreen() {
       CategoryFetch();
     }
   }, [bookData]);
-  function SelectChapter(index: any) {}
+  function SelectChapter(index: number) {
+    setActiveTab(index);
+  }
+  function getActiveContet(activeTab: number) {
+    return {
+      id: activeTab,
+    };
+  }
 
   return (
     <ScrollView style={styles.allContainer}>
@@ -93,32 +101,32 @@ export default function DetailsScreen() {
       <View style={{ backgroundColor: "black", width: "100%" }}>
         <ScrollView horizontal={true} style={styles?.chapterContainer}>
           {bookData?.chapters?.map((chapter: string, index: number) => (
-            <View>
-              <Pressable
+            <Pressable
+              style={{
+                borderBottomColor: `${activeTab == index ? "red" : "black"}`,
+                borderBottomWidth: 5,
+                marginTop: 15,
+                marginLeft: 35,
+                height: 40,
+              }}
+              onPress={() => SelectChapter(index)}
+            >
+              <Text
                 style={{
-                  borderBottomColor: "rgb(73,153,232)",
-                  borderBottomWidth: 5,
-                  marginBottom: 15,
-                  marginTop: 15,
-                  marginLeft: 35,
+                  color: "white",
+                  fontFamily: "Inherit",
+                  fontSize: 17,
+                  fontWeight: "700",
                 }}
-                onPress={() => SelectChapter(index)}
               >
-                <Text
-                  style={{
-                    color: "white",
-                    fontFamily: "Inherit",
-                    fontSize: 17,
-                    fontWeight: "700",
-                  }}
-                >
-                  {chapter}
-                </Text>
-              </Pressable>
-            </View>
+                {chapter}
+              </Text>
+            </Pressable>
           ))}
         </ScrollView>
-        <View style={styles?.postContainer}></View>
+        <View style={styles?.postContainer}>
+          {/* <ContentShower data={getActiveContet(activeTab)} /> */}
+        </View>
       </View>
     </ScrollView>
   );
@@ -165,7 +173,6 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingLeft: 10,
     paddingRight: 10,
-    width: "20%",
   },
   chapterContainer: {
     borderBottomColor: "rgb(17,19,20)",

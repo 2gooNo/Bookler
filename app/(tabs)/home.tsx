@@ -63,11 +63,15 @@ export default function HomeStackScreen() {
           ),
         })}
       />
-      {/* <HomeStack.Screen
+      <HomeStack.Screen
         name="CommentPage"
         component={CommentPage}
-        options={({ navigation }) => ({})}
-      /> */}
+        options={({ navigation }) => ({
+          gestureEnabled: true,
+          gestureDirection: "horizontal",
+          animation: "slide_from_left",
+        })}
+      />
       <HomeStack.Screen
         name="Following"
         component={FollowingPost}

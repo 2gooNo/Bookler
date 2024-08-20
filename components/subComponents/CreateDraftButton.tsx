@@ -17,11 +17,15 @@ export function CreateDraftButton() {
     title,
     bodyText,
     linkUrl,
+    selectedChapter,
+    selectedBook,
     setBodyText,
     setTitle,
     setMedia,
     setSelectedTags,
     setLinkUrl,
+    setSelectedChapter,
+    setSelectedBook,
   } = useContext(CreatePostContext);
   const CreateDraft = async () => {
     try {
@@ -33,12 +37,16 @@ export function CreateDraftButton() {
         media: media,
         tags: selectedTags,
         link: linkUrl,
+        chapter: selectedChapter,
+        book: selectedBook,
       }).then((res) => {
         setBodyText("");
         setTitle("");
         setMedia([]);
         setSelectedTags([]);
         setLinkUrl("");
+        setSelectedChapter("");
+        setSelectedBook("");
         router.push("/home");
       });
     } catch (err) {}

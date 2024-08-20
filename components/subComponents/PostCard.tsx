@@ -1,15 +1,14 @@
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { Button, Linking, Modal, Pressable, Text, View } from "react-native";
-import BottomSheet, { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { PostOptions } from "./PostOptions";
+import { useContext } from "react";
+import { Linking, Pressable, Text, View } from "react-native";
 import Swiper from "react-native-swiper";
 import { PostCardMedia } from "./PostCardMedia";
 import { Image } from "expo-image";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { FullWindowOverlay } from "react-native-screens";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import GestureRecognizer from "react-native-swipe-gestures";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { PostContext } from "@/context/postContext";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
 export function PostCard({
   item,
@@ -21,8 +20,6 @@ export function PostCard({
   navigation: any;
 }) {
   const { setCurrentPostData } = useContext(PostContext);
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
-  console.log(setCurrentPostData);
   const supportedURL = "https://google.com";
   const unsupportedURL = "slack://open?team=123456";
 
@@ -42,7 +39,6 @@ export function PostCard({
       style={{
         flexDirection: "column",
         backgroundColor: "grey",
-        // position: "relative",
       }}
     >
       <View style={{ flexDirection: "row" }}>
@@ -63,17 +59,11 @@ export function PostCard({
         )}
         <View style={{ flexDirection: "column" }}>
           <Text style={{ color: "white" }}>
-            {item?.user?.userName || "User deleted"}
+            {item?.user?.userName || "Unavailable user"}
           </Text>
           <Text style={{ color: "white" }}>Book commuinity / Chapter</Text>
         </View>
 
-        {/* <Button
-        title="Open Bottom Sheet"
-        onPress={() =>
-          bottomSheetRef.current && bottomSheetRef.current.expand()
-        }
-      /> */}
         <Pressable
           onPress={() => {
             navigation.getParent().setOptions({
@@ -84,7 +74,7 @@ export function PostCard({
             if (bottomSheetRef.current) {
               console.log("expand");
               bottomSheetRef.current.expand();
-              setModalVisible(true);
+
               setCurrentPostData(item);
             }
           }}
@@ -112,41 +102,7 @@ export function PostCard({
           ))}
         </Swiper>
       )}
-      {/* <GestureRecognizer onSwipeDown={() => setModalVisible(false)}>
-        <Modal
-          presentationStyle="pageSheet"
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}
-          style={{ backgroundColor: "green" }}
-        > */}
-      {/* <BottomSheetModalProvider>
-        <BottomSheet
-          snapPoints={[200, 600]}
-          onChange={handleSheetChanges}
-          ref={bottomSheetRef}
-          index={-1}
-          containerHeight={600}
-          enablePanDownToClose={true}
-          style={{
-            width: "100%",
-            height: "auto",
-            zIndex: 10,
-          }}
-        >
-          <FullWindowOverlay>
-          <View> 
-          <PostOptions />
-          </View>
-          </FullWindowOverlay>
-        </BottomSheet>
-      </BottomSheetModalProvider> */}
 
-      {/* </Modal>
-      </GestureRecognizer> */}
       {item?.post?.[0]?.tags && (
         <View style={{ flexDirection: "row", gap: 10 }}>
           {item?.post?.[0]?.tags.map((hashtag: any, index: number) => (
@@ -156,7 +112,25 @@ export function PostCard({
           ))}
         </View>
       )}
-      <View style={{ flexDirection: "row", backgroundColor: "yellow" }}></View>
+      <View style={{ flexDirection: "row", backgroundColor: "yellow" }}>
+        <View style={{ flexDirection: "row", backgroundColor: "grey" }}>
+          <Pressable onPress={() => console.log("funct")}>
+            <FontAwesome name="arrow-up" size={24} color="white" />
+          </Pressable>
+          <Pressable onPress={() => console.log("funct")}>
+            <FontAwesome name="arrow-down" size={24} color="white" />
+          </Pressable>
+        </View>
+      </View>
+      <Pressable onPress={() => console.log("funct")}>
+        <FontAwesome6 name="retweet" size={24} color="black" />
+      </Pressable>
+      <Pressable onPress={() => console.log("funct")}>
+        <FontAwesome name="share-square-o" size={24} color="black" />
+      </Pressable>
+      <Pressable onPress={() => console.log("funct")}>
+        <FontAwesome5 name="comment-alt" size={24} color="black" />
+      </Pressable>
     </GestureHandlerRootView>
   );
 }

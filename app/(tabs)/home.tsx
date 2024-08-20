@@ -16,7 +16,6 @@ import { useNavigation } from "expo-router";
 import { PostPage } from "@/components/subComponents/PostPage";
 import { FollowingPost } from "@/components/subComponents/FollowingPost";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { CommentPage } from "@/components/subComponents/CommentPage";
 
 const CustomHeaderTitle = ({ navigation, index }: any) => {
   return (
@@ -43,12 +42,16 @@ export default function HomeStackScreen() {
   const state = navigationUsed.getState();
 
   const handlePress = () => {
-    // Check the navigation history to decide where to go back
     const previousRoutes = state.history || [];
-    console.log(previousRoutes, "--");
-    if (previousRoutes.length > 1) {
+    console.log(previousRoutes, "--", navigationUsed.goBack());
+    // if (previousRoutes.length > 1) {
+    // navigationUsed.goBack();
+    console.log(state);
+    if (navigationUsed.canGoBack()) {
       navigationUsed.goBack();
     }
+
+    // }
   };
   return (
     <HomeStack.Navigator>
@@ -72,21 +75,7 @@ export default function HomeStackScreen() {
           ),
         })}
       />
-      <HomeStack.Screen
-        name="CommentPage"
-        component={CommentPage}
-        options={({ navigation }) => ({
-          headerTitle: () => "",
-          headerLeft: () => (
-            <Pressable onPress={() => handlePress()}>
-              <AntDesign name="arrowleft" size={24} color="white" />
-            </Pressable>
-          ),
-          gestureEnabled: true,
-          gestureDirection: "horizontal",
-          animation: "slide_from_right",
-        })}
-      />
+
       <HomeStack.Screen
         name="Following"
         component={FollowingPost}

@@ -109,11 +109,13 @@ export function CreatePostButton() {
           doc(db, "posts", docRef.id),
           "likes"
         );
+
         const commentCollectionRef = collection(
           doc(db, "posts", docRef.id),
           "comments"
         );
-        const subDocRef = await addDoc(likesCollectionRef, {
+        await addDoc(commentCollectionRef, { first: false });
+        await addDoc(likesCollectionRef, {
           likedBy: doc(db, "users", user.uid),
           type: +1,
         });

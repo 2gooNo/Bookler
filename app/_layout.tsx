@@ -12,6 +12,8 @@ import "react-native-reanimated";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { AuthProvider } from "@/context/authContext";
 import { LangProvider } from "@/context/langContext";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import { Pressable } from "react-native";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -44,6 +46,20 @@ export default function RootLayout() {
             <Stack.Screen
               name="details/[id]"
               options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="commentPage/[postId]"
+              options={({ navigation }) => ({
+                headerTitle: () => "",
+                headerLeft: () => (
+                  <Pressable onPress={() => navigation.goBack()}>
+                    <AntDesign name="arrowleft" size={20} color="white" />
+                  </Pressable>
+                ),
+                gestureEnabled: true,
+                gestureDirection: "horizontal",
+                animation: "slide_from_right",
+              })}
             />
           </Stack>
         </ThemeProvider>

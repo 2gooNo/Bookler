@@ -4,14 +4,14 @@ import { Dimensions, Image, View } from "react-native";
 export function PostCardMedia({ media }: any) {
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
-  console.log(media);
+  console.log(media.type, "---", media);
   return (
     <View
       style={{
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#9DD6EB",
+        backgroundColor: "black",
       }}
     >
       {media.type === "image/jpeg" ? (
@@ -21,7 +21,11 @@ export function PostCardMedia({ media }: any) {
         />
       ) : (
         <Video
-          style={{ height: 150, width: 150, backgroundColor: "pink" }}
+          style={{
+            flex: 1,
+            width: windowWidth * 0.75,
+            backgroundColor: "green",
+          }}
           source={{ uri: media?.url }}
           // resizeMode="contain"
           // repeat={true}

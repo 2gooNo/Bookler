@@ -6,7 +6,7 @@ import {
   Dimensions,
   Button,
 } from "react-native";
-import { AuthContext } from "@/context/authContext";
+import AntDesign from "@expo/vector-icons/AntDesign";
 import { useContext, useEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { homeTranslation } from "@/localization/translate";
@@ -16,7 +16,6 @@ import { useNavigation } from "expo-router";
 import { PostPage } from "@/components/subComponents/PostPage";
 import { FollowingPost } from "@/components/subComponents/FollowingPost";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { CommentPage } from "@/components/subComponents/CommentPage";
 
 const CustomHeaderTitle = ({ navigation, index }: any) => {
   return (
@@ -40,7 +39,20 @@ export default function HomeStackScreen() {
   const navigationUsed = useNavigation();
   const route = useRoute();
   const index = navigationUsed.getState()?.routes?.[1]?.state?.index;
-  console.log(index);
+  const state = navigationUsed.getState();
+
+  const handlePress = () => {
+    const previousRoutes = state.history || [];
+    console.log(previousRoutes, "--", navigationUsed.goBack());
+    // if (previousRoutes.length > 1) {
+    // navigationUsed.goBack();
+    console.log(state);
+    if (navigationUsed.canGoBack()) {
+      navigationUsed.goBack();
+    }
+
+    // }
+  };
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen
@@ -63,15 +75,7 @@ export default function HomeStackScreen() {
           ),
         })}
       />
-      <HomeStack.Screen
-        name="CommentPage"
-        component={CommentPage}
-        options={({ navigation }) => ({
-          gestureEnabled: true,
-          gestureDirection: "horizontal",
-          animation: "slide_from_left",
-        })}
-      />
+
       <HomeStack.Screen
         name="Following"
         component={FollowingPost}

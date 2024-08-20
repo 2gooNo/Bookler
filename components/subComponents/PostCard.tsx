@@ -9,6 +9,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { PostContext } from "@/context/postContext";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { router } from "expo-router";
 
 export function PostCard({
   item,
@@ -176,7 +177,7 @@ export function PostCard({
             <FontAwesome name="share-square-o" size={20} color="white" />
           </Pressable>
           <Pressable
-            onPress={() => console.log("funct")}
+            onPress={() => router.navigate(`/commentPage/${item?.post?.[1]}`)}
             style={{
               flexDirection: "row",
               paddingVertical: 3,

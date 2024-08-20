@@ -1,37 +1,28 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { CreatePostButton } from "@/components/subComponents/CreatePostButton";
 import HashTagSelect from "@/components/subComponents/HashTagSelect";
 import { PhotoSelector } from "@/components/subComponents/PhotoSelector";
 import { CreatePostContext } from "@/context/createPostContext";
 import { router } from "expo-router";
 import { useContext, useState } from "react";
-import {
-  Dimensions,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  ScrollView,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { Dimensions, Pressable, ScrollView, Text, View } from "react-native";
 import { Camera } from "@/components/subComponents/Camera";
 import { PhotoConfirm } from "@/components/subComponents/PhotoConfirm";
 import { BodyTextInput } from "@/components/subComponents/BodyTextInput";
 import { TitleInput } from "@/components/subComponents/TitleInput";
 import { SelectedMedia } from "@/components/subComponents/SelectedMedia";
-import { CreateDraftButton } from "@/components/subComponents/CreateDraftButton";
 import { LinkUrl } from "@/components/subComponents/LinkUrl";
 import { LangContext } from "@/context/langContext";
 import { homeTranslation } from "@/localization/translate";
 import Modal from "react-native-modal";
+import { BookSelect } from "@/components/subComponents/BookSelect";
+import { ChapterSelect } from "@/components/subComponents/ChapterSelect";
 
 export function CreatePost({ navigation }: { navigation: any }) {
   const { lang } = useContext(LangContext);
-  const { media, linkComponent, setLinkComponent, selectedTags } =
+  const { media, linkComponent, setLinkComponent, selectedTags, title } =
     useContext(CreatePostContext);
   const [isVisible, setIsVisible] = useState(false);
-  const { width, height } = Dimensions.get("window");
+  const { width } = Dimensions.get("window");
   return (
     <View style={{ paddingVertical: "30%" }}>
       <Modal
@@ -49,7 +40,13 @@ export function CreatePost({ navigation }: { navigation: any }) {
       >
         <HashTagSelect setIsVisible={setIsVisible} />
       </Modal>
-      <View style={{ flexDirection: "row" }}>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          width: "100%",
+        }}
+      >
         <Pressable
           onPress={() => router.push("./home")}
           style={{ backgroundColor: "purple" }}
@@ -58,8 +55,13 @@ export function CreatePost({ navigation }: { navigation: any }) {
             {homeTranslation?.[lang]?.["goBack"]}
           </Text>
         </Pressable>
-        <CreatePostButton />
-        <CreateDraftButton />
+        <Pressable
+          onPress={() => navigation.navigate("BookSelect")}
+          style={{ backgroundColor: "purple" }}
+          disabled={title ? false : true}
+        >
+          <Text style={{ color: title ? "white" : "grey" }}>Next</Text>
+        </Pressable>
       </View>
       <ScrollView horizontal={false}>
         <TitleInput />
@@ -79,12 +81,11 @@ export function CreatePost({ navigation }: { navigation: any }) {
         ))}
         <Pressable
           onPress={() => setIsVisible(true)}
-          // onPress={() => navigation.navigate("HashtagSelect")}
           style={{ backgroundColor: "purple", height: 100 }}
         >
           <Text style={{ color: "white" }}>Hashtag select</Text>
         </Pressable>
-        {/* <HashTagSelect /> */}
+
         <View style={{ flexDirection: "row" }}>
           <PhotoSelector />
           <Pressable
@@ -150,15 +151,22 @@ export default function HomeStackScreen() {
         component={PhotoConfirm}
         options={{ headerShown: false }}
       />
-      {/* <HomeStack.Screen
-        name="HashtagSelect"
-        component={HashTagSelect}
+      <HomeStack.Screen
+        name="BookSelect"
+        component={BookSelect}
         options={{
-          ...transparentModalOptions,
           animation: "slide_from_bottom",
           gestureDirection: "vertical",
         }}
-      /> */}
+      />
+      <HomeStack.Screen
+        name="ChapterSelect"
+        component={ChapterSelect}
+        options={{
+          animation: "slide_from_bottom",
+          gestureDirection: "vertical",
+        }}
+      />
     </HomeStack.Navigator>
   );
 }

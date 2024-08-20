@@ -32,11 +32,15 @@ export function CreatePostButton() {
     title,
     bodyText,
     linkUrl,
+    selectedBook,
+    selectedChapter,
     setBodyText,
     setMedia,
     setSelectedTags,
     setTitle,
     setLinkUrl,
+    setSelectedBook,
+    setSelectedChapter,
   } = useContext(CreatePostContext);
   const [tags, setTags] = useState<any>([]);
   const CreatePost = async () => {
@@ -98,6 +102,8 @@ export function CreatePostButton() {
           tags: tags,
           link: linkUrl,
           createdAt: serverTimestamp(),
+          chapter: selectedChapter,
+          book: selectedBook,
         });
         const likesCollectionRef = collection(
           doc(db, "posts", docRef.id),
@@ -117,6 +123,8 @@ export function CreatePostButton() {
         setLinkUrl("");
         setSelectedTags([]);
         setLinkUrl("");
+        setSelectedChapter("");
+        setSelectedBook("");
         router.push("/home");
         alert("Subcollection document written with ID: ");
       }

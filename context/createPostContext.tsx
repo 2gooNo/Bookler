@@ -21,6 +21,10 @@ type PostContextType = {
   linkUrl: string;
   setLinkComponent: React.Dispatch<React.SetStateAction<boolean>>;
   linkComponent: boolean;
+  selectedBook: string;
+  setSelectedBook: React.Dispatch<React.SetStateAction<string>>;
+  selectedChapter: string;
+  setSelectedChapter: React.Dispatch<React.SetStateAction<string>>;
 };
 export const CreatePostContext = React.createContext<PostContextType>(
   {} as PostContextType
@@ -34,7 +38,8 @@ export const CreatePostProvider = ({ children }: Props) => {
   const [takenMedia, setTakenMedia] = useState<string>("");
   const [linkUrl, setLinkUrl] = useState<string>("");
   const [linkComponent, setLinkComponent] = useState<boolean>(false);
-
+  const [selectedBook, setSelectedBook] = useState<string>("");
+  const [selectedChapter, setSelectedChapter] = useState<string>("");
   return (
     <CreatePostContext.Provider
       value={{
@@ -52,6 +57,10 @@ export const CreatePostProvider = ({ children }: Props) => {
         setLinkUrl,
         linkComponent,
         setLinkComponent,
+        selectedBook,
+        selectedChapter,
+        setSelectedChapter,
+        setSelectedBook,
       }}
     >
       {children}

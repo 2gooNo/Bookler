@@ -124,13 +124,15 @@ export function PostPage({ navigation }: { navigation: any }) {
         onGestureEvent={onSwipe}
         onHandlerStateChange={onSwipe}
       >
-        <View style={{ position: "relative" }}>
+        <View style={{ position: "relative", paddingVertical: 10 }}>
           {/* <Pressable onPress={() => onLogout()}>
             <Text style={{ backgroundColor: "blue" }}>
               {homeTranslation?.[lang]?.["logOutBtn"]}
             </Text>
           </Pressable> */}
           <FlatList
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
             onEndReached={() => getPostsAndUserInfo()}
             onEndReachedThreshold={0.5}
             style={{ gap: 10 }}

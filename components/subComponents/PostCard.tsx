@@ -39,29 +39,46 @@ export function PostCard({
       style={{
         flexDirection: "column",
         backgroundColor: "grey",
+        paddingHorizontal: 12,
+        paddingVertical: 8,
+        gap: 8,
       }}
     >
-      <View style={{ flexDirection: "row" }}>
-        {item?.user?.photoUrl && (
-          <Image
-            style={{
-              height: 50,
-              width: 50,
-              borderRadius: 50,
-              backgroundColor: "pink",
-            }}
-            source={{
-              uri:
-                item?.user?.photoUrl ||
-                "https://nestcore-my.sharepoint.com/da4d4fc4-9a28-497e-abdb-0b23672a14bb",
-            }}
-          ></Image>
-        )}
-        <View style={{ flexDirection: "column" }}>
-          <Text style={{ color: "white" }}>
-            {item?.user?.userName || "Unavailable user"}
-          </Text>
-          <Text style={{ color: "white" }}>Book commuinity / Chapter</Text>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 10,
+          }}
+        >
+          {item?.user?.photoUrl && (
+            <Image
+              style={{
+                height: 50,
+                width: 50,
+                borderRadius: 50,
+                backgroundColor: "pink",
+              }}
+              source={{
+                uri:
+                  item?.user?.photoUrl ||
+                  "https://nestcore-my.sharepoint.com/da4d4fc4-9a28-497e-abdb-0b23672a14bb",
+              }}
+            ></Image>
+          )}
+          <View style={{ flexDirection: "column" }}>
+            <Text style={{ color: "white" }}>
+              {item?.user?.userName || "Unavailable user"}
+            </Text>
+            <Text style={{ color: "white" }}>Book commuinity / Chapter</Text>
+          </View>
         </View>
 
         <Pressable
@@ -82,13 +99,15 @@ export function PostCard({
           <AntDesign name="ellipsis1" size={24} color="black" />
         </Pressable>
       </View>
-      <Text style={{ color: "white" }}>{item?.post?.[0]?.title || ""}</Text>
+      {item?.post?.[0]?.title && (
+        <Text style={{ color: "white" }}>{item?.post?.[0]?.title || ""}</Text>
+      )}
       {item?.post?.[0]?.link && (
         <Pressable onPress={handlePress}>
           <Text style={{ color: "blue" }}>{item?.post?.[0]?.link}</Text>
         </Pressable>
       )}
-      <Text>{item?.post?.[0]?.bodytext}</Text>
+      {item?.post?.[0]?.bodytext && <Text>{item?.post?.[0]?.bodytext}</Text>}
       {item?.post?.[0]?.media?.[0] && (
         <Swiper
           showsButtons={true}
@@ -112,25 +131,66 @@ export function PostCard({
           ))}
         </View>
       )}
-      <View style={{ flexDirection: "row", backgroundColor: "yellow" }}>
-        <View style={{ flexDirection: "row", backgroundColor: "grey" }}>
+      <View
+        style={{
+          borderBottomColor: "black",
+          borderBottomWidth: 1,
+        }}
+      />
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            backgroundColor: "blue",
+            paddingVertical: 3,
+            paddingHorizontal: 10,
+            borderRadius: 50,
+            gap: 7,
+          }}
+        >
           <Pressable onPress={() => console.log("funct")}>
-            <FontAwesome name="arrow-up" size={24} color="white" />
+            <FontAwesome name="arrow-up" size={20} color="white" />
+          </Pressable>
+          <Text style={{ color: "white" }}></Text>
+          <Pressable onPress={() => console.log("funct")}>
+            <FontAwesome name="arrow-down" size={20} color="white" />
+          </Pressable>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 15,
+          }}
+        >
+          <Pressable onPress={() => console.log("funct")}>
+            <FontAwesome6 name="retweet" size={20} color="white" />
           </Pressable>
           <Pressable onPress={() => console.log("funct")}>
-            <FontAwesome name="arrow-down" size={24} color="white" />
+            <FontAwesome name="share-square-o" size={20} color="white" />
+          </Pressable>
+          <Pressable
+            onPress={() => console.log("funct")}
+            style={{
+              flexDirection: "row",
+              paddingVertical: 3,
+              paddingHorizontal: 10,
+              borderRadius: 40,
+              gap: 7,
+              backgroundColor: "green",
+            }}
+          >
+            <FontAwesome5 name="comment" size={20} color="white" />
+            <Text style={{ color: "white" }}></Text>
           </Pressable>
         </View>
       </View>
-      <Pressable onPress={() => console.log("funct")}>
-        <FontAwesome6 name="retweet" size={24} color="black" />
-      </Pressable>
-      <Pressable onPress={() => console.log("funct")}>
-        <FontAwesome name="share-square-o" size={24} color="black" />
-      </Pressable>
-      <Pressable onPress={() => console.log("funct")}>
-        <FontAwesome5 name="comment-alt" size={24} color="black" />
-      </Pressable>
     </GestureHandlerRootView>
   );
 }

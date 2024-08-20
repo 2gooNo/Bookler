@@ -61,22 +61,32 @@ export function EditProfileModal() {
   const pickImage = async (isBanner: boolean) => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
+      // allowsEditing: true,
       allowsMultipleSelection: false,
       // aspect: [4, 3],
       quality: 1,
     });
+    console.log(result?.assets?.[0]?.uri);
     if (!result.canceled) {
-      console.log(result?.assets);
-      result?.assets.forEach((image) => {
-        if (isBanner) {
-          setPhotos({ ...photos, bannerUrl: "", bannerUri: image?.uri });
-        } else {
-          setPhotos({ ...photos, profileUrl: "", profileUri: image?.uri });
-        }
-      });
+      // result?.assets.forEach((image) => {
+      if (isBanner) {
+        console.log(result?.assets, "--");
+        setPhotos({
+          ...photos,
+          bannerUrl: "",
+          bannerUri: result?.assets?.[0]?.uri,
+        });
+      } else {
+        setPhotos({
+          ...photos,
+          profileUrl: "",
+          profileUri: result?.assets?.[0]?.uri,
+        });
+      }
+      // });
     }
   };
+  console.log(photos);
   return (
     <View style={styles.allContainer}>
       <View

@@ -12,6 +12,7 @@ export function PostCardMedia({ media }: any) {
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "black",
+        borderRadius: 10,
       }}
     >
       {media.type === "image/jpeg" ? (

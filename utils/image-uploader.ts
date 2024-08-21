@@ -6,7 +6,6 @@ export const mediaUploader = async (
 ): Promise<{ url: string; type: string }[]> => {
   try {
     const blobMedia = await uriToBlob(media);
-    console.log(blobMedia);
     const sendingFile = await Promise.all(
       blobMedia.map(async (blob) => {
         const imgName = imgNameGenerator();
@@ -19,7 +18,6 @@ export const mediaUploader = async (
     );
     return sendingFile;
   } catch (error) {
-    console.error("Error uploading media:", error);
     return [];
   }
 };

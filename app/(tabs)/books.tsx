@@ -56,7 +56,7 @@ export function BookCommunities({ navigation }: { navigation: any }) {
             borderRadius: 35,
             backgroundColor: "rgb(33,35,40)",
             width: "85%",
-            height: "100%",
+            height: 50,
             paddingLeft: "20%",
             fontFamily: "Inherit",
             fontSize: 18,
@@ -65,7 +65,7 @@ export function BookCommunities({ navigation }: { navigation: any }) {
           }}
         />
       </View>
-      <View style={{ width: "100%", height: "auto", gap: 30 }}>
+      <View style={{ width: "100%", gap: 30 }}>
         {bookData?.map((book: any, index: number) => (
           <Pressable
             onPress={() => router.navigate(`/details/${book?.name}`)}

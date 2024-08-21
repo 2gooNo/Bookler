@@ -7,10 +7,11 @@ import {
   View,
   TextInput,
   Dimensions,
+  Image,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { doc, updateDoc } from "firebase/firestore";
-import { Image } from "expo-image";
+// import { Image } from "expo-image";
 import { db } from "@/common";
 import { AuthContext } from "@/context/authContext";
 import { mediaUploader } from "@/utils/image-uploader";
@@ -23,9 +24,7 @@ export function EditProfileModal() {
   const { userData } = useContext(AuthContext);
   const [photos, setPhotos] = useState<any>({
     profileUrl: userData?.photoUrl == "" ? "" : userData?.photoUrl,
-    profileUri: "",
     bannerUrl: userData?.banner == "" ? "" : userData?.banner,
-    bannerUri: "",
   });
   const [inputVals, setInputVals] = useState({
     banner: `${userData?.banner}`,
@@ -33,58 +32,49 @@ export function EditProfileModal() {
     photoUrl: `${userData?.photoUrl}`,
     userName: `${userData?.userName}`,
   });
+  console.log("+======", userData);
 
   async function updateUser() {
-    const uploadedMedia = [
-      photos?.profileUri == ""
-        ? photos?.profileUrl
-        : await mediaUploader([photos?.profileUri]),
-      photos?.bannerUri == ""
-        ? photos?.bannerUrl
-        : await mediaUploader([photos?.bannerUri]),
-    ];
-    console.log(uploadedMedia);
-
-    const profilePic = doc(db, "users", userData.userId);
-
-    await updateDoc(profilePic, {
-      banner:
-        photos?.bannerUri == "" ? userData?.banner : uploadedMedia[1][0].url,
-      bio: inputVals.bio,
-      photoUrl:
-        photos?.profileUri == "" ? userData?.photoUrl : uploadedMedia[0][0].url,
-      userName: inputVals.userName,
-    });
-    console.log("done");
-    router.back();
+    if (photos?.profileUrl && photos?.bannerUrl) {
+      console.log(await mediaUploader([photos?.profileUrl, photos?.bannerUrl]));
+      // console.log(await mediaUploader([photos?.bannerUrl]));
+    } else if (photos?.profileUr) {
+      console.log(await mediaUploader([photos?.profileUrl]));
+    } else if (photos?.bannerUrl) {
+      console.log(await mediaUploader([photos?.bannerUrl]));
+    }
+    // console.log("2");
+    // const profilePic = doc(db, "users", userData?.userId);
+    // console.log("3");
+    // await updateDoc(profilePic, {
+    //   banner: uploadedImages[1] == "" ? "" : uploadedImages[1][0]?.url,
+    //   bio: inputVals?.bio,
+    //   photoUrl: uploadedImages[0] == "" ? "" : uploadedImages[0][0]?.url,
+    //   userName: inputVals?.userName,
+    // });
+    // console.log("done");
+    // router.navigate("/profile");
   }
   const pickImage = async (isBanner: boolean) => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
-      // allowsEditing: true,
       allowsMultipleSelection: false,
-      // aspect: [4, 3],
       quality: 1,
     });
-    console.log(result?.assets?.[0]?.uri);
     if (!result.canceled) {
       if (isBanner) {
-        console.log(result?.assets, "--");
         setPhotos({
           ...photos,
-          bannerUrl: "",
-          bannerUri: result?.assets?.[0]?.uri,
+          bannerUrl: result?.assets?.[0]?.uri,
         });
       } else {
         setPhotos({
           ...photos,
-          profileUrl: "",
-          profileUri: result?.assets?.[0]?.uri,
+          profileUrl: result?.assets?.[0]?.uri,
         });
       }
     }
   };
-  console.log(photos);
   return (
     <View style={styles.allContainer}>
       <View
@@ -123,7 +113,16 @@ export function EditProfileModal() {
           Edit profile
         </Text>
         <Pressable
-          style={{ marginLeft: "10%", position: "absolute", right: "5%" }}
+          style={{
+            marginLeft: "10%",
+            position: "absolute",
+            right: "5%",
+            backgroundColor: "red",
+            height: 50,
+            justifyContent: "center",
+            alignItems: "center",
+            width: 70,
+          }}
           onPress={updateUser}
         >
           <Text
@@ -138,19 +137,9 @@ export function EditProfileModal() {
           </Text>
         </Pressable>
       </View>
-      {photos?.bannerUri == "" && photos?.bannerUrl == "" ? (
+      {photos?.bannerUrl == "" ? (
         <Pressable onPress={() => pickImage(true)}>
           <BannerIcon />
-        </Pressable>
-      ) : photos?.bannerUrl == "" ? (
-        <Pressable
-          style={{
-            width: "100%",
-            height: "18%",
-          }}
-          onPress={() => pickImage(true)}
-        >
-          <SelectedMedia isBanner={true} value={photos?.bannerUri} />
         </Pressable>
       ) : (
         <Pressable
@@ -161,29 +150,9 @@ export function EditProfileModal() {
         </Pressable>
       )}
 
-      {photos?.profileUri == "" && photos?.profileUrl == "" ? (
+      {photos?.profileUrl == "" ? (
         <Pressable onPress={() => pickImage(false)}>
           <UserIcon />
-        </Pressable>
-      ) : photos?.profileUrl == "" ? (
-        <Pressable
-          style={{
-            width: "22%",
-            height: "10%",
-            borderColor: "black",
-            borderRadius: 50,
-            borderStyle: "solid",
-            borderWidth: 4,
-            top: "19.5%",
-            left: "3%",
-            position: "absolute",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          onPress={() => pickImage(false)}
-        >
-          <UploadImgIcon style={styles.uploadIcon} />
-          <SelectedMedia isBanner={false} value={photos?.profileUri} />
         </Pressable>
       ) : (
         <Pressable

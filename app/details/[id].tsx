@@ -103,7 +103,7 @@ export default function DetailsScreen() {
           {bookData?.chapters?.map((chapter: string, index: number) => (
             <Pressable
               style={{
-                borderBottomColor: `${activeTab == index ? "red" : "black"}`,
+                borderBottomColor: `${activeTab == index ? "red" : "black`r"}`,
                 borderBottomWidth: 5,
                 marginTop: 15,
                 marginLeft: 35,

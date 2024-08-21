@@ -3,11 +3,11 @@ import { Video } from "expo-av";
 import { useContext } from "react";
 import { Image, Pressable, View } from "react-native";
 
-export function SelectedMedia(value: { value: string; isBanner: boolean }) {
+export function SelectedMedia({ value }: { value: string }) {
   const { setMedia, media } = useContext(CreatePostContext);
   const RemoveSelectedMedia = () => {
     media.forEach((e) => {
-      if (e.includes(value?.value)) {
+      if (e.includes(value)) {
         setMedia((prev) => [...prev, e]);
       }
     });
@@ -22,24 +22,17 @@ export function SelectedMedia(value: { value: string; isBanner: boolean }) {
         height: "100%",
       }}
     >
-      {value?.value.slice(-4) == ".jpg" ? (
-        value?.isBanner ? (
-          <Image
-            style={{ height: "100%", width: "100%" }}
-            source={{ uri: value?.value }}
-          ></Image>
-        ) : (
-          <Image
-            style={{ height: "100%", width: "100%", borderRadius: 50 }}
-            source={{ uri: value?.value }}
-          ></Image>
-        )
+      {value.slice(-4) == ".jpg" ? (
+        <Image
+          style={{ height: "100%", width: "50%" }}
+          source={{ uri: value }}
+        ></Image>
       ) : (
         <Video
           shouldPlay={false}
           isMuted={false}
           style={{ height: 200, width: "50%" }}
-          source={{ uri: value?.value }}
+          source={{ uri: value }}
         ></Video>
       )}
       <Pressable onPress={() => RemoveSelectedMedia()}></Pressable>

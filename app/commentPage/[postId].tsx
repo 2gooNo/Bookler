@@ -114,7 +114,10 @@ export default function CommentPage() {
               onChangeText={(e) => setCommentText(e)}
               value={commentText}
             />
-            <Pressable onPress={() => createComment()}>
+            <Pressable
+              onPress={() => createComment()}
+              style={styles.submitButton}
+            >
               <Feather name="arrow-right" size={24} color="white" />
             </Pressable>
           </View>
@@ -166,4 +169,5 @@ const styles = StyleSheet.create({
     width: width * 0.7,
     maxHeight: 96,
   },
+  submitButton: { height: "100%", justifyContent: "center" },
 });

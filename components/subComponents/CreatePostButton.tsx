@@ -116,7 +116,7 @@ export function CreatePostButton() {
         );
         await addDoc(commentCollectionRef, { first: false });
         await addDoc(likesCollectionRef, {
-          likedBy: doc(db, "users", user.uid),
+          likedBy: user.uid,
           type: +1,
         });
         setBodyText("");

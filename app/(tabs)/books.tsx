@@ -22,7 +22,7 @@ import { CreateBook } from "@/components/subComponents/CreateBook";
 import BackIcon from "@/assets/images/BackIcon";
 import { collection, onSnapshot, query } from "firebase/firestore";
 import { db } from "@/common";
-import BookDetail from "@/components/subComponents/BookDetails";
+import BookDetail from "@/components/subComponents/BookCommunity";
 export function BookCommunities({ navigation }: { navigation: any }) {
   const [bookData, setBookData] = useState<any>([]);
   const [ok, setOk] = useState<boolean>();

@@ -12,6 +12,7 @@ export function SelectedMedia({ value }: { value: string }) {
       }
     });
   };
+  console.log(value);
   return (
     <View style={{ flexDirection: "row", flexWrap: "wrap", width: "100%" }}>
       {value.slice(-4) == ".jpg" ? (

@@ -55,24 +55,24 @@ export function PostOptions() {
     await Clipboard.setStringAsync(currentPostData?.post?.bodyText);
   };
   return (
-    <View style={{ backgroundColor: "pink", flex: 1 }}>
+    <View style={{ backgroundColor: "pink", flex: 1, gap: 10, padding: 10 }}>
       <Pressable onPress={() => copyText()} style={{ flexDirection: "row" }}>
         <FontAwesome5 name="clipboard" size={24} color="black" />
-        <Text style={{ color: "black" }}>Copy text</Text>
+        <Text style={{ color: "black", fontSize: 20 }}>Copy text</Text>
       </Pressable>
 
       {auth?.currentUser?.uid !== currentPostData?.user?.userId && (
         <Pressable onPress={() => savePost()} style={{ flexDirection: "row" }}>
           <FontAwesome name="bookmark-o" size={24} color="black" />
           <FontAwesome name="bookmark" size={24} color="black" />
-          <Text style={{ color: "black" }}>Save post</Text>
+          <Text style={{ color: "black", fontSize: 20 }}>Save post</Text>
         </Pressable>
       )}
 
       {auth?.currentUser?.uid !== currentPostData?.user?.userId && (
         <Pressable onPress={() => blockUser()} style={{ flexDirection: "row" }}>
           <FontAwesome name="remove" size={24} color="red" />
-          <Text style={{ color: "red" }}>Block user</Text>
+          <Text style={{ color: "red", fontSize: 20 }}>Block user</Text>
         </Pressable>
       )}
 
@@ -82,7 +82,7 @@ export function PostOptions() {
           style={{ flexDirection: "row" }}
         >
           <FontAwesome name="trash-o" size={24} color="red" />
-          <Text style={{ color: "red" }}>Delete</Text>
+          <Text style={{ color: "red", fontSize: 20 }}>Delete</Text>
         </Pressable>
       )}
 
@@ -92,7 +92,7 @@ export function PostOptions() {
           style={{ flexDirection: "row" }}
         >
           <FontAwesome name="pencil-square-o" size={24} color="black" />
-          <Text style={{ color: "black" }}>Edit</Text>
+          <Text style={{ color: "black", fontSize: 20 }}>Edit</Text>
         </Pressable>
       )}
     </View>

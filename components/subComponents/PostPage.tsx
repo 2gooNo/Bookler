@@ -57,7 +57,6 @@ export function PostPage({ navigation }: { navigation: any }) {
       });
     }
   }, []);
-  const [postSheetData, setPostSheetData] = useState<any>();
 
   const getPostsAndUserInfo = async () => {
     const q = query(
@@ -68,29 +67,46 @@ export function PostPage({ navigation }: { navigation: any }) {
     );
 
     onSnapshot(q, async (snapshot) => {
-      const userPromises = snapshot.docs.map((postDoc) => {
+      const userPromises = snapshot.docs.map(async (postDoc) => {
         const postData = [postDoc.data(), postDoc.id];
-
         const userRef =
           postData?.[0] && typeof postData?.[0] !== "string"
             ? postData?.[0].userRef
             : null;
+
         setLastVisible(postDoc.id);
-        return getDoc(userRef)
-          .then((userDoc) => {
-            if (userDoc.exists()) {
-              return {
-                post: postData,
-                user: userDoc.data(),
-              };
-            }
-          })
-          .catch((error) => {
-            return {
-              post: postData,
-              user: null,
-            };
+
+        try {
+          const likesQuery = query(
+            collection(db, "posts", postDoc.id, "likes")
+          );
+          const likesSnapshot = await getDocs(likesQuery);
+          const likes = [] as any[];
+          likesSnapshot.forEach((doc) => {
+            likes.push({ id: doc.id, data: doc.data() });
           });
+
+          let userData = null;
+          if (userRef) {
+            const userDoc = await getDoc(userRef);
+            if (userDoc.exists()) {
+              userData = userDoc.data();
+            }
+          }
+
+          return {
+            post: postData,
+            user: userData,
+            likes: likes,
+          };
+        } catch (error) {
+          console.error("Error fetching data:", error);
+          return {
+            post: postData,
+            likes: [],
+            user: null,
+          };
+        }
       });
 
       try {
@@ -98,10 +114,6 @@ export function PostPage({ navigation }: { navigation: any }) {
         if (results) {
           setPosts((prev) => [...prev, ...results]);
         }
-      } catch (error) {
-        // console.error(error);
-      }
-      try {
       } catch (error) {
         // console.error(error);
       }

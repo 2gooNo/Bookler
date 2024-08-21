@@ -10,6 +10,7 @@ import { PostContext } from "@/context/postContext";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { router } from "expo-router";
+import { PostLikes } from "./PostLikes";
 
 export function PostCard({
   item,
@@ -34,7 +35,7 @@ export function PostCard({
     }
   };
   if (!item) return;
-
+  console.log(item, "-");
   return (
     <GestureHandlerRootView
       style={{
@@ -112,7 +113,7 @@ export function PostCard({
       {item?.post?.[0]?.media?.[0] && (
         <Swiper
           showsButtons={true}
-          style={{ backgroundColor: "yellow" }}
+          style={{ backgroundColor: "transparent", borderRadius: 10 }}
           loop={false}
           index={0}
           height={300}
@@ -145,24 +146,7 @@ export function PostCard({
           justifyContent: "space-between",
         }}
       >
-        <View
-          style={{
-            flexDirection: "row",
-            backgroundColor: "blue",
-            paddingVertical: 3,
-            paddingHorizontal: 10,
-            borderRadius: 50,
-            gap: 7,
-          }}
-        >
-          <Pressable onPress={() => console.log("funct")}>
-            <FontAwesome name="arrow-up" size={20} color="white" />
-          </Pressable>
-          <Text style={{ color: "white" }}></Text>
-          <Pressable onPress={() => console.log("funct")}>
-            <FontAwesome name="arrow-down" size={20} color="white" />
-          </Pressable>
-        </View>
+        <PostLikes item={item} />
         <View
           style={{
             flexDirection: "row",

@@ -1,27 +1,13 @@
 import { AuthContext } from "@/context/authContext";
 import { LangContext } from "@/context/langContext";
-import { homeTranslation } from "@/localization/translate";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import {
-  Dimensions,
-  FlatList,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Dimensions, FlatList, StyleSheet, View } from "react-native";
 import {
   GestureHandlerRootView,
   PanGestureHandler,
 } from "react-native-gesture-handler";
-import firebase from "firebase/app";
 import {
   collection,
-  doc,
-  DocumentData,
-  documentId,
-  FieldPath,
-  FieldValue,
   getDoc,
   getDocs,
   limit,
@@ -29,16 +15,13 @@ import {
   orderBy,
   query,
   startAfter,
-  where,
 } from "firebase/firestore";
-import { app, db } from "@/common";
+import { db } from "@/common";
 import { PostCard } from "./PostCard";
 import { PostOptions } from "./PostOptions";
-import BottomSheet, { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import BottomSheet from "@gorhom/bottom-sheet";
 
 export function PostPage({ navigation }: { navigation: any }) {
-  const { onLogout } = useContext(AuthContext);
-  const { lang } = useContext(LangContext);
   const [posts, setPosts] = useState<any[]>([]);
   const [lastVisible, setLastVisible] = useState<any>(null);
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -67,7 +50,7 @@ export function PostPage({ navigation }: { navigation: any }) {
     );
 
     onSnapshot(q, async (snapshot) => {
-      const userPromises = snapshot.docs.map(async (postDoc) => {
+      const postPromises = snapshot.docs.map(async (postDoc) => {
         const postData = [postDoc.data(), postDoc.id];
         const userRef =
           postData?.[0] && typeof postData?.[0] !== "string"
@@ -76,46 +59,50 @@ export function PostPage({ navigation }: { navigation: any }) {
 
         setLastVisible(postDoc.id);
 
-        try {
-          const likesQuery = query(
-            collection(db, "posts", postDoc.id, "likes")
-          );
-          const likesSnapshot = await getDocs(likesQuery);
-          const likes = [] as any[];
-          likesSnapshot.forEach((doc) => {
-            likes.push({ id: doc.id, data: doc.data() });
-          });
-
-          let userData = null;
-          if (userRef) {
-            const userDoc = await getDoc(userRef);
-            if (userDoc.exists()) {
-              userData = userDoc.data();
-            }
+        let userData = null;
+        if (userRef) {
+          const userDoc = await getDoc(userRef);
+          if (userDoc.exists()) {
+            userData = userDoc.data();
           }
-
-          return {
-            post: postData,
-            user: userData,
-            likes: likes,
-          };
-        } catch (error) {
-          console.error("Error fetching data:", error);
-          return {
-            post: postData,
-            likes: [],
-            user: null,
-          };
         }
+
+        onSnapshot(
+          query(collection(db, "posts", postDoc.id, "likes")),
+          (likesSnapshot) => {
+            const likes = [] as any[];
+            likesSnapshot.forEach((doc) => {
+              likes.push({ id: doc.id, data: doc.data() });
+            });
+
+            setPosts((prev) => {
+              return prev.map((item) => {
+                if (item.post[1] === postDoc.id) {
+                  return {
+                    ...item,
+                    likes: likes,
+                  };
+                }
+                return item;
+              });
+            });
+          }
+        );
+
+        return {
+          post: postData,
+          user: userData,
+          likes: [],
+        };
       });
 
       try {
-        const results = await Promise.all(userPromises);
+        const results = await Promise.all(postPromises);
         if (results) {
           setPosts((prev) => [...prev, ...results]);
         }
       } catch (error) {
-        // console.error(error);
+        console.error(error);
       }
     });
   };
@@ -136,7 +123,7 @@ export function PostPage({ navigation }: { navigation: any }) {
         onGestureEvent={onSwipe}
         onHandlerStateChange={onSwipe}
       >
-        <View style={{ position: "relative", paddingVertical: 10 }}>
+        <View style={{ position: "relative", paddingTop: 10 }}>
           {/* <Pressable onPress={() => onLogout()}>
             <Text style={{ backgroundColor: "blue" }}>
               {homeTranslation?.[lang]?.["logOutBtn"]}
@@ -160,18 +147,9 @@ export function PostPage({ navigation }: { navigation: any }) {
           />
         </View>
       </PanGestureHandler>
-      {/* <BottomSheetModalProvider> */}
-      {/* <View
-        style={{
-          height: 800,
-          width: "100%",
-          position: "absolute",
-          bottom: 0,
-          zIndex: 1000,
-        }}
-      > */}
+
       <BottomSheet
-        snapPoints={[600, 400]}
+        snapPoints={[400, 230]}
         onChange={handleSheetChanges}
         ref={bottomSheetRef}
         index={-1}
@@ -182,6 +160,10 @@ export function PostPage({ navigation }: { navigation: any }) {
           height: "auto",
           zIndex: 10,
         }}
+        backgroundStyle={{
+          backgroundColor: "#121212",
+        }}
+        handleIndicatorStyle={{ backgroundColor: "transparent" }}
         onClose={() =>
           navigation.getParent().setOptions({
             tabBarStyle: {
@@ -190,100 +172,10 @@ export function PostPage({ navigation }: { navigation: any }) {
           })
         }
       >
-        {/* <FullWindowOverlay>
-          <View>  */}
         <PostOptions />
-        {/* </View>
-          </FullWindowOverlay> */}
       </BottomSheet>
-      {/* </View> */}
-      {/* </BottomSheetModalProvider> */}
     </GestureHandlerRootView>
   );
 }
 
-const styles = StyleSheet.create({
-  allContainer: {
-    backgroundColor: "black",
-    height: Dimensions.get("window").height,
-    width: Dimensions.get("window").width,
-    paddingTop: "18%",
-    alignItems: "center",
-    paddingLeft: "8%",
-    paddingRight: "8%",
-  },
-  upperText: {
-    fontFamily: "Inter",
-    fontSize: 28,
-    fontWeight: "800",
-    color: "white",
-    width: "100%",
-    letterSpacing: 1,
-    marginBottom: "40%",
-  },
-  fastLogButtons: {
-    gap: 10,
-    width: "100%",
-    height: "auto",
-  },
-  fastLogButton: {
-    width: "100%",
-    height: "8%",
-    backgroundColor: "white",
-    borderRadius: 50,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 25,
-  },
-  xLogo: {
-    marginBottom: "35%",
-  },
-  fastLogLogo: {
-    width: "10%",
-    height: "60%",
-  },
-  fastLogText: {
-    fontFamily: "Inter",
-    fontWeight: "700",
-    fontSize: 15,
-  },
-  orContainer: {
-    flexDirection: "row",
-    width: "100%",
-    height: "auto",
-    gap: 5,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  grayLine: {
-    height: "10%",
-    width: "43%",
-    borderColor: " rgb(136,138,141)",
-    borderStyle: "solid",
-    borderWidth: 1,
-  },
-  choiseSection: {
-    width: "100%",
-    height: "100%",
-    position: "relative",
-    gap: 10,
-  },
-  orText: {
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontWeight: "500",
-    color: " rgb(136,138,141)",
-  },
-  logInTextContainer: {
-    marginTop: "8%",
-    flexDirection: "row",
-    gap: 5,
-  },
-  logInText: {
-    fontFamily: "Inter",
-    fontSize: 16,
-    fontWeight: "500",
-    color: " rgb(74,152,232)",
-  },
-});
+const styles = StyleSheet.create({});

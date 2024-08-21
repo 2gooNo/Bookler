@@ -5,12 +5,12 @@ import { PostCardMedia } from "./PostCardMedia";
 import { Image } from "expo-image";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { PostContext } from "@/context/postContext";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { router } from "expo-router";
 import { PostLikes } from "./PostLikes";
+import { RepostButton } from "./RepostButton";
 
 export function PostCard({
   item,
@@ -22,9 +22,6 @@ export function PostCard({
   navigation: any;
 }) {
   const { setCurrentPostData } = useContext(PostContext);
-  const supportedURL = "https://google.com";
-  const unsupportedURL = "slack://open?team=123456";
-
   const handlePress = async () => {
     const supported = await Linking.canOpenURL(item?.post?.[0]?.link);
 
@@ -73,7 +70,7 @@ export function PostCard({
                   item?.user?.photoUrl ||
                   "https://nestcore-my.sharepoint.com/da4d4fc4-9a28-497e-abdb-0b23672a14bb",
               }}
-            ></Image>
+            />
           )}
           <View style={{ flexDirection: "column" }}>
             <Text style={{ color: "white" }}>
@@ -154,12 +151,11 @@ export function PostCard({
             gap: 15,
           }}
         >
+          <RepostButton />
           <Pressable onPress={() => console.log("funct")}>
             <FontAwesome6 name="retweet" size={20} color="white" />
           </Pressable>
-          <Pressable onPress={() => console.log("funct")}>
-            <FontAwesome name="share-square-o" size={20} color="white" />
-          </Pressable>
+
           <Pressable
             onPress={() => router.navigate(`/commentPage/${item?.post?.[1]}`)}
             style={{

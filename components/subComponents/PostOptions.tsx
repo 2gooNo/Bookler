@@ -1,4 +1,4 @@
-import { Pressable, Text, View } from "react-native";
+import { Pressable, Text, View, StyleSheet } from "react-native";
 import { auth, db } from "@/common";
 import { useContext } from "react";
 import { PostContext } from "@/context/postContext";
@@ -17,7 +17,6 @@ import * as Clipboard from "expo-clipboard";
 
 export function PostOptions() {
   const { currentPostData } = useContext(PostContext);
-  console.log(currentPostData);
   const deletePost = async () => {
     const documentRef = doc(db, "posts", currentPostData?.post?.[1]);
 
@@ -31,7 +30,6 @@ export function PostOptions() {
       });
       await batch.commit();
     }
-
     await deleteDoc(documentRef);
   };
 
@@ -55,46 +53,50 @@ export function PostOptions() {
     await Clipboard.setStringAsync(currentPostData?.post?.bodyText);
   };
   return (
-    <View style={{ backgroundColor: "pink", flex: 1, gap: 10, padding: 10 }}>
-      <Pressable onPress={() => copyText()} style={{ flexDirection: "row" }}>
-        <FontAwesome5 name="clipboard" size={24} color="black" />
-        <Text style={{ color: "black", fontSize: 20 }}>Copy text</Text>
+    <View style={{ flex: 1, gap: 20, padding: 10 }}>
+      <Pressable onPress={() => copyText()} style={styles.pressable}>
+        <FontAwesome5 name="clipboard" size={24} color="#dedcdb" />
+        <Text style={{ color: "#dedcdb", fontSize: 18 }}>Copy text</Text>
       </Pressable>
 
       {auth?.currentUser?.uid !== currentPostData?.user?.userId && (
-        <Pressable onPress={() => savePost()} style={{ flexDirection: "row" }}>
-          <FontAwesome name="bookmark-o" size={24} color="black" />
-          <FontAwesome name="bookmark" size={24} color="black" />
-          <Text style={{ color: "black", fontSize: 20 }}>Save post</Text>
+        <Pressable onPress={() => savePost()} style={styles.pressable}>
+          <FontAwesome name="bookmark-o" size={24} color="#dedcdb" />
+          <FontAwesome name="bookmark" size={24} color="#dedcdb" />
+          <Text style={{ color: "#dedcdb", fontSize: 18 }}>Save post</Text>
         </Pressable>
       )}
 
       {auth?.currentUser?.uid !== currentPostData?.user?.userId && (
-        <Pressable onPress={() => blockUser()} style={{ flexDirection: "row" }}>
-          <FontAwesome name="remove" size={24} color="red" />
-          <Text style={{ color: "red", fontSize: 20 }}>Block user</Text>
+        <Pressable onPress={() => blockUser()} style={styles.pressable}>
+          <FontAwesome name="remove" size={24} color="#ff4e0e" />
+          <Text style={{ color: "#ff4e0e", fontSize: 18 }}>Block user</Text>
         </Pressable>
       )}
 
       {auth?.currentUser?.uid == currentPostData?.user?.userId && (
-        <Pressable
-          onPress={() => deletePost()}
-          style={{ flexDirection: "row" }}
-        >
-          <FontAwesome name="trash-o" size={24} color="red" />
-          <Text style={{ color: "red", fontSize: 20 }}>Delete</Text>
+        <Pressable onPress={() => deletePost()} style={styles.pressable}>
+          <FontAwesome name="trash-o" size={24} color="#ff4e0e" />
+          <Text style={{ color: "#ff4e0e", fontSize: 18 }}>Delete</Text>
         </Pressable>
       )}
 
       {auth?.currentUser?.uid == currentPostData?.user?.userId && (
         <Pressable
           onPress={() => console.log("edit post")}
-          style={{ flexDirection: "row" }}
+          style={styles.pressable}
         >
-          <FontAwesome name="pencil-square-o" size={24} color="black" />
-          <Text style={{ color: "black", fontSize: 20 }}>Edit</Text>
+          <FontAwesome name="pencil-square-o" size={24} color="#dedcdb" />
+          <Text style={{ color: "#dedcdb", fontSize: 18 }}>Edit</Text>
         </Pressable>
       )}
     </View>
   );
 }
+const styles = StyleSheet.create({
+  pressable: {
+    flexDirection: "row",
+    gap: 10,
+    alignItems: "center",
+  },
+});

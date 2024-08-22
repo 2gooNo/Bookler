@@ -26,6 +26,7 @@ export default function DetailsScreen() {
   const [bookData, setBookData] = useState<any>();
   const [activeTab, setActiveTab] = useState(1);
   const [categoryData, setCategoryData] = useState<any>();
+  const [communityMembers, setCommunityMembers] = useState<Array<any>>([]);
   async function BookFetch() {
     if (typeof id == "string") {
       const docRef = doc(db, "books", id);
@@ -41,7 +42,17 @@ export default function DetailsScreen() {
     //   });
     // });
   }
-
+  async function UsersFetch() {
+    const q = query(
+      collection(db, "users"),
+      where("books", "array-contains", id)
+    );
+    onSnapshot(q, async (snapshot) => {
+      const userPromises = snapshot.docs.map((postDoc) => {
+        setCommunityMembers((prev: any) => [...prev, postDoc?.data()]);
+      });
+    });
+  }
   async function CategoryFetch() {
     if (bookData?.category) {
       const q = query(
@@ -57,6 +68,7 @@ export default function DetailsScreen() {
   }
   useEffect(() => {
     BookFetch();
+    UsersFetch();
   }, []);
   useEffect(() => {
     if (bookData) {
@@ -66,11 +78,11 @@ export default function DetailsScreen() {
   function SelectChapter(index: number) {
     setActiveTab(index);
   }
-  function getActiveContet(activeTab: number) {
-    return {
-      id: activeTab,
-    };
-  }
+  // function getActiveContet(activeTab: number) {
+  //   return {
+  //     id: activeTab,
+  //   };
+  // }
 
   return (
     <ScrollView style={styles.allContainer}>
@@ -93,7 +105,7 @@ export default function DetailsScreen() {
         >
           {bookData?.name}
         </Text>
-        <JoinCommuinityButton bookId={id} />
+
         <View style={styles.categories}>
           {/* {categoryData?.map((category: { name: string }, index: number) => (
           <View style={styles?.category} key={index}>
@@ -105,13 +117,26 @@ export default function DetailsScreen() {
               style={{
                 color: "white",
                 fontFamily: "Inherit",
-                fontSize: 17,
+                fontSize: 13,
                 fontWeight: "700",
               }}
             >
               {categoryData?.name}
             </Text>
           </View>
+        </View>
+        <View style={{ flexDirection: "row", gap: 51, alignItems: "center" }}>
+          <Text
+            style={{
+              color: "rgb(205,205,205)",
+              fontFamily: "Inherit",
+              fontSize: 17,
+              fontWeight: "400",
+            }}
+          >
+            {communityMembers.length} Member
+          </Text>
+          <JoinCommuinityButton bookId={id} />
         </View>
       </View>
       <View style={{ backgroundColor: "black", width: "100%" }}>
@@ -186,11 +211,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderStyle: "solid",
     borderRadius: 50,
-    paddingBottom: 5,
-    paddingTop: 5,
-    paddingLeft: 10,
-    paddingRight: 10,
-    width: 80,
+    paddingBottom: 3,
+    paddingTop: 3,
+    justifyContent: "center",
+    alignItems: "center",
+    width: 62,
   },
   chapterContainer: {
     borderBottomColor: "rgb(17,19,20)",

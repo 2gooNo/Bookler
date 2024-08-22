@@ -24,8 +24,7 @@ import { collection, onSnapshot, query } from "firebase/firestore";
 import { db } from "@/common";
 import BookDetail from "@/components/subComponents/BookCommunity";
 export function BookCommunities({ navigation }: { navigation: any }) {
-  const [bookData, setBookData] = useState<any>([]);
-  const [ok, setOk] = useState<boolean>();
+  const [bookData, setBookData] = useState<Array<any>>([]);
   useEffect(() => {
     const q = query(collection(db, "books"));
     onSnapshot(q, async (snapshot) => {

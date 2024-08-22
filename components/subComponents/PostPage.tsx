@@ -45,7 +45,7 @@ export function PostPage({ navigation }: { navigation: any }) {
     const q = query(
       collection(db, "posts"),
       orderBy("__name__"),
-      startAfter(lastVisible || "0jYHvFadWJKkEK3RtAhU"),
+      startAfter(lastVisible),
       limit(4)
     );
 

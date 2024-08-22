@@ -8,10 +8,18 @@ import {
   ScrollView,
 } from "react-native";
 import { db } from "@/common";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { Image } from "expo-image";
 import BackIcon from "@/assets/images/BackIcon";
+import { JoinCommuinityButton } from "@/components/subComponents/JoinCommuinityButton";
 
 export default function DetailsScreen() {
   const { id } = useLocalSearchParams();
@@ -19,12 +27,19 @@ export default function DetailsScreen() {
   const [activeTab, setActiveTab] = useState(1);
   const [categoryData, setCategoryData] = useState<any>();
   async function BookFetch() {
-    const q = query(collection(db, "books"), where("name", "==", id));
-    onSnapshot(q, async (snapshot) => {
-      const userPromises = snapshot.docs.map((postDoc) => {
-        setBookData(postDoc?.data());
-      });
-    });
+    if (typeof id == "string") {
+      const docRef = doc(db, "books", id);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setBookData(docSnap?.data());
+      }
+    }
+    // const q = query(collection(db, "books",), where("name", "==", id));
+    // onSnapshot(q, async (snapshot) => {
+    //   const userPromises = snapshot.docs.map((postDoc) => {
+    //     setBookData(postDoc?.data());
+    //   });
+    // });
   }
 
   async function CategoryFetch() {
@@ -78,6 +93,7 @@ export default function DetailsScreen() {
         >
           {bookData?.name}
         </Text>
+        <JoinCommuinityButton bookId={id} />
         <View style={styles.categories}>
           {/* {categoryData?.map((category: { name: string }, index: number) => (
           <View style={styles?.category} key={index}>

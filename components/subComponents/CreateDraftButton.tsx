@@ -56,7 +56,7 @@ export function CreateDraftButton() {
       onPress={() => CreateDraft()}
       style={{ backgroundColor: "pink" }}
     >
-      <Text> {homeTranslation[lang]["draft"]}</Text>
+      <Text> {homeTranslation?.[lang]?.["draft"]}</Text>
     </Pressable>
   );
 }

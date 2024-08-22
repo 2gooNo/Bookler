@@ -7,7 +7,6 @@ import {
   collection,
   deleteDoc,
   doc,
-  setDoc,
   updateDoc,
 } from "firebase/firestore";
 import { db } from "@/common";
@@ -15,38 +14,28 @@ import { db } from "@/common";
 export function PostLikes({ item }: any) {
   const { userData } = useContext(AuthContext);
   const [interacted, setInteracted] = useState<number>(0);
-
+  console.log(item);
   const Vote = async (likeType: number) => {
-    item?.likes.forEach(async (like: any) => {
-      if (
-        like?.data?.likedBy == userData?.userId &&
-        like?.data?.type == likeType
-      ) {
-        const docRef = doc(db, "posts", item?.post?.[1], "likes", like?.id);
-        await deleteDoc(docRef);
-        setInteracted(0);
-      } else if (
-        like?.data?.likedBy == userData?.userId &&
-        like?.data?.type !== likeType
-      ) {
-        const docRef = doc(db, "posts", item?.post?.[1], "likes", like?.id);
-        await updateDoc(docRef, {
-          type: likeType,
-        });
-      } else if (like?.data?.likedBy !== userData?.userId) {
-        const docData = {
-          likedBy: userData?.userId,
-          type: likeType,
-        };
+    let hasLiked = false;
 
-        const commentCollectionRef = collection(
-          doc(db, "posts", item?.post?.[1]),
-          "likes"
-        );
-        await addDoc(commentCollectionRef, docData);
+    for (const like of item?.likes || []) {
+      if (like?.data?.likedBy === userData?.userId) {
+        hasLiked = true;
+
+        if (like?.data?.type === likeType) {
+          const docRef = doc(db, "posts", item?.post?.[1], "likes", like?.id);
+          await deleteDoc(docRef);
+          setInteracted(0);
+        } else {
+          const docRef = doc(db, "posts", item?.post?.[1], "likes", like?.id);
+          await updateDoc(docRef, { type: likeType });
+          setInteracted(likeType);
+        }
+        return;
       }
-    });
-    if (!item?.likes[0]) {
+    }
+
+    if (!hasLiked) {
       const docData = {
         likedBy: userData?.userId,
         type: likeType,
@@ -57,6 +46,7 @@ export function PostLikes({ item }: any) {
         "likes"
       );
       await addDoc(commentCollectionRef, docData);
+      setInteracted(likeType);
     }
   };
 
@@ -72,7 +62,7 @@ export function PostLikes({ item }: any) {
       });
     }
   }, [item]);
-  console.log(interacted);
+
   return (
     <View
       style={{

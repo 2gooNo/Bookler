@@ -119,7 +119,7 @@ export function CreatePostButton() {
   };
   return (
     <Pressable onPress={() => CreatePost()} style={{ backgroundColor: "pink" }}>
-      <Text>{homeTranslation[lang]["post"]}</Text>
+      <Text>{homeTranslation?.[lang]?.["post"]}</Text>
     </Pressable>
   );
 }

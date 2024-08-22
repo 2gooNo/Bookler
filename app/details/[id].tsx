@@ -34,12 +34,6 @@ export default function DetailsScreen() {
         setBookData(docSnap?.data());
       }
     }
-    // const q = query(collection(db, "books",), where("name", "==", id));
-    // onSnapshot(q, async (snapshot) => {
-    //   const userPromises = snapshot.docs.map((postDoc) => {
-    //     setBookData(postDoc?.data());
-    //   });
-    // });
   }
 
   async function CategoryFetch() {

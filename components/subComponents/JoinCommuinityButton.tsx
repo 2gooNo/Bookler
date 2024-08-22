@@ -28,8 +28,26 @@ export function JoinCommuinityButton({ bookId }: any) {
       onPress={() => {
         HandleClick();
       }}
+      style={{
+        backgroundColor: "white",
+        borderRadius: 50,
+        borderColor: "white",
+        borderWidth: 1,
+        paddingBottom: 3,
+        paddingTop: 3,
+        width: 62,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
     >
-      <Text style={{ color: "white" }}>
+      <Text
+        style={{
+          color: "black",
+          fontFamily: "Inherit",
+          fontSize: 13,
+          fontWeight: "700",
+        }}
+      >
         {userData?.books.includes(bookId) ? "Leave" : "Join"}{" "}
       </Text>
     </Pressable>

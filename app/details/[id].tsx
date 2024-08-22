@@ -103,12 +103,13 @@ export default function DetailsScreen() {
           {bookData?.chapters?.map((chapter: string, index: number) => (
             <Pressable
               style={{
-                borderBottomColor: `${activeTab == index ? "red" : "black`r"}`,
+                borderBottomColor: `${activeTab == index ? "red" : "black"}`,
                 borderBottomWidth: 5,
                 marginTop: 15,
                 marginLeft: 35,
                 height: 40,
               }}
+              key={index}
               onPress={() => SelectChapter(index)}
             >
               <Text
@@ -173,6 +174,7 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingLeft: 10,
     paddingRight: 10,
+    width: 80,
   },
   chapterContainer: {
     borderBottomColor: "rgb(17,19,20)",

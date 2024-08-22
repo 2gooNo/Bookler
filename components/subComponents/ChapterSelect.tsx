@@ -1,13 +1,12 @@
 import { CreatePostContext } from "@/context/createPostContext";
 import { useContext, useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
-import { CreatePostButton } from "./CreatePostButton";
-import { CreateDraftButton } from "./CreateDraftButton";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/common";
 
-export function ChapterSelect() {
-  const { setSelectedChapter, selectedBook } = useContext(CreatePostContext);
+export function ChapterSelect({ navigation }: any) {
+  const { setSelectedChapter, selectedBook, selectedChapter } =
+    useContext(CreatePostContext);
   const [book, setBook] = useState<any>();
 
   const getBook = async () => {
@@ -20,15 +19,24 @@ export function ChapterSelect() {
 
   useEffect(() => {
     getBook();
-  }, []);
-  console.log(book?.chapters);
+    if (!selectedBook.name) {
+      setSelectedChapter({ name: "", number: null });
+    }
+  }, [selectedBook]);
+
   return (
     <View style={{ paddingVertical: 40 }}>
+      {selectedChapter.number && (
+        <Pressable
+          style={{ backgroundColor: "red" }}
+          onPress={() => navigation.navigate("CreatePost")}
+        >
+          <Text style={{ color: "white" }}>Next</Text>
+        </Pressable>
+      )}
       {book?.chapters.map((chapter: string, index: number) => (
         <ChapterCard key={index} chapter={chapter} index={index} />
       ))}
-      {/* <CreatePostButton />
-      <CreateDraftButton /> */}
     </View>
   );
 }

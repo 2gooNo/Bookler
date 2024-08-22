@@ -1,7 +1,8 @@
-import { Button, Image, StyleSheet, View } from "react-native";
+import { Button, Image, Pressable, StyleSheet, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { CreatePostContext } from "@/context/createPostContext";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 export function PhotoSelector() {
   const { setMedia } = useContext(CreatePostContext);
@@ -14,7 +15,6 @@ export function PhotoSelector() {
       quality: 1,
     });
     if (!result.canceled) {
-      console.log(result?.assets);
       result?.assets.forEach((image) => {
         console.log(image);
         setMedia((prev) => [...prev, image.uri]);
@@ -22,21 +22,8 @@ export function PhotoSelector() {
     }
   };
   return (
-    <View style={styles.container}>
-      <Button title="Pick an image from camera roll" onPress={pickImage} />
-    </View>
+    <Pressable onPress={() => pickImage()}>
+      <AntDesign name="picture" size={26} color="white" />
+    </Pressable>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "red",
-  },
-  image: {
-    color: "yellow",
-    width: 200,
-    height: 200,
-  },
-});

@@ -43,50 +43,8 @@ export default function HashTagSelect({ setIsVisible }: any) {
         }
       });
     }
-    // if (value.length !== 0) {
-    //   const q = query(
-    //     collection(db, "tags"),
-    //     where("tagName", ">=", value),
-    //     where("tagName", "<=", value + "\uf8ff"),
-    //     limit(10)
-    //   );
-
-    //   onSnapshot(q, (snapshot) => {
-    //     const tagInfo = snapshot.docs
-    //       .map((doc) => {
-    //         const docData = [doc.data(), doc.id];
-    //         const isAlreadySelected = selectedTags.some(
-    //           (tag: any) => tag[1] === doc.id
-    //         );
-    //         if (!isAlreadySelected) {
-    //           return docData;
-    //         }
-    //         return null;
-    //       })
-    //       .filter((doc) => doc !== null);
-    //     if (tagInfo[0] && !enter) {
-    //       console.log(tagInfo);
-    //       setTags(tagInfo);
-    //     } else if (enter && !tagInfo[0]) {
-    //       createNewtag(value);
-    //     } else {
-    //       setTags([]);
-    //       setNewTag(value);
-    //     }
-    //   });
-    // } else {
-    //   setTags([]);
-    //   setNewTag(undefined);
-    // }
   };
-  //   const createNewtag = async (tag: string) => {
-  //     const docRef = await addDoc(collection(db, "tags"), {
-  //       tagName: tag,
-  //     });
-  //     const docSnap = await getDoc(docRef);
-  //     console.log(docSnap.data());
-  //     setSelectedTags((prev: any) => [...prev, [docSnap.data(), docSnap.id]]);
-  //   };
+
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
   useEffect(() => {
@@ -128,13 +86,6 @@ export default function HashTagSelect({ setIsVisible }: any) {
   };
   const { height } = Dimensions.get("window");
   return (
-    // <View
-    //   style={{
-    //     flexDirection: "column",
-    //     flex: 1,
-    //   }}
-    // >
-
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{
@@ -177,6 +128,5 @@ export default function HashTagSelect({ setIsVisible }: any) {
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
-    // </View>
   );
 }

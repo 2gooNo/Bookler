@@ -76,7 +76,10 @@ export function PostCard({
             <Text style={{ color: "white" }}>
               {item?.user?.userName || "Unavailable user"}
             </Text>
-            <Text style={{ color: "white" }}>Book commuinity / Chapter</Text>
+            <Text style={{ color: "white" }}>
+              {item?.post?.[0]?.book?.name} / {item?.post?.[0]?.chapter?.number}{" "}
+              {item?.post?.[0]?.chapter?.name}
+            </Text>
           </View>
         </View>
 

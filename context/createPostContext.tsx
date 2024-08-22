@@ -6,6 +6,14 @@ type Props = {
 type SelectedTagsType = {
   tagName: string;
 };
+type SelectedBookType = {
+  name: string;
+  id: string;
+};
+type SelectedChapterType = {
+  name: string;
+  number: number | null;
+};
 type PostContextType = {
   setSelectedTags: React.Dispatch<React.SetStateAction<SelectedTagsType[]>>;
   selectedTags: SelectedTagsType[];
@@ -21,10 +29,10 @@ type PostContextType = {
   linkUrl: string;
   setLinkComponent: React.Dispatch<React.SetStateAction<boolean>>;
   linkComponent: boolean;
-  selectedBook: string;
-  setSelectedBook: React.Dispatch<React.SetStateAction<string>>;
-  selectedChapter: string;
-  setSelectedChapter: React.Dispatch<React.SetStateAction<string>>;
+  selectedBook: SelectedBookType;
+  setSelectedBook: React.Dispatch<React.SetStateAction<SelectedBookType>>;
+  selectedChapter: SelectedChapterType;
+  setSelectedChapter: React.Dispatch<React.SetStateAction<SelectedChapterType>>;
 };
 export const CreatePostContext = React.createContext<PostContextType>(
   {} as PostContextType
@@ -38,8 +46,14 @@ export const CreatePostProvider = ({ children }: Props) => {
   const [takenMedia, setTakenMedia] = useState<string>("");
   const [linkUrl, setLinkUrl] = useState<string>("");
   const [linkComponent, setLinkComponent] = useState<boolean>(false);
-  const [selectedBook, setSelectedBook] = useState<string>("");
-  const [selectedChapter, setSelectedChapter] = useState<string>("");
+  const [selectedBook, setSelectedBook] = useState<SelectedBookType>({
+    id: "",
+    name: "",
+  });
+  const [selectedChapter, setSelectedChapter] = useState<SelectedChapterType>({
+    number: null,
+    name: "",
+  });
   return (
     <CreatePostContext.Provider
       value={{

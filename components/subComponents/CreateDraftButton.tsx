@@ -45,8 +45,8 @@ export function CreateDraftButton() {
         setMedia([]);
         setSelectedTags([]);
         setLinkUrl("");
-        setSelectedChapter("");
-        setSelectedBook("");
+        setSelectedChapter({ name: "", number: null });
+        setSelectedBook({ id: "", name: "" });
         router.push("/home");
       });
     } catch (err) {}

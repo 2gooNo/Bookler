@@ -45,27 +45,6 @@ export function CreatePostButton() {
   const [tags, setTags] = useState<any>([]);
   const CreatePost = async () => {
     try {
-      // await Promise.resolve(
-      //   selectedTags.map(async (tag) => {
-      //     const q = query(
-      //       collection(db, "tags"),
-      //       where("tagName", "==", tag.tagName),
-      //       limit(1)
-      //     );
-      //     console.log(q);
-      //     const tagInfo = await firebaseActions(q);
-      //     console.log(tagInfo, "===");
-      //     if (tagInfo?.[0]?.id) {
-      //       setTags((prev: any) => [...prev, tagInfo[0]]);
-      //       console.log("push id");
-      //       setIsUploaded(true);
-      //     } else {
-      //       await CreateNewTag(tag.tagName);
-      //     }
-      //     return;
-      //   })
-      // );
-
       selectedTags.forEach(async (tag, index) => {
         const q = query(
           collection(db, "tags"),
@@ -88,9 +67,8 @@ export function CreatePostButton() {
           }
         });
       });
-      console.log(tags, "---");
+
       const uploadedMedia = await mediaUploader(media);
-      console.log(uploadedMedia, "-");
 
       if (tags.length == selectedTags.length && uploadedMedia) {
         const docRef = await addDoc(collection(db, "posts"), {
@@ -125,8 +103,8 @@ export function CreatePostButton() {
         setLinkUrl("");
         setSelectedTags([]);
         setLinkUrl("");
-        setSelectedChapter("");
-        setSelectedBook("");
+        setSelectedChapter({ name: "", number: null });
+        setSelectedBook({ id: "", name: "" });
         router.push("/home");
         alert("Subcollection document written with ID: ");
       }

@@ -30,7 +30,7 @@ export function BookCommunities({ navigation }: { navigation: any }) {
     const q = query(collection(db, "books"));
     onSnapshot(q, async (snapshot) => {
       const userPromises = snapshot.docs.map((postDoc) => {
-        setBookData((prev: any) => [...prev, postDoc.data()]);
+        setBookData((prev: any) => [...prev, [postDoc.data(), postDoc.id]]);
       });
     });
   }, []);
@@ -68,7 +68,7 @@ export function BookCommunities({ navigation }: { navigation: any }) {
       <View style={{ width: "100%", gap: 30 }}>
         {bookData?.map((book: any, index: number) => (
           <Pressable
-            onPress={() => router.navigate(`/details/${book?.name}`)}
+            onPress={() => router.navigate(`/details/${book?.[1]}`)}
             style={{
               width: "100%",
               flexDirection: "row",
@@ -79,7 +79,7 @@ export function BookCommunities({ navigation }: { navigation: any }) {
           >
             <Image
               style={{ width: "23%", height: 90, borderRadius: 10 }}
-              source={{ uri: book?.bookImg }}
+              source={{ uri: book?.[0]?.bookImg }}
             />
             <View style={{ gap: 5 }}>
               <Text
@@ -91,7 +91,7 @@ export function BookCommunities({ navigation }: { navigation: any }) {
                   fontWeight: "600",
                 }}
               >
-                {book?.name}
+                {book?.[0]?.name}
               </Text>
               {/* {book?.chapters?.map((chapter: any, index: number) => (
                 <Text key={index} style={{ color: "white" }}>
@@ -107,7 +107,7 @@ export function BookCommunities({ navigation }: { navigation: any }) {
                   fontWeight: "400",
                 }}
               >
-                {book?.chapters.length} chapters
+                {book?.[0]?.chapters.length} chapters
               </Text>
             </View>
           </Pressable>

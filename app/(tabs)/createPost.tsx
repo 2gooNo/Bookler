@@ -74,14 +74,6 @@ export function CreatePost({ navigation }: { navigation: any }) {
             <HashTagSelect setIsVisible={setIsVisible} />
           </Modal>
           <View style={styles.header}>
-            {/* <Pressable
-              onPress={() => router.push("./home")}
-              // style={{ backgroundColor: "purple", width: 100 }}
-            >
-              <Text style={{ color: "white" }}>
-                {homeTranslation?.[lang]?.["goBack"]}
-              </Text>
-            </Pressable> */}
             <ExitButton></ExitButton>
             {(!selectedBook.id || !selectedChapter.number) && (
               <Pressable

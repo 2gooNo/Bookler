@@ -42,12 +42,14 @@ export function PostPage({ navigation }: { navigation: any }) {
   }, []);
 
   const getPostsAndUserInfo = async () => {
-    const q = query(
-      collection(db, "posts"),
-      orderBy("__name__"),
-      startAfter(lastVisible || "0jYHvFadWJKkEK3RtAhU"),
-      limit(4)
-    );
+    const q = lastVisible
+      ? query(
+          collection(db, "posts"),
+          orderBy("__name__"),
+          startAfter(lastVisible),
+          limit(4)
+        )
+      : query(collection(db, "posts"), limit(4));
 
     onSnapshot(q, async (snapshot) => {
       const postPromises = snapshot.docs.map(async (postDoc) => {
@@ -141,7 +143,7 @@ export function PostPage({ navigation }: { navigation: any }) {
                 navigation={navigation}
               />
             )}
-            ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
+            ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
           />
         </View>
       </PanGestureHandler>

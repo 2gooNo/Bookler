@@ -1,9 +1,9 @@
 import { useContext } from "react";
-import { Linking, Pressable, Text, View } from "react-native";
+import { Dimensions, Linking, Pressable, Text, View } from "react-native";
 import Swiper from "react-native-swiper";
 import { PostCardMedia } from "./PostCardMedia";
 import { Image } from "expo-image";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import Entypo from "@expo/vector-icons/Entypo";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { PostContext } from "@/context/postContext";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
@@ -11,6 +11,8 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { router } from "expo-router";
 import { PostLikes } from "./PostLikes";
 import { RepostButton } from "./RepostButton";
+
+const { height, width } = Dimensions.get("window");
 
 export function PostCard({
   item,
@@ -32,12 +34,12 @@ export function PostCard({
     }
   };
   if (!item) return;
-  console.log(item);
+
   return (
     <GestureHandlerRootView
       style={{
         flexDirection: "column",
-        backgroundColor: "grey",
+        backgroundColor: "#121212",
         paddingHorizontal: 12,
         paddingVertical: 8,
         gap: 8,
@@ -65,8 +67,8 @@ export function PostCard({
             >
               <Image
                 style={{
-                  height: 50,
-                  width: 50,
+                  height: height * 0.04,
+                  width: width * 0.08,
                   borderRadius: 50,
                   backgroundColor: "pink",
                 }}
@@ -103,7 +105,7 @@ export function PostCard({
             }
           }}
         >
-          <AntDesign name="ellipsis1" size={24} color="black" />
+          <Entypo name="dots-three-horizontal" size={24} color="white" />
         </Pressable>
       </View>
       {item?.post?.[0]?.title && (
@@ -169,14 +171,15 @@ export function PostCard({
             style={{
               flexDirection: "row",
               paddingVertical: 3,
-              paddingHorizontal: 10,
-              borderRadius: 40,
+              // paddingHorizontal: 10,
+              borderRadius: 20,
               gap: 7,
-              backgroundColor: "green",
+              // borderColor: "white",
+              // borderWidth: 0.5,
             }}
           >
             <FontAwesome5 name="comment" size={20} color="white" />
-            <Text style={{ color: "white" }}></Text>
+            {/* <Text style={{ color: "white" }}></Text> */}
           </Pressable>
         </View>
       </View>

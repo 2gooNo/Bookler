@@ -11,44 +11,56 @@ import {
 } from "firebase/firestore";
 import { db } from "@/common";
 
-export function PostLikes({ item }: any) {
+export function CommentLikes({ item, postId }: any) {
   const { userData } = useContext(AuthContext);
   const [interacted, setInteracted] = useState<number>(0);
-  // console.log(item, userData?.userId);
-  console.log("PostLikes: ", item, interacted);
 
   const Vote = async (likeType: number) => {
     let hasLiked = false;
-
     for (const like of item?.likes || []) {
       if (like?.data?.likedBy === userData?.userId) {
         hasLiked = true;
-
         if (like?.data?.type === likeType) {
-          const docRef = doc(db, "posts", item?.post?.[1], "likes", like?.id);
+          const docRef = doc(
+            db,
+            "posts",
+            postId,
+            "comments",
+            item?.comment?.[1],
+            "likes",
+            like?.id
+          );
           await deleteDoc(docRef);
           setInteracted(0);
         } else {
-          const docRef = doc(db, "posts", item?.post?.[1], "likes", like?.id);
+          const docRef = doc(
+            db,
+            "posts",
+            postId,
+            "comments",
+            item?.comment?.[1],
+            "likes",
+            like?.id
+          );
           await updateDoc(docRef, { type: likeType });
           setInteracted(likeType);
         }
         return;
       }
     }
-
     if (!hasLiked) {
       const docData = {
         likedBy: userData?.userId,
         type: likeType,
       };
-
       const commentCollectionRef = collection(
-        doc(db, "posts", item?.post?.[1]),
+        doc(db, "posts", postId),
+        "comments",
+        item?.comment?.[1],
         "likes"
       );
-      await addDoc(commentCollectionRef, docData);
       setInteracted(likeType);
+      await addDoc(commentCollectionRef, docData);
     }
   };
 
@@ -56,7 +68,6 @@ export function PostLikes({ item }: any) {
     if (item) {
       item?.likes.forEach((like: any) => {
         if (like?.data?.likedBy == userData.userId && like?.data?.type) {
-          console.log("--", like?.data?.type);
           setInteracted(like?.data?.type);
         } else {
           setInteracted(0);
@@ -73,20 +84,20 @@ export function PostLikes({ item }: any) {
       style={{
         flexDirection: "row",
         backgroundColor: "transparent",
-        paddingVertical: 3,
-        paddingHorizontal: 10,
-        borderRadius: 50,
+        // paddingVertical: 3,
+        // paddingHorizontal: 10,
+
         alignItems: "center",
         gap: 7,
-        borderColor: "white",
-        borderWidth: 0.5,
+        // borderColor: "white",
+        // borderWidth: 0.5,
       }}
     >
       <Pressable onPress={() => Vote(1)}>
         <FontAwesome
           name="arrow-up"
-          size={20}
-          color={interacted == 1 ? "red" : "white"}
+          size={15}
+          color={interacted == 1 ? "orange" : "white"}
         />
       </Pressable>
       <Text style={{ color: "white" }}>
@@ -98,7 +109,7 @@ export function PostLikes({ item }: any) {
       <Pressable onPress={() => Vote(-1)}>
         <FontAwesome
           name="arrow-down"
-          size={20}
+          size={15}
           color={interacted == -1 ? "#1DA1F2" : "white"}
         />
       </Pressable>

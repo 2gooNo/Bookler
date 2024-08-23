@@ -17,7 +17,6 @@ import { useRoute } from "@react-navigation/native";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/common";
 import BackIcon from "@/assets/images/BackIcon";
-import SearchIcon from "@/assets/images/SearchIcon";
 import CalendarIcon from "@/assets/images/CalendarIcon";
 import UserIcon from "@/assets/images/UserIcon";
 
@@ -57,13 +56,13 @@ export function Profile({ navigation }: { navigation: any }) {
       return "December";
     }
   }
-  async function updateUser() {
-    const profilePic = doc(db, "users", userData?.userId);
-    await updateDoc(profilePic, {
-      defaultLang: !isEn ? "en" : "mn",
-    });
-    setIsEn(!isEn);
-  }
+  // async function updateUser() {
+  //   const profilePic = doc(db, "users", userData?.userId);
+  //   await updateDoc(profilePic, {
+  //     defaultLang: !isEn ? "en" : "mn",
+  //   });
+  //   setIsEn(!isEn);
+  // }
 
   return (
     <View style={styles.allContainer}>

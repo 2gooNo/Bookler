@@ -60,7 +60,7 @@ export function PostCard({
           {item?.user?.photoUrl && (
             <Pressable
               onPress={() => {
-                router.navigate(`/otherProfile/${item?.user?.userId}`);
+                router.navigate(`../otherProfile/${item?.user?.userId}`);
               }}
             >
               <Image

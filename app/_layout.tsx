@@ -48,6 +48,10 @@ export default function RootLayout() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
+              name="otherProfile/[userId]"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
               name="commentPage/[postId]"
               options={({ navigation }) => ({
                 headerTitle: () => "",

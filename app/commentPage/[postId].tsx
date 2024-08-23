@@ -44,16 +44,6 @@ export default function CommentPage({ navigation }: any) {
 
   const getComments = async () => {
     if (postId == "") {
-      // const q = query(collection(db, "posts", postId, "comments"));
-      // const querySnapshot = await getDocs(q);
-      // querySnapshot.forEach(async (doc) => {
-      //   const q = query(
-      //     collection(db, "posts", postId, "comments", doc.id, "likes")
-      //   );
-      //   const queryLikes = await getDocs(q);
-      //   queryLikes.forEach(async (doc) => {});
-      //   setComments((prev: any) => [...prev, [doc.data(), doc.id]]);
-      // });
       const q = query(collection(db, "posts", postId, "comments"));
 
 
@@ -109,11 +99,6 @@ export default function CommentPage({ navigation }: any) {
     } else {
       setComments([]);
     }
-
-    // const results = await Promise.all(postPromises);
-    // if (results) {
-    //   setPosts((prev) => [...prev, ...results]);
-    // }
   };
 
   console.log(userData, comments);
@@ -147,23 +132,7 @@ export default function CommentPage({ navigation }: any) {
     //     justifyContent: "flex-end",
     //   }}
     // >
-    //   {/* <FlatList
-    //         showsVerticalScrollIndicator={false}
-    //         showsHorizontalScrollIndicator={false}
-    //         onEndReached={() => getPostsAndUserInfo()}
-    //         onEndReachedThreshold={0.5}
-    //         style={{ gap: 10 }}
-    //         data={posts}
-    //         renderItem={({ item }) => (
-    //           <PostCard
-    //             item={item}
-    //             bottomSheetRef={bottomSheetRef}
-    //             navigation={navigation}
-    //           />
-    //         )}
-    //         ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
-    //       /> */}
-    //
+
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}

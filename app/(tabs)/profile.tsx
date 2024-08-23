@@ -1,6 +1,6 @@
 "use client";
 
-import { EditProfileModal } from "@/components/subComponents/EditProfileModal";
+import { EditProfileModal } from "@/components/subComponents/editProfileModal";
 import { AuthContext } from "@/context/authContext";
 import { useContext, useEffect, useState } from "react";
 import {

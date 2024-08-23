@@ -1,8 +1,5 @@
 "use client";
-
-import { EditProfileModal } from "@/components/subComponents/EditProfileModal";
-import { AuthContext } from "@/context/authContext";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dimensions,
   StyleSheet,
@@ -11,30 +8,14 @@ import {
   Pressable,
   Image,
 } from "react-native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { router, useNavigation, useLocalSearchParams } from "expo-router";
-import { useRoute } from "@react-navigation/native";
-import {
-  collection,
-  doc,
-  onSnapshot,
-  query,
-  updateDoc,
-  where,
-} from "firebase/firestore";
+import { router, useLocalSearchParams } from "expo-router";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "@/common";
 import BackIcon from "@/assets/images/BackIcon";
-import SearchIcon from "@/assets/images/SearchIcon";
 import CalendarIcon from "@/assets/images/CalendarIcon";
-import UserIcon from "@/assets/images/UserIcon";
-
 export default function Profile() {
   const { userId } = useLocalSearchParams();
   const [userData, setUserData] = useState<any>();
-
-  const [isEn, setIsEn] = useState(
-    userData?.defaultLang == "en" ? true : false
-  );
   const date = userData?.birthDate.toDate();
   const formattedDate = date?.toLocaleString();
   const year = formattedDate?.split(",")[0].split(".")[0];
@@ -80,8 +61,10 @@ export default function Profile() {
 
   return (
     <View style={styles.allContainer}>
-      {userData?.banner && (
+      {userData?.banner ? (
         <Image style={styles.banner} source={{ uri: userData?.banner }} />
+      ) : (
+        <View style={styles.banner}></View>
       )}
       <View style={{ width: "100%", height: "100%" }}>
         <Pressable
@@ -97,38 +80,16 @@ export default function Profile() {
             justifyContent: "space-between",
             flexDirection: "row",
             alignItems: "flex-end",
-            // backgroundColor: "red",
           }}
         >
-          {/* {userData?.photoUr && (
-            <Image
-              style={styles.profileImg}
-              source={{ uri: userData?.photoUrl }}
-            />
-          )} */}
           {userData?.photoUrl ? (
             <Image
               style={styles.profileImg}
               source={{ uri: userData?.photoUrl }}
             />
           ) : (
-            <UserIcon></UserIcon>
+            <View style={styles.profileImg}></View>
           )}
-          <Pressable
-            // onPress={() => navigation.navigate("EditProfile")}
-            style={styles.editProfile}
-          >
-            <Text
-              style={{
-                fontFamily: "Inherit",
-                fontSize: 15,
-                fontWeight: "700",
-                color: "white",
-              }}
-            >
-              Edit Profile
-            </Text>
-          </Pressable>
         </View>
         <View style={{ gap: 8 }}>
           <Text
@@ -165,9 +126,6 @@ export default function Profile() {
             </Text>
           </View>
         </View>
-        {/* <Pressable onPress={updateUser}>
-          <Text style={{ color: "white" }}>{isEn ? "en" : "mn"}</Text>
-        </Pressable> */}
       </View>
     </View>
   );
@@ -211,15 +169,5 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     borderStyle: "solid",
     borderWidth: 4,
-  },
-  editProfile: {
-    borderColor: "rgb(83, 100, 113)",
-    borderStyle: "solid",
-    borderWidth: 1,
-    paddingTop: "2%",
-    paddingBottom: "2%",
-    paddingLeft: "4%",
-    paddingRight: "4%",
-    borderRadius: 30,
   },
 });

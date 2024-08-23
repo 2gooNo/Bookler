@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { doc, updateDoc } from "firebase/firestore";
-// import { Image } from "expo-image";
 import { db } from "@/common";
 import { AuthContext } from "@/context/authContext";
 import { mediaUploader } from "@/utils/image-uploader";
@@ -34,28 +33,41 @@ export function EditProfileModal() {
   });
 
   async function updateUser() {
+    const profilePic = doc(db, "users", userData?.userId);
     if (photos?.profileUrl && photos?.bannerUrl) {
-      console.log(
-        "1",
-        await mediaUploader([photos?.profileUrl, photos?.bannerUrl])
-      );
-      // console.log(await mediaUploader([photos?.bannerUrl]));
+      const bannerAndProfile = await mediaUploader([
+        photos?.profileUrl,
+        photos?.bannerUrl,
+      ]);
+      console.log("hoyula", bannerAndProfile);
+
+      await updateDoc(profilePic, {
+        banner: bannerAndProfile[1]?.url,
+        bio: inputVals?.bio,
+        photoUrl: bannerAndProfile[0]?.url,
+        userName: inputVals?.userName,
+      });
     } else if (photos?.profileUr) {
-      console.log("2", await mediaUploader([photos?.profileUrl]));
+      const bannerAndProfile = await mediaUploader([photos?.profileUrl]);
+      await updateDoc(profilePic, {
+        banner: userData?.banner,
+        bio: inputVals?.bio,
+        photoUrl: bannerAndProfile[0]?.url,
+        userName: inputVals?.userName,
+      });
+      console.log("profile", bannerAndProfile);
     } else if (photos?.bannerUrl) {
-      console.log("3", await mediaUploader([photos?.bannerUrl]));
+      const bannerAndProfile = await mediaUploader([photos?.bannerUrl]);
+      await updateDoc(profilePic, {
+        banner: bannerAndProfile[0]?.url,
+        bio: inputVals?.bio,
+        photoUrl: userData?.photoUrl,
+        userName: inputVals?.userName,
+      });
+      console.log("banner", bannerAndProfile);
     }
-    // console.log("2");
-    // const profilePic = doc(db, "users", userData?.userId);
-    // console.log("3");
-    // await updateDoc(profilePic, {
-    //   banner: uploadedImages[1] == "" ? "" : uploadedImages[1][0]?.url,
-    //   bio: inputVals?.bio,
-    //   photoUrl: uploadedImages[0] == "" ? "" : uploadedImages[0][0]?.url,
-    //   userName: inputVals?.userName,
-    // });
-    // console.log("done");
-    // router.navigate("/profile");
+
+    router.back();
   }
   const pickImage = async (isBanner: boolean) => {
     let result = await ImagePicker.launchImageLibraryAsync({

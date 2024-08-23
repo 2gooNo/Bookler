@@ -98,7 +98,7 @@ export function Profile({ navigation }: { navigation: any }) {
               source={{ uri: userData?.photoUrl }}
             />
           ) : (
-            <UserIcon></UserIcon>
+            <View style={styles?.profileImg}></View>
           )}
           <Pressable
             onPress={() => navigation.navigate("EditProfile")}

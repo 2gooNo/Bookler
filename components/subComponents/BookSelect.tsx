@@ -1,35 +1,32 @@
 import { db } from "@/common";
 import { AuthContext } from "@/context/authContext";
 import { CreatePostContext } from "@/context/createPostContext";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocFromCache,
-  limit,
-  query,
-  where,
-} from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 
 export function BookSelect({ navigation }: any) {
   const { userData } = useContext(AuthContext);
-  const { setSelectedBook, selectedBook } = useContext(CreatePostContext);
+  const { selectedBook } = useContext(CreatePostContext);
   const [searchNumber, setSearchNumber] = useState<number>(5);
   const [books, setBooks] = useState<any[]>([]);
-  // const [selectedBook, setSelectedBook] = useState<string>()
+
   const GetBooks = async () => {
     if (userData?.books[0]) {
       userData?.books.slice(0, searchNumber).forEach(async (book: any) => {
         const docRef = doc(db, "books", book);
         const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
+
+        const bookIds = books.map((book) => book[1]);
+        const isNotIncluded = !bookIds.includes(docSnap.id);
+
+        if (docSnap.exists() && isNotIncluded) {
           setBooks((prev) => [...prev, [docSnap.data(), docSnap.id]]);
         }
       });
     }
   };
+
   useEffect(() => {
     GetBooks();
   }, [userData, searchNumber]);
@@ -55,7 +52,7 @@ export function BookSelect({ navigation }: any) {
           </Pressable>
         )}
       </View>
-      {books ? (
+      {books[0] ? (
         books.map((book, index) => <BookCard key={index} book={book} />)
       ) : (
         <Text style={{ color: "grey" }}>
@@ -74,10 +71,12 @@ export function BookSelect({ navigation }: any) {
   );
 }
 function BookCard({ book }: any) {
-  const { setSelectedBook, selectedBook } = useContext(CreatePostContext);
+  const { setSelectedBook, selectedBook, setSelectedChapter } =
+    useContext(CreatePostContext);
   const selectBook = () => {
     if (selectedBook.id == book?.[1]) {
       setSelectedBook({ id: "", name: "" });
+      setSelectedChapter({ number: null, name: "" });
     } else {
       setSelectedBook({ id: book?.[1], name: book?.[0]?.name });
     }

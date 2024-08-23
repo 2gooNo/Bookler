@@ -15,6 +15,7 @@ import {
   Text,
   View,
   TouchableWithoutFeedback,
+  Image,
 } from "react-native";
 import { Camera } from "@/components/subComponents/Camera";
 import { PhotoConfirm } from "@/components/subComponents/PhotoConfirm";
@@ -30,13 +31,24 @@ import { ChapterSelect } from "@/components/subComponents/ChapterSelect";
 import Feather from "@expo/vector-icons/Feather";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { CreatePostButton } from "@/components/subComponents/CreatePostButton";
+import { CreateDraftButton } from "@/components/subComponents/CreateDraftButton";
+import { CreatePostBookCard } from "@/components/subComponents/CreatePostBookCard";
+import { ExitButton } from "@/components/subComponents/CreatePostExitButton";
 
 const { height, width } = Dimensions.get("window");
 
 export function CreatePost({ navigation }: { navigation: any }) {
   const { lang } = useContext(LangContext);
-  const { media, linkComponent, setLinkComponent, selectedTags, title } =
-    useContext(CreatePostContext);
+  const {
+    media,
+    linkComponent,
+    setLinkComponent,
+    selectedTags,
+    title,
+    selectedBook,
+    selectedChapter,
+  } = useContext(CreatePostContext);
   const [isVisible, setIsVisible] = useState(false);
   return (
     <KeyboardAvoidingView
@@ -62,30 +74,43 @@ export function CreatePost({ navigation }: { navigation: any }) {
             <HashTagSelect setIsVisible={setIsVisible} />
           </Modal>
           <View style={styles.header}>
-            <Pressable
+            {/* <Pressable
               onPress={() => router.push("./home")}
               // style={{ backgroundColor: "purple", width: 100 }}
             >
               <Text style={{ color: "white" }}>
                 {homeTranslation?.[lang]?.["goBack"]}
               </Text>
-            </Pressable>
-            <Pressable
-              onPress={() => navigation.navigate("BookSelect")}
-              // style={{ backgroundColor: "purple" }}
-              disabled={title ? false : true}
-            >
-              <Text style={{ color: title ? "white" : "grey" }}>Next</Text>
-            </Pressable>
+            </Pressable> */}
+            <ExitButton></ExitButton>
+            {(!selectedBook.id || !selectedChapter.number) && (
+              <Pressable
+                onPress={() => navigation.navigate("BookSelect")}
+                // style={{ backgroundColor: "purple" }}
+                disabled={title ? false : true}
+              >
+                <Text style={{ color: title ? "white" : "grey" }}>Next</Text>
+              </Pressable>
+            )}
+            {selectedBook.id && selectedChapter.number && (
+              <View style={{ flexDirection: "row", gap: 10 }}>
+                <CreateDraftButton />
+                <CreatePostButton />
+              </View>
+            )}
           </View>
+
           <ScrollView horizontal={false}>
+            {(selectedBook.id || selectedChapter.number) && (
+              <CreatePostBookCard navigation={navigation} />
+            )}
             <TitleInput />
             {linkComponent && <LinkUrl />}
             <View
               style={{ flexDirection: "row", flexWrap: "wrap", width: "100%" }}
             >
               {media.map((media, index) => (
-                <SelectedMedia value={media} key={index} />
+                <SelectedMedia value={media} key={index} index={index} />
               ))}
             </View>
             <BodyTextInput />

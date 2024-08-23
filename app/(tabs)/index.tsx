@@ -87,7 +87,6 @@ const HomeStack = createNativeStackNavigator();
 export default function HomeStackScreen() {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    console.log(auth);
     auth.onAuthStateChanged(
       (user) => {
         if (user) {

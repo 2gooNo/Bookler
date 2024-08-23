@@ -79,7 +79,6 @@ export function PasswordConfirm() {
         <Formik
           initialValues={{ password: "", confirmPassword: "" }}
           onSubmit={async (values, { setSubmitting }) => {
-            console.log(values);
             await signUp(values);
           }}
         >

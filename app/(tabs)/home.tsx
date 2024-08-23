@@ -43,10 +43,10 @@ export default function HomeStackScreen() {
 
   const handlePress = () => {
     const previousRoutes = state.history || [];
-    console.log(previousRoutes, "--", navigationUsed.goBack());
+
     // if (previousRoutes.length > 1) {
     // navigationUsed.goBack();
-    console.log(state);
+
     if (navigationUsed.canGoBack()) {
       navigationUsed.goBack();
     }

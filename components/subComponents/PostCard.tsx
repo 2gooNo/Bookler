@@ -32,7 +32,6 @@ export function PostCard({
     }
   };
   if (!item) return;
-  console.log(item, "-");
   return (
     <GestureHandlerRootView
       style={{
@@ -91,7 +90,6 @@ export function PostCard({
               },
             });
             if (bottomSheetRef.current) {
-              console.log("expand");
               bottomSheetRef.current.expand();
 
               setCurrentPostData(item);
@@ -155,7 +153,7 @@ export function PostCard({
           }}
         >
           <RepostButton />
-          <Pressable onPress={() => console.log("funct")}>
+          <Pressable>
             <FontAwesome6 name="retweet" size={20} color="white" />
           </Pressable>
 

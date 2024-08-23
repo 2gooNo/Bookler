@@ -22,7 +22,6 @@ export function BookSelect({ navigation }: any) {
   const GetBooks = async () => {
     if (userData?.books[0]) {
       userData?.books.slice(0, searchNumber).forEach(async (book: any) => {
-        console.log(book, "---");
         const docRef = doc(db, "books", book);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
@@ -31,7 +30,6 @@ export function BookSelect({ navigation }: any) {
       });
     }
   };
-  console.log(selectedBook.id, "books");
   useEffect(() => {
     GetBooks();
   }, [userData, searchNumber]);

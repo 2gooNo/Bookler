@@ -4,7 +4,6 @@ import { Dimensions, Image, View } from "react-native";
 export function PostCardMedia({ media }: any) {
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
-  console.log(media.type, "---", media);
   return (
     <View
       style={{

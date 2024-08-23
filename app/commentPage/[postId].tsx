@@ -9,12 +9,14 @@ import {
   doc,
   getDoc,
   getDocs,
+  onSnapshot,
   query,
   serverTimestamp,
 } from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
 import {
   Dimensions,
+  FlatList,
   Image,
   Keyboard,
   KeyboardAvoidingView,
@@ -28,38 +30,97 @@ import {
 import Feather from "@expo/vector-icons/Feather";
 const { height, width } = Dimensions.get("window");
 
-export default function CommentPage() {
+export default function CommentPage({ navigation }: any) {
   const { postId } = useLocalSearchParams();
   const { userData } = useContext(AuthContext);
   const { currentPostData } = useContext(PostContext);
   const [comments, setComments] = useState<any[]>([]);
   const [commentText, setCommentText] = useState<string>("");
+  const [replyTo, setReplyTo] = useState();
 
   console.log(postId);
-  useEffect(() => {
-    getComments();
-  }, []);
+
   const getComments = async () => {
     if (postId == "") {
+      // const q = query(collection(db, "posts", postId, "comments"));
+      // const querySnapshot = await getDocs(q);
+      // querySnapshot.forEach(async (doc) => {
+      //   const q = query(
+      //     collection(db, "posts", postId, "comments", doc.id, "likes")
+      //   );
+      //   const queryLikes = await getDocs(q);
+      //   queryLikes.forEach(async (doc) => {});
+      //   setComments((prev: any) => [...prev, [doc.data(), doc.id]]);
+      // });
       const q = query(collection(db, "posts", postId, "comments"));
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
-        console.log(doc.id, " => ", doc.data(), "comments");
-        setComments((prev: any) => [...prev, [doc.data(), doc.id]]);
+
+      onSnapshot(q, async (snapshot) => {
+        const commentPromises = snapshot.docs.map(async (commentDoc) => {
+          const Commentdata = [commentDoc.data(), commentDoc.id];
+          const userRef =
+            Commentdata?.[0] && typeof Commentdata?.[0] !== "string"
+              ? Commentdata?.[0].userRef
+              : null;
+
+          let userData = null;
+          if (userRef) {
+            const userDoc = await getDoc(userRef);
+            if (userDoc.exists()) {
+              userData = userDoc.data();
+            }
+          }
+
+          onSnapshot(
+            query(collection(db, "posts", commentDoc.id, "likes")),
+            (likesSnapshot) => {
+              const likes = [] as any[];
+              likesSnapshot.forEach((doc) => {
+                likes.push({ id: doc.id, data: doc.data() });
+              });
+
+              setComments((prev) => {
+                return prev.map((item) => {
+                  if (item.post[1] === commentDoc.id) {
+                    return {
+                      ...item,
+                      likes: likes,
+                    };
+                  }
+                  return item;
+                });
+              });
+            }
+          );
+
+          return {
+            post: Commentdata,
+            user: userData,
+            likes: [],
+          };
+        });
+        const results = await Promise.all(commentPromises);
+        if (results) {
+          setComments((prev) => [...prev, ...results]);
+        }
       });
     } else {
       setComments([]);
     }
+
+    // const results = await Promise.all(postPromises);
+    // if (results) {
+    //   setPosts((prev) => [...prev, ...results]);
+    // }
   };
-  console.log(userData);
+  console.log(userData, comments);
+
   const createComment = async () => {
     const docRef = await addDoc(collection(db, "posts"), {
       userId: userData?.userId,
       userRef: doc(db, "users", userData?.userId),
       bodyText: commentText,
       // media: uploadedMedia,
-      // replyTo:,
+      replyTo: replyTo,
       createdAt: serverTimestamp(),
     });
     const likesCollectionRef = collection(doc(db, "posts", docRef.id), "likes");
@@ -68,6 +129,11 @@ export default function CommentPage() {
       type: +1,
     });
   };
+
+  useEffect(() => {
+    getComments();
+  }, []);
+
   return (
     // <View
     //   style={{
@@ -101,7 +167,23 @@ export default function CommentPage() {
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.innerContainer}>
-          <CommentCard />
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            // onEndReached={() => getPostsAndUserInfo()}
+            // onEndReachedThreshold={0.5}
+            style={{ gap: 10 }}
+            data={comments}
+            renderItem={({ item }) => (
+              <CommentCard
+                comment={item}
+                setReplyTo={setReplyTo}
+                navigation={navigation}
+              />
+            )}
+            ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
+          />
+          {/* <CommentCard setReplyTo={setReplyTo} /> */}
           <View style={styles.footer}>
             <Image source={{ uri: userData?.photoUrl }} style={styles.image} />
             <TextInput

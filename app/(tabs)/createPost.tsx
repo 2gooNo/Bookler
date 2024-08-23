@@ -110,7 +110,7 @@ export function CreatePost({ navigation }: { navigation: any }) {
               style={{ flexDirection: "row", flexWrap: "wrap", width: "100%" }}
             >
               {media.map((media, index) => (
-                <SelectedMedia value={media} key={index} />
+                <SelectedMedia value={media} key={index} index={index} />
               ))}
             </View>
             <BodyTextInput />

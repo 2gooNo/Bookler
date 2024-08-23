@@ -1,13 +1,62 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { router } from "expo-router";
+import { CreatePostContext } from "@/context/createPostContext";
+import { CreateDraftButton } from "./CreateDraftButton";
 
 export function ExitButton() {
+  const {
+    media,
+    takenMedia,
+    title,
+    bodyText,
+    linkUrl,
+    selectedBook,
+    setTakenMedia,
+    setBodyText,
+    setLinkUrl,
+    setMedia,
+    setSelectedBook,
+    setSelectedChapter,
+    setSelectedTags,
+    setLinkComponent,
+    setTitle,
+  } = useContext(CreatePostContext);
   const [modalVisible, setModalVisible] = useState(false);
-
+  console.log(title);
   const exit = () => {
-    router.push("./home");
+    if (
+      media[0] ||
+      takenMedia[0] ||
+      title ||
+      bodyText ||
+      linkUrl ||
+      selectedBook?.id
+    ) {
+      setModalVisible(true);
+    } else {
+      resetValues();
+      router.push("./home");
+    }
+  };
+  const resetValues = () => {
+    setTakenMedia("");
+    setBodyText("");
+    setLinkUrl("");
+    setMedia([]);
+    setSelectedBook({
+      id: "",
+      name: "",
+    });
+    setSelectedChapter({
+      number: null,
+      name: "",
+    });
+    setSelectedTags([]);
+    setLinkComponent(false);
+    setTitle("");
+    setModalVisible(false);
   };
   return (
     <View style={styles.centeredView}>
@@ -26,23 +75,21 @@ export function ExitButton() {
             <View style={styles.buttonView}>
               <Pressable
                 style={[styles.button, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}
+                onPress={async () => {
+                  resetValues();
+                  router.push("./home");
+                }}
               >
                 <Text style={styles.textStyle}>Discard</Text>
               </Pressable>
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}
-              >
-                <Text style={styles.textStyle}>Save</Text>
-              </Pressable>
+              <CreateDraftButton />
             </View>
           </View>
         </View>
       </Modal>
       <Pressable
         style={[styles.button, styles.buttonOpen]}
-        onPress={() => setModalVisible(true)}
+        onPress={() => exit()}
       >
         <FontAwesome6 name="x" size={15} color="white" />
       </Pressable>

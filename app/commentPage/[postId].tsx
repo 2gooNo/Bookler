@@ -23,6 +23,7 @@ import {
   Platform,
   Pressable,
   StyleSheet,
+  Text,
   TextInput,
   TouchableWithoutFeedback,
   View,
@@ -36,16 +37,13 @@ export default function CommentPage({ navigation }: any) {
   const { currentPostData } = useContext(PostContext);
   const [comments, setComments] = useState<any[]>([]);
   const [commentText, setCommentText] = useState<string>("");
-  const [replyTo, setReplyTo] = useState();
-
+  const [replyTo, setReplyTo] = useState<string | any>({});
 
   console.log(postId);
 
-
   const getComments = async () => {
-    if (postId == "") {
+    if (typeof postId === "string" && !Array.isArray(postId)) {
       const q = query(collection(db, "posts", postId, "comments"));
-
 
       onSnapshot(q, async (snapshot) => {
         const commentPromises = snapshot.docs.map(async (commentDoc) => {
@@ -101,28 +99,67 @@ export default function CommentPage({ navigation }: any) {
     }
   };
 
-  console.log(userData, comments);
+  console.log(userData, comments, postId);
 
   const createComment = async () => {
-    const docRef = await addDoc(collection(db, "posts"), {
-      userId: userData?.userId,
-      userRef: doc(db, "users", userData?.userId),
-      bodyText: commentText,
-      // media: uploadedMedia,
-      replyTo: replyTo,
-      createdAt: serverTimestamp(),
-    });
-    const likesCollectionRef = collection(doc(db, "posts", docRef.id), "likes");
-    await addDoc(likesCollectionRef, {
-      likedBy: doc(db, "users", userData.userId),
-      type: +1,
-    });
+    if (typeof postId === "string" && !Array.isArray(postId)) {
+      try {
+        const commentsCollectionRef = collection(
+          db,
+          "posts",
+          postId,
+          "comments"
+        );
+        const commentsSnapshot = await getDocs(commentsCollectionRef);
+
+        if (commentsSnapshot.empty || comments[0]) {
+          console.log("Creating comment...");
+          const docRef = await addDoc(commentsCollectionRef, {
+            userId: userData?.userId,
+            userRef: doc(db, "users", userData?.userId),
+            bodyText: commentText,
+            // media: uploadedMedia, // Uncomment if you have media to upload
+            replyTo: replyTo.id || "",
+            createdAt: serverTimestamp(),
+          });
+
+          const commentRef = doc(db, "posts", postId, "comments", docRef.id);
+          const likesCollectionRef = collection(commentRef, "likes");
+          await addDoc(likesCollectionRef, {
+            likedBy: doc(db, "users", userData.userId),
+            type: +1,
+          });
+
+          Keyboard.dismiss();
+        } else {
+          const docRef = await addDoc(commentsCollectionRef, {
+            userId: userData?.userId,
+            userRef: doc(db, "users", userData?.userId),
+            bodyText: commentText,
+
+            replyTo: replyTo.id || "",
+            createdAt: serverTimestamp(),
+          });
+
+          const commentRef = doc(db, "posts", postId, "comments", docRef.id);
+          const likesCollectionRef = collection(commentRef, "likes");
+          await addDoc(likesCollectionRef, {
+            likedBy: doc(db, "users", userData.userId),
+            type: +1,
+          });
+
+          Keyboard.dismiss();
+        }
+      } catch (error) {
+        console.error("Error creating comment: ", error);
+      }
+    }
   };
 
   useEffect(() => {
     getComments();
   }, []);
-
+  console.log(replyTo, "0");
   return (
     // <View
     //   style={{
@@ -158,23 +195,38 @@ export default function CommentPage({ navigation }: any) {
           />
           {/* <CommentCard setReplyTo={setReplyTo} /> */}
           <View style={styles.footer}>
-            <Image source={{ uri: userData?.photoUrl }} style={styles.image} />
-            <TextInput
-              style={styles.textInput}
-              keyboardType="default"
-              placeholder={`Reply as ${userData?.userName}`}
-              placeholderTextColor="gray"
-              multiline={true}
-              textAlignVertical="top"
-              onChangeText={(e) => setCommentText(e)}
-              value={commentText}
-            />
-            <Pressable
-              onPress={() => createComment()}
-              style={styles.submitButton}
-            >
-              <Feather name="arrow-right" size={24} color="white" />
-            </Pressable>
+            {replyTo.id && (
+              <View style={styles.replyingTo}>
+                <Text style={{ color: "white" }}>
+                  Reply to {replyTo.userName}
+                </Text>
+                <Pressable onPress={() => setReplyTo("")}>
+                  <Text>Cancel</Text>
+                </Pressable>
+              </View>
+            )}
+            <View style={styles.footerInner}>
+              <Image
+                source={{ uri: userData?.photoUrl }}
+                style={styles.image}
+              />
+              <TextInput
+                style={styles.textInput}
+                keyboardType="default"
+                placeholder={`Reply as ${userData?.userName}`}
+                placeholderTextColor="gray"
+                multiline={true}
+                textAlignVertical="top"
+                onChangeText={(e) => setCommentText(e)}
+                value={commentText}
+              />
+              <Pressable
+                onPress={() => createComment()}
+                style={styles.submitButton}
+              >
+                <Feather name="arrow-right" size={24} color="white" />
+              </Pressable>
+            </View>
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -193,7 +245,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   footer: {
-    flexDirection: "row",
+    flexDirection: "column",
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 10,
@@ -206,6 +258,13 @@ const styles = StyleSheet.create({
     paddingBottom: height * 0.035,
     paddingTop: height * 0.02,
     bottom: 0,
+    width: "100%",
+    gap: 10,
+  },
+  footerInner: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     width: "100%",
   },
   image: {
@@ -224,5 +283,15 @@ const styles = StyleSheet.create({
     width: width * 0.7,
     maxHeight: 96,
   },
-  submitButton: { height: "100%", justifyContent: "center" },
+  replyingTo: {
+    flexDirection: "row",
+    // backgroundColor: "yellow",
+    gap: 10,
+    // padding: 10,
+    width: "100%",
+  },
+  submitButton: {
+    height: "100%",
+    justifyContent: "center",
+  },
 });

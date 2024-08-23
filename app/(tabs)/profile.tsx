@@ -17,7 +17,6 @@ import { useRoute } from "@react-navigation/native";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/common";
 import BackIcon from "@/assets/images/BackIcon";
-import SearchIcon from "@/assets/images/SearchIcon";
 import CalendarIcon from "@/assets/images/CalendarIcon";
 import UserIcon from "@/assets/images/UserIcon";
 
@@ -67,32 +66,31 @@ export function Profile({ navigation }: { navigation: any }) {
 
   return (
     <View style={styles.allContainer}>
-      {userData?.banner && (
+      {userData?.banner ? (
         <Image style={styles.banner} source={{ uri: userData?.banner }} />
+      ) : (
+        <View style={{ ...styles.banner, backgroundColor: "grey" }}></View>
       )}
-      <View style={{ width: "100%", height: "100%" }}>
-        <Pressable
-          onPress={() => router?.navigate("/home")}
-          style={styles.iconWrapper}
-        >
-          <BackIcon style={styles.icon} />
-        </Pressable>
+      <View
+        style={{
+          width: "100%",
+          height: "100%",
+          flexDirection: "column",
+          gap: 10,
+          // backgroundColor: "green",
+        }}
+      >
         <View
           style={{
             width: "100%",
             height: "10%",
             justifyContent: "space-between",
             flexDirection: "row",
-            alignItems: "flex-end",
+            alignItems: "center",
+
             // backgroundColor: "red",
           }}
         >
-          {/* {userData?.photoUr && (
-            <Image
-              style={styles.profileImg}
-              source={{ uri: userData?.photoUrl }}
-            />
-          )} */}
           {userData?.photoUrl ? (
             <Image
               style={styles.profileImg}

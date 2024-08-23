@@ -82,10 +82,7 @@ export function PostOptions() {
       )}
 
       {auth?.currentUser?.uid == currentPostData?.user?.userId && (
-        <Pressable
-          onPress={() => console.log("edit post")}
-          style={styles.pressable}
-        >
+        <Pressable style={styles.pressable}>
           <FontAwesome name="pencil-square-o" size={24} color="#dedcdb" />
           <Text style={{ color: "#dedcdb", fontSize: 18 }}>Edit</Text>
         </Pressable>

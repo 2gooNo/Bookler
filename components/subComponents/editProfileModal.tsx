@@ -32,16 +32,18 @@ export function EditProfileModal() {
     photoUrl: `${userData?.photoUrl}`,
     userName: `${userData?.userName}`,
   });
-  console.log("+======", userData);
 
   async function updateUser() {
     if (photos?.profileUrl && photos?.bannerUrl) {
-      console.log(await mediaUploader([photos?.profileUrl, photos?.bannerUrl]));
+      console.log(
+        "1",
+        await mediaUploader([photos?.profileUrl, photos?.bannerUrl])
+      );
       // console.log(await mediaUploader([photos?.bannerUrl]));
     } else if (photos?.profileUr) {
-      console.log(await mediaUploader([photos?.profileUrl]));
+      console.log("2", await mediaUploader([photos?.profileUrl]));
     } else if (photos?.bannerUrl) {
-      console.log(await mediaUploader([photos?.bannerUrl]));
+      console.log("3", await mediaUploader([photos?.bannerUrl]));
     }
     // console.log("2");
     // const profilePic = doc(db, "users", userData?.userId);
@@ -117,7 +119,6 @@ export function EditProfileModal() {
             marginLeft: "10%",
             position: "absolute",
             right: "5%",
-            backgroundColor: "red",
             height: 50,
             justifyContent: "center",
             alignItems: "center",

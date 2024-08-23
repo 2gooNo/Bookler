@@ -56,7 +56,6 @@ export function PostLikes({ item }: any) {
         if (like?.data?.likedBy == userData.userId && like?.data?.type) {
           setInteracted(like?.data?.type);
         } else {
-          console.log("--");
           setInteracted(0);
         }
       });

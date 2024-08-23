@@ -101,9 +101,7 @@ export function PostPage({ navigation }: { navigation: any }) {
         if (results) {
           setPosts((prev) => [...prev, ...results]);
         }
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     });
   };
   useEffect(() => {

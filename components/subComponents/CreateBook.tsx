@@ -89,7 +89,6 @@ export function CreateBook() {
             category: "",
           }}
           onSubmit={async (values, { setSubmitting }) => {
-            console.log(values);
             await addBook(values);
           }}
         >
@@ -101,15 +100,6 @@ export function CreateBook() {
             values,
             errors,
           }) => (
-            // <View
-            //   style={{
-            //     alignItems: "center",
-            //     justifyContent: "center",
-            //     width: "100%",
-            //     height: "100%",
-            //     gap: 5,
-            //   }}
-            // >
             <>
               <View
                 style={{
@@ -139,7 +129,7 @@ export function CreateBook() {
                     paddingRight: "3%",
                     borderRadius: 18,
                     width: "30%",
-                    height: 500,
+                    height: 60,
                     zIndex: 5,
                     backgroundColor: "red",
                   }}

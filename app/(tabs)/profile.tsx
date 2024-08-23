@@ -1,6 +1,6 @@
 "use client";
 
-import { EditProfileModal } from "@/components/subComponents/editProfileModal";
+import { EditProfileModal } from "@/components/subComponents/EditProfileModal";
 import { AuthContext } from "@/context/authContext";
 import { useContext, useEffect, useState } from "react";
 import {
@@ -19,6 +19,7 @@ import { db } from "@/common";
 import BackIcon from "@/assets/images/BackIcon";
 import SearchIcon from "@/assets/images/SearchIcon";
 import CalendarIcon from "@/assets/images/CalendarIcon";
+import UserIcon from "@/assets/images/UserIcon";
 
 export function Profile({ navigation }: { navigation: any }) {
   const { userData } = useContext(AuthContext);
@@ -63,7 +64,7 @@ export function Profile({ navigation }: { navigation: any }) {
     });
     setIsEn(!isEn);
   }
-  console.log(userData?.banner, "-");
+
   return (
     <View style={styles.allContainer}>
       {userData?.banner && (
@@ -83,13 +84,22 @@ export function Profile({ navigation }: { navigation: any }) {
             justifyContent: "space-between",
             flexDirection: "row",
             alignItems: "flex-end",
+            // backgroundColor: "red",
           }}
         >
-          {userData?.photoUr && (
+          {/* {userData?.photoUr && (
             <Image
               style={styles.profileImg}
               source={{ uri: userData?.photoUrl }}
             />
+          )} */}
+          {userData?.photoUrl ? (
+            <Image
+              style={styles.profileImg}
+              source={{ uri: userData?.photoUrl }}
+            />
+          ) : (
+            <UserIcon></UserIcon>
           )}
           <Pressable
             onPress={() => navigation.navigate("EditProfile")}

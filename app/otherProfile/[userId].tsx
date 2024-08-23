@@ -215,35 +215,12 @@ const styles = StyleSheet.create({
 const HomeStack = createNativeStackNavigator();
 
 export default function HomeStackScreen() {
-  const navigation = useNavigation();
-  const route = useRoute();
-
-  useEffect(() => {
-    const routeIndex = navigation?.getState()?.routes?.[5].state?.index;
-    const shouldHideTabBar = routeIndex === 1;
-    navigation.setOptions({
-      tabBarStyle: {
-        display: shouldHideTabBar ? "none" : "flex",
-      },
-    });
-  }, [navigation, route]);
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen
         name="Profile"
         component={Profile}
         options={{ headerShown: false }}
-      />
-
-      <HomeStack.Screen
-        name="EditProfile"
-        component={EditProfileModal}
-        options={{
-          // animation: "slide_from_bottom",
-          headerShown: false,
-          // gestureDirection: "vertical",
-          presentation: "modal",
-        }}
       />
     </HomeStack.Navigator>
   );

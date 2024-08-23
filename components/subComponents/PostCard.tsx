@@ -32,6 +32,7 @@ export function PostCard({
     }
   };
   if (!item) return;
+  console.log(item);
   return (
     <GestureHandlerRootView
       style={{
@@ -57,19 +58,25 @@ export function PostCard({
           }}
         >
           {item?.user?.photoUrl && (
-            <Image
-              style={{
-                height: 50,
-                width: 50,
-                borderRadius: 50,
-                backgroundColor: "pink",
+            <Pressable
+              onPress={() => {
+                router.navigate(`/otherProfile/${item?.user?.userId}`);
               }}
-              source={{
-                uri:
-                  item?.user?.photoUrl ||
-                  "https://nestcore-my.sharepoint.com/da4d4fc4-9a28-497e-abdb-0b23672a14bb",
-              }}
-            />
+            >
+              <Image
+                style={{
+                  height: 50,
+                  width: 50,
+                  borderRadius: 50,
+                  backgroundColor: "pink",
+                }}
+                source={{
+                  uri:
+                    item?.user?.photoUrl ||
+                    "https://nestcore-my.sharepoint.com/da4d4fc4-9a28-497e-abdb-0b23672a14bb",
+                }}
+              />
+            </Pressable>
           )}
           <View style={{ flexDirection: "column" }}>
             <Text style={{ color: "white" }}>

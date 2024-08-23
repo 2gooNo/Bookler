@@ -8,7 +8,6 @@ export const firebaseActions = async (q: any) => {
       tagName: doc.data().tagName,
     }));
     result = await tagInfo;
-    console.log({ result });
   });
   return result;
 };

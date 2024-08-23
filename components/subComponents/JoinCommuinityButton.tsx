@@ -6,17 +6,14 @@ import { Pressable, Text } from "react-native";
 
 export function JoinCommuinityButton({ bookId }: any) {
   const { userData } = useContext(AuthContext);
-  console.log(bookId, "--", userData?.books, userData);
 
   const HandleClick = async () => {
     if (userData?.books.includes(bookId)) {
-      console.log("leave");
       const d = doc(db, "users", userData?.userId);
       await updateDoc(d, {
         books: arrayRemove(bookId),
       });
     } else if (!userData?.books.includes(bookId)) {
-      console.log("pp");
       const d = doc(db, "users", userData?.userId);
       await updateDoc(d, {
         books: arrayUnion(bookId),
@@ -33,8 +30,8 @@ export function JoinCommuinityButton({ bookId }: any) {
         borderRadius: 50,
         borderColor: "white",
         borderWidth: 1,
-        paddingBottom: 3,
-        paddingTop: 3,
+        paddingBottom: 7,
+        paddingTop: 7,
         width: 62,
         justifyContent: "center",
         alignItems: "center",

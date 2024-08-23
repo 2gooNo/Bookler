@@ -16,7 +16,6 @@ export function PhotoSelector() {
     });
     if (!result.canceled) {
       result?.assets.forEach((image) => {
-        console.log(image);
         setMedia((prev) => [...prev, image.uri]);
       });
     }

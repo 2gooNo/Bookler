@@ -17,7 +17,6 @@ import * as Yup from "yup";
 
 export function SendEmailToUser() {
   const sendEmail = (values: any) => {
-    console.log(values);
     sendPasswordResetEmail(auth, values.email)
       .then(() => {
         alert("An email has been sent to this email ");

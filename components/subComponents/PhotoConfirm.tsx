@@ -6,7 +6,6 @@ import * as MediaLibrary from "expo-media-library";
 
 export function PhotoConfirm({ navigation }: { navigation: any }) {
   const { takenMedia, setTakenMedia, setMedia } = useContext(CreatePostContext);
-  console.log(takenMedia);
   return (
     <View>
       <Pressable

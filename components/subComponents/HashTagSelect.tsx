@@ -74,7 +74,6 @@ export default function HashTagSelect({ setIsVisible }: any) {
     });
   };
   const selectTag = (value: string) => {
-    console.log(value.length);
     if (value.length > 0) {
       setSelectedTags((prev) => [...prev, { tagName: value }]);
       setSuggestedTags((prev: any) => {

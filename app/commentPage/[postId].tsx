@@ -38,11 +38,14 @@ export default function CommentPage({ navigation }: any) {
   const [commentText, setCommentText] = useState<string>("");
   const [replyTo, setReplyTo] = useState();
 
+
   console.log(postId);
+
 
   const getComments = async () => {
     if (postId == "") {
       const q = query(collection(db, "posts", postId, "comments"));
+
 
       onSnapshot(q, async (snapshot) => {
         const commentPromises = snapshot.docs.map(async (commentDoc) => {
@@ -97,6 +100,7 @@ export default function CommentPage({ navigation }: any) {
       setComments([]);
     }
   };
+
   console.log(userData, comments);
 
   const createComment = async () => {

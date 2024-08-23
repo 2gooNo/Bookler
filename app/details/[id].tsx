@@ -26,7 +26,7 @@ export default function DetailsScreen() {
   const [bookData, setBookData] = useState<any>();
   const [activeTab, setActiveTab] = useState(1);
   const [categoryData, setCategoryData] = useState<any>();
-  const [communityMembers, setCommunityMembers] = useState<Array<any>>([]);
+  const [communityMembers, setCommunityMembers] = useState<number>(0);
   async function BookFetch() {
     if (typeof id == "string") {
       const docRef = doc(db, "books", id);
@@ -41,12 +41,18 @@ export default function DetailsScreen() {
       collection(db, "users"),
       where("books", "array-contains", id)
     );
+    var number = 0;
     onSnapshot(q, async (snapshot) => {
+      setCommunityMembers(snapshot.docs.length);
       const userPromises = snapshot.docs.map((postDoc) => {
-        setCommunityMembers((prev: any) => [...prev, postDoc?.data()]);
+        // console.log("=====", postDoc.data());
+        // console.log(number);
+        // number = number + 1;
+        // setCommunityMembers((prev) => prev + 1);
       });
     });
   }
+
   async function CategoryFetch() {
     if (bookData?.category) {
       const q = query(
@@ -62,6 +68,7 @@ export default function DetailsScreen() {
   }
   useEffect(() => {
     BookFetch();
+    setCommunityMembers(0);
     UsersFetch();
   }, []);
   useEffect(() => {
@@ -87,7 +94,14 @@ export default function DetailsScreen() {
       >
         <BackIcon style={styles.icon} />
       </Pressable>
-      <View style={{ paddingLeft: "3%", width: "100%" }}>
+      <View
+        style={{
+          paddingLeft: "3%",
+          width: "100%",
+          marginBottom: 30,
+          paddingRight: 30,
+        }}
+      >
         <Text
           style={{
             color: "white",
@@ -99,7 +113,6 @@ export default function DetailsScreen() {
         >
           {bookData?.name}
         </Text>
-
         <View style={styles.categories}>
           {/* {categoryData?.map((category: { name: string }, index: number) => (
           <View style={styles?.category} key={index}>
@@ -119,7 +132,14 @@ export default function DetailsScreen() {
             </Text>
           </View>
         </View>
-        <View style={{ flexDirection: "row", gap: 51, alignItems: "center" }}>
+        <View
+          style={{
+            flexDirection: "row",
+            gap: 51,
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
           <Text
             style={{
               color: "rgb(205,205,205)",
@@ -128,7 +148,7 @@ export default function DetailsScreen() {
               fontWeight: "400",
             }}
           >
-            {communityMembers.length} Member
+            {communityMembers} Members
           </Text>
           <JoinCommuinityButton bookId={id} />
         </View>
@@ -138,7 +158,9 @@ export default function DetailsScreen() {
           {bookData?.chapters?.map((chapter: string, index: number) => (
             <Pressable
               style={{
-                borderBottomColor: `${activeTab == index ? "red" : "black"}`,
+                borderBottomColor: `${
+                  activeTab == index ? "rgb(73,152,232)" : "black"
+                }`,
                 borderBottomWidth: 5,
                 marginTop: 15,
                 marginLeft: 35,

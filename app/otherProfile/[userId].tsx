@@ -14,16 +14,24 @@ import {
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { router, useNavigation, useLocalSearchParams } from "expo-router";
 import { useRoute } from "@react-navigation/native";
-import { doc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  onSnapshot,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { db } from "@/common";
 import BackIcon from "@/assets/images/BackIcon";
 import SearchIcon from "@/assets/images/SearchIcon";
 import CalendarIcon from "@/assets/images/CalendarIcon";
 import UserIcon from "@/assets/images/UserIcon";
 
-export function Profile() {
+export default function Profile() {
   const { userId } = useLocalSearchParams();
-  const { userData } = useContext(AuthContext);
+  const [userData, setUserData] = useState<any>();
+
   const [isEn, setIsEn] = useState(
     userData?.defaultLang == "en" ? true : false
   );
@@ -58,13 +66,17 @@ export function Profile() {
       return "December";
     }
   }
-  async function updateUser() {
-    const profilePic = doc(db, "users", userData?.userId);
-    await updateDoc(profilePic, {
-      defaultLang: !isEn ? "en" : "mn",
+  async function UserFetch() {
+    const q = query(collection(db, "users"), where("userId", "==", userId));
+    onSnapshot(q, (snapshot) => {
+      const userInfo = snapshot.docs.map((doc) => {
+        setUserData(doc.data());
+      });
     });
-    setIsEn(!isEn);
   }
+  useEffect(() => {
+    UserFetch();
+  }, []);
 
   return (
     <View style={styles.allContainer}>
@@ -211,17 +223,3 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
 });
-
-const HomeStack = createNativeStackNavigator();
-
-export default function HomeStackScreen() {
-  return (
-    <HomeStack.Navigator>
-      <HomeStack.Screen
-        name="Profile"
-        component={Profile}
-        options={{ headerShown: false }}
-      />
-    </HomeStack.Navigator>
-  );
-}

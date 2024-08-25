@@ -8,80 +8,6 @@ import { SendEmailToUser } from "@/components/subComponents/ForgotPassword";
 import { auth } from "@/common";
 import { useEffect, useState } from "react";
 import { router } from "expo-router";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-// import {
-//   collection,
-//   doc,
-//   getDoc,
-//   getDocs,
-//   onSnapshot,
-//   query,
-// } from "firebase/firestore";
-// import { db } from "@/common";
-
-// function HomeScreen({ navigation }: { navigation: any }) {
-//   const getPostsAndUserInfo = async () => {
-//     const q = query(collection(db, "posts"));
-
-//     onSnapshot(q, async (snapshot) => {
-//       console.log(snapshot, "-");
-//       const userPromises = snapshot.docs.map((postDoc) => {
-//         const postData = postDoc.data();
-//         console.log(postData);
-//         const userRef = postData.userRef;
-//         console.log(userRef);
-//         return getDoc(userRef)
-//           .then((userDoc) => {
-//             if (userDoc.exists()) {
-//               return {
-//                 post: postData,
-//                 user: userDoc.data(),
-//               };
-//             }
-//           })
-//           .catch((error) => {
-//             console.error(error);
-//             return {
-//               post: postData,
-//               user: null,
-//             };
-//           });
-//       });
-//       console.log(console.log(userPromises, "--"));
-//       try {
-//         // const postsWithUserInfo = await Promise.all(userPromises);
-//         // console.log(postsWithUserInfo);
-//       } catch (error) {
-//         console.error(error);
-//       }
-//     });
-//   };
-
-//   return (
-//     <View style={{ backgroundColor: "grey", height: "100%" }}>
-//       <Pressable
-//         onPress={() => navigation.navigate("SignUp")}
-//         style={{ top: 100, backgroundColor: "pink" }}
-//       >
-//         <Text style={{ color: "white", top: 100 }}>oncluf</Text>
-//       </Pressable>
-//       <Pressable
-//         onPress={() => navigation.navigate("Login")}
-//         style={{ top: 100, backgroundColor: "green" }}
-//       >
-//         <Text style={{ color: "white", top: 100 }}>Log in</Text>
-//       </Pressable>
-
-//       <Pressable
-//         onPress={() => getPostsAndUserInfo()}
-//         style={{ top: 100, backgroundColor: "yellow" }}
-//       >
-//         <Text style={{ color: "white", top: 100 }}>Log in</Text>
-//       </Pressable>
-//     </View>
-//   );
-// }
 
 const HomeStack = createNativeStackNavigator();
 export default function HomeStackScreen() {
@@ -105,22 +31,22 @@ export default function HomeStackScreen() {
       <HomeStack.Navigator>
         <HomeStack.Screen
           name="LogAndSign"
-          component={LogAndSign} // rreplace with loginAndSignUp page
+          component={LogAndSign}
           options={{ headerShown: false }}
         />
         <HomeStack.Screen
           name="Login"
-          component={Login} // log in
+          component={Login}
           options={{ headerShown: false }}
         />
         <HomeStack.Screen
           name="SignUp"
-          component={SignUp} // sign up page
+          component={SignUp}
           options={{ headerShown: false }}
         />
         <HomeStack.Screen
           name="PasswordConfirm"
-          component={PasswordConfirm} // sign up page
+          component={PasswordConfirm}
           options={{ headerShown: false }}
         />
         <HomeStack.Screen

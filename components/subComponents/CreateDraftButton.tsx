@@ -54,9 +54,20 @@ export function CreateDraftButton() {
   return (
     <Pressable
       onPress={() => CreateDraft()}
-      style={{ backgroundColor: "pink" }}
+      style={{
+        borderRadius: 30,
+        padding: 10,
+        elevation: 2,
+        // paddingHorizontal: 45
+        paddingVertical: 15,
+        backgroundColor: "blue",
+        width: "45%",
+        alignItems: "center",
+      }}
     >
-      <Text> {homeTranslation?.[lang]?.["draft"]}</Text>
+      <Text style={{ color: "#e8e3e0", fontSize: 15, fontWeight: "bold" }}>
+        {homeTranslation?.[lang]?.["draft"]}
+      </Text>
     </Pressable>
   );
 }

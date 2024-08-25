@@ -12,13 +12,9 @@ import {
   Image,
 } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { router, useNavigation } from "expo-router";
+import { useNavigation } from "expo-router";
 import { useRoute } from "@react-navigation/native";
-import { doc, updateDoc } from "firebase/firestore";
-import { db } from "@/common";
-import BackIcon from "@/assets/images/BackIcon";
 import CalendarIcon from "@/assets/images/CalendarIcon";
-import UserIcon from "@/assets/images/UserIcon";
 
 export function Profile({ navigation }: { navigation: any }) {
   const { userData } = useContext(AuthContext);
@@ -56,13 +52,6 @@ export function Profile({ navigation }: { navigation: any }) {
       return "December";
     }
   }
-  // async function updateUser() {
-  //   const profilePic = doc(db, "users", userData?.userId);
-  //   await updateDoc(profilePic, {
-  //     defaultLang: !isEn ? "en" : "mn",
-  //   });
-  //   setIsEn(!isEn);
-  // }
 
   return (
     <View style={styles.allContainer}>
@@ -77,7 +66,6 @@ export function Profile({ navigation }: { navigation: any }) {
           height: "100%",
           flexDirection: "column",
           gap: 10,
-          // backgroundColor: "green",
         }}
       >
         <View
@@ -87,8 +75,6 @@ export function Profile({ navigation }: { navigation: any }) {
             justifyContent: "space-between",
             flexDirection: "row",
             alignItems: "center",
-
-            // backgroundColor: "red",
           }}
         >
           {userData?.photoUrl ? (
@@ -150,9 +136,6 @@ export function Profile({ navigation }: { navigation: any }) {
             </Text>
           </View>
         </View>
-        {/* <Pressable onPress={updateUser}>
-          <Text style={{ color: "white" }}>{isEn ? "en" : "mn"}</Text>
-        </Pressable> */}
       </View>
     </View>
   );
@@ -236,9 +219,7 @@ export default function HomeStackScreen() {
         name="EditProfile"
         component={EditProfileModal}
         options={{
-          // animation: "slide_from_bottom",
           headerShown: false,
-          // gestureDirection: "vertical",
           presentation: "modal",
         }}
       />

@@ -47,19 +47,19 @@ export function BookCommunities({ navigation }: { navigation: any }) {
           marginBottom: "10%",
         }}
       >
-        <BackIcon style={styles.icon} />
         <TextInput
           placeholder="Search for a Book"
+          textAlign="left"
           placeholderTextColor="rgb(115,120,124)"
           style={{
             borderRadius: 35,
             backgroundColor: "rgb(33,35,40)",
-            width: "85%",
+            width: "100%",
             height: 50,
-            paddingLeft: "20%",
+            paddingHorizontal: 15,
             fontFamily: "Inherit",
-            fontSize: 18,
-            fontWeight: "500",
+            fontSize: 16,
+            fontWeight: "400",
             color: "white",
           }}
         />

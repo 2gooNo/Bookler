@@ -15,7 +15,7 @@ export function CreatePostBookCard({ navigation }: { navigation: any }) {
         <Pressable onPress={() => navigation.navigate("ChapterSelect")}>
           <Text style={styles.text}>
             {selectedChapter.number
-              ? `${selectedChapter.number}  -  ${selectedChapter.name}`
+              ? `${selectedChapter.number + 1}  -  ${selectedChapter.name}`
               : "Select Chapter..."}
           </Text>
         </Pressable>

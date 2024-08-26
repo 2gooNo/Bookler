@@ -10,6 +10,15 @@ export function TitleInput() {
         value={title}
         placeholder="Title"
         onChangeText={(e) => setTitle(e)}
+        multiline={true}
+        textAlignVertical="top"
+        style={{
+          // backgroundColor: "yellow",
+          paddingHorizontal: 10,
+          fontSize: 25,
+          color: "white",
+          fontWeight: "bold",
+        }}
       ></TextInput>
     </TouchableWithoutFeedback>
   );

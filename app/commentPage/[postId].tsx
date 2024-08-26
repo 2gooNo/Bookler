@@ -13,7 +13,7 @@ import {
   query,
   serverTimestamp,
 } from "firebase/firestore";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import {
   Dimensions,
   FlatList,
@@ -38,8 +38,7 @@ export default function CommentPage({ navigation }: any) {
   const [comments, setComments] = useState<any[]>([]);
   const [commentText, setCommentText] = useState<string>("");
   const [replyTo, setReplyTo] = useState<string | any>({});
-
-  console.log(postId);
+  const textInputField = useRef(null);
 
   const getComments = async () => {
     if (typeof postId === "string" && !Array.isArray(postId)) {
@@ -47,10 +46,10 @@ export default function CommentPage({ navigation }: any) {
 
       onSnapshot(q, async (snapshot) => {
         const commentPromises = snapshot.docs.map(async (commentDoc) => {
-          const Commentdata = [commentDoc.data(), commentDoc.id];
+          const commentData = [commentDoc.data(), commentDoc.id];
           const userRef =
-            Commentdata?.[0] && typeof Commentdata?.[0] !== "string"
-              ? Commentdata?.[0].userRef
+            commentData?.[0] && typeof commentData?.[0] !== "string"
+              ? commentData?.[0].userRef
               : null;
 
           let userData = null;
@@ -62,36 +61,53 @@ export default function CommentPage({ navigation }: any) {
           }
 
           onSnapshot(
-            query(collection(db, "posts", commentDoc.id, "likes")),
+            query(
+              collection(
+                db,
+                "posts",
+                postId,
+                "comments",
+                commentDoc.id,
+                "likes"
+              )
+            ),
             (likesSnapshot) => {
               const likes = [] as any[];
               likesSnapshot.forEach((doc) => {
                 likes.push({ id: doc.id, data: doc.data() });
               });
 
-              setComments((prev) => {
-                return prev.map((item) => {
-                  if (item.post[1] === commentDoc.id) {
-                    return {
-                      ...item,
-                      likes: likes,
-                    };
-                  }
-                  return item;
-                });
-              });
+              setComments((prev) =>
+                prev.map((item) =>
+                  item.comment[1] === commentDoc.id
+                    ? { ...item, likes: likes }
+                    : item
+                )
+              );
             }
           );
 
           return {
-            post: Commentdata,
+            comment: commentData,
             user: userData,
             likes: [],
           };
         });
+
         const results = await Promise.all(commentPromises);
+
         if (results) {
-          setComments((prev) => [...prev, ...results]);
+          setComments((prev) => {
+            const newComments = results.filter(
+              (newComment) =>
+                !prev.some(
+                  (existingComment) =>
+                    existingComment.comment[1] === newComment.comment[1]
+                )
+            );
+
+            return [...prev, ...newComments];
+          });
         }
       });
     } else {
@@ -99,57 +115,34 @@ export default function CommentPage({ navigation }: any) {
     }
   };
 
-  console.log(userData, comments, postId);
-
   const createComment = async () => {
     if (typeof postId === "string" && !Array.isArray(postId)) {
       try {
+        Keyboard.dismiss();
         const commentsCollectionRef = collection(
           db,
           "posts",
           postId,
           "comments"
         );
-        const commentsSnapshot = await getDocs(commentsCollectionRef);
 
-        if (commentsSnapshot.empty || comments[0]) {
-          console.log("Creating comment...");
-          const docRef = await addDoc(commentsCollectionRef, {
-            userId: userData?.userId,
-            userRef: doc(db, "users", userData?.userId),
-            bodyText: commentText,
-            // media: uploadedMedia, // Uncomment if you have media to upload
-            replyTo: replyTo.id || "",
-            createdAt: serverTimestamp(),
-          });
+        const docRef = await addDoc(commentsCollectionRef, {
+          userId: userData?.userId,
+          userRef: doc(db, "users", userData?.userId),
+          bodyText: commentText,
 
-          const commentRef = doc(db, "posts", postId, "comments", docRef.id);
-          const likesCollectionRef = collection(commentRef, "likes");
-          await addDoc(likesCollectionRef, {
-            likedBy: doc(db, "users", userData.userId),
-            type: +1,
-          });
+          replyTo: replyTo.id || "",
+          createdAt: serverTimestamp(),
+        });
 
-          Keyboard.dismiss();
-        } else {
-          const docRef = await addDoc(commentsCollectionRef, {
-            userId: userData?.userId,
-            userRef: doc(db, "users", userData?.userId),
-            bodyText: commentText,
-
-            replyTo: replyTo.id || "",
-            createdAt: serverTimestamp(),
-          });
-
-          const commentRef = doc(db, "posts", postId, "comments", docRef.id);
-          const likesCollectionRef = collection(commentRef, "likes");
-          await addDoc(likesCollectionRef, {
-            likedBy: doc(db, "users", userData.userId),
-            type: +1,
-          });
-
-          Keyboard.dismiss();
-        }
+        const commentRef = doc(db, "posts", postId, "comments", docRef.id);
+        const likesCollectionRef = collection(commentRef, "likes");
+        await addDoc(likesCollectionRef, {
+          likedBy: userData.userId,
+          type: +1,
+        });
+        setReplyTo("");
+        setCommentText("");
       } catch (error) {
         console.error("Error creating comment: ", error);
       }
@@ -159,17 +152,8 @@ export default function CommentPage({ navigation }: any) {
   useEffect(() => {
     getComments();
   }, []);
-  console.log(replyTo, "0");
-  return (
-    // <View
-    //   style={{
-    //     width: "100%",
-    //     flex: 1,
-    //     position: "relative",
-    //     justifyContent: "flex-end",
-    //   }}
-    // >
 
+  return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
@@ -177,23 +161,32 @@ export default function CommentPage({ navigation }: any) {
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.innerContainer}>
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            showsHorizontalScrollIndicator={false}
-            // onEndReached={() => getPostsAndUserInfo()}
-            // onEndReachedThreshold={0.5}
-            style={{ gap: 10 }}
-            data={comments}
-            renderItem={({ item }) => (
-              <CommentCard
-                comment={item}
-                setReplyTo={setReplyTo}
-                navigation={navigation}
-              />
-            )}
-            ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
-          />
-          {/* <CommentCard setReplyTo={setReplyTo} /> */}
+          {comments[0] ? (
+            <FlatList
+              scrollEnabled={true}
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+              // onEndReached={() => getPostsAndUserInfo()}
+              // onEndReachedThreshold={0.5}
+              // style={{ gap: 10 }}
+              data={comments}
+              renderItem={({ item }) => (
+                <CommentCard
+                  comment={item}
+                  setReplyTo={setReplyTo}
+                  navigation={navigation}
+                  textInputField={textInputField}
+                  postId={postId}
+                />
+              )}
+              ItemSeparatorComponent={() => (
+                <View style={{ height: 1, backgroundColor: "#6c757d" }} />
+              )}
+            />
+          ) : (
+            <Text>Be the first to Comment? :D</Text>
+          )}
+
           <View style={styles.footer}>
             {replyTo.id && (
               <View style={styles.replyingTo}>
@@ -219,6 +212,8 @@ export default function CommentPage({ navigation }: any) {
                 textAlignVertical="top"
                 onChangeText={(e) => setCommentText(e)}
                 value={commentText}
+                autoFocus={true}
+                ref={textInputField}
               />
               <Pressable
                 onPress={() => createComment()}
@@ -231,13 +226,12 @@ export default function CommentPage({ navigation }: any) {
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
-    // </View>
   );
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "green",
+    backgroundColor: "black",
     width: "100%",
   },
   innerContainer: {
@@ -249,11 +243,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 10,
-    // height: height * 0.12,
-    // marginBottom: height * 0.02,
-    backgroundColor: "blue",
-    borderColor: "white",
-    borderTopWidth: 1,
+    backgroundColor: "#121212",
+    borderColor: "light-grey",
+    borderTopWidth: 0.3,
     position: "absolute",
     paddingBottom: height * 0.035,
     paddingTop: height * 0.02,
@@ -274,12 +266,12 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   textInput: {
-    backgroundColor: "pink",
+    backgroundColor: "rgb(33,35,40)",
     paddingVertical: 8,
     paddingHorizontal: 10,
     borderRadius: 8,
     borderColor: "white",
-    borderWidth: 2,
+    borderWidth: 0.4,
     width: width * 0.7,
     maxHeight: 96,
   },

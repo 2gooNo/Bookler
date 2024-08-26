@@ -111,7 +111,7 @@ export function ExitButton() {
         {/* </View> */}
       </Modal>
       <Pressable style={styles.buttonOpen} onPress={() => exit()}>
-        <FontAwesome6 name="x" size={15} color="white" />
+        <FontAwesome6 name="x" size={17} color="white" />
       </Pressable>
     </View>
   );
@@ -161,6 +161,13 @@ const styles = StyleSheet.create({
   },
   buttonOpen: {
     // backgroundColor: "#F194FF",
+    // padding: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingBottom: 0,
+    marginBottom: 8,
+    height: height * 0.04,
+    width: width * 0.08,
   },
   buttonClose: {
     // backgroundColor: "#2196F3",

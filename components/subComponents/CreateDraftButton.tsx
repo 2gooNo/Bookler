@@ -58,9 +58,8 @@ export function CreateDraftButton() {
         borderRadius: 30,
         padding: 10,
         elevation: 2,
-        // paddingHorizontal: 45
         paddingVertical: 15,
-        backgroundColor: "blue",
+        backgroundColor: "#1DA1F2",
         width: "45%",
         alignItems: "center",
       }}

@@ -8,7 +8,15 @@ export function BodyTextInput() {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <TextInput
         value={bodyText}
-        placeholder="Body"
+        multiline={true}
+        textAlignVertical="top"
+        style={{
+          // backgroundColor: "yellow",
+          paddingHorizontal: 10,
+          fontSize: 15,
+          color: "white",
+        }}
+        placeholder="Body text"
         onChangeText={(e) => setBodyText(e)}
       ></TextInput>
     </TouchableWithoutFeedback>

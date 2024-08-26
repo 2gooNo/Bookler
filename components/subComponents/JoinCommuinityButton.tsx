@@ -45,7 +45,7 @@ export function JoinCommuinityButton({ bookId }: any) {
           fontWeight: "700",
         }}
       >
-        {userData?.books.includes(bookId) ? "Leave" : "Join"}{" "}
+        {userData?.books.includes(bookId) ? "Гарах" : "Нэгдэх"}
       </Text>
     </Pressable>
   );

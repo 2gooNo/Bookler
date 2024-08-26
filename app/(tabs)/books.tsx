@@ -106,16 +106,16 @@ export function BookCommunities({ navigation }: { navigation: any }) {
                   fontWeight: "400",
                 }}
               >
-                {book?.[0]?.chapters.length} chapters
+                {book?.[0]?.chapters?.length}-н бүлэг
               </Text>
             </View>
           </Pressable>
         ))}
       </View>
-      <Pressable
+      {/* <Pressable
         style={{ backgroundColor: "white", width: "20%", height: 80 }}
         onPress={() => navigation.navigate("CreateBook")}
-      ></Pressable>
+      ></Pressable> */}
     </ScrollView>
   );
 }
@@ -153,7 +153,7 @@ export default function HomeStackScreen() {
   const route = useRoute();
 
   useEffect(() => {
-    const routeIndex = navigation?.getState()?.routes?.[5].state?.index;
+    const routeIndex = navigation?.getState()?.routes?.[5]?.state?.index;
     const shouldHideTabBar = routeIndex === 1;
     navigation.setOptions({
       tabBarStyle: {

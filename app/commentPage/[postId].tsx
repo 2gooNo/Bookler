@@ -191,10 +191,10 @@ export default function CommentPage({ navigation }: any) {
             {replyTo.id && (
               <View style={styles.replyingTo}>
                 <Text style={{ color: "white" }}>
-                  Reply to {replyTo.userName}
+                  {replyTo.userName}-руу хариулах
                 </Text>
                 <Pressable onPress={() => setReplyTo("")}>
-                  <Text>Cancel</Text>
+                  <Text>Болих</Text>
                 </Pressable>
               </View>
             )}

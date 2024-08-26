@@ -9,7 +9,7 @@ export function TitleInput() {
       <TextInput
         value={title}
         placeholderTextColor={"#adabaa"}
-        placeholder="Title"
+        placeholder="Гарчиг"
         onChangeText={(e) => setTitle(e)}
         multiline={true}
         textAlignVertical="top"

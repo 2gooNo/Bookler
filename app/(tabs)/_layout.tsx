@@ -82,17 +82,6 @@ export default function TabLayout() {
               }}
             />
             <Tabs.Screen
-              name="inbox"
-              options={{
-                tabBarIcon: ({ color, focused }) => (
-                  <TabBarIcon
-                    name={focused ? "mail" : "mail-outline"}
-                    color={color}
-                  />
-                ),
-              }}
-            />
-            <Tabs.Screen
               name={`profile`}
               options={{
                 tabBarIcon: ({ color, focused }) => (

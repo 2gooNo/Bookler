@@ -17,7 +17,7 @@ export function BodyTextInput() {
           color: "white",
           backgroundColor: "yellow",
         }}
-        placeholder="Body text"
+        placeholder="Үндсэн текст"
         onChangeText={(e) => setBodyText(e)}
       ></TextInput>
     </TouchableWithoutFeedback>

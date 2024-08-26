@@ -93,7 +93,7 @@ export function CreatePost({ navigation }: { navigation: any }) {
                       : styles.nextClose
                   }
                 >
-                  <Text style={{ fontSize: 16 }}>Next</Text>
+                  <Text style={{ fontSize: 16 }}>Дараах</Text>
                 </View>
               </Pressable>
             )}
@@ -156,7 +156,9 @@ export function CreatePost({ navigation }: { navigation: any }) {
                 )}
                 {!selectedTags[0] ? (
                   <View style={styles.tagAdd}>
-                    <Text># Add tags to help people find your post</Text>
+                    <Text>
+                      # Шошго нэмж таны постыг олоход хялбар болгоорой
+                    </Text>
                   </View>
                 ) : (
                   selectedTags.map((tag, index) => (

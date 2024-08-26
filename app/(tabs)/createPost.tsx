@@ -3,7 +3,7 @@ import HashTagSelect from "@/components/subComponents/HashTagSelect";
 import { PhotoSelector } from "@/components/subComponents/PhotoSelector";
 import { CreatePostContext } from "@/context/createPostContext";
 import { router } from "expo-router";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Dimensions,
   Keyboard,
@@ -38,6 +38,8 @@ import { ExitButton } from "@/components/subComponents/CreatePostExitButton";
 
 const { height, width } = Dimensions.get("window");
 
+console.log(Keyboard);
+
 export function CreatePost({ navigation }: { navigation: any }) {
   const { lang } = useContext(LangContext);
   const {
@@ -50,11 +52,34 @@ export function CreatePost({ navigation }: { navigation: any }) {
     selectedChapter,
   } = useContext(CreatePostContext);
   const [isVisible, setIsVisible] = useState(false);
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      () => {
+        setKeyboardVisible(true);
+      }
+    );
+
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        setKeyboardVisible(false);
+      }
+    );
+
+    // Cleanup listeners on component unmount
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
-      // keyboardVerticalOffset={height * 0.085}
+      keyboardVerticalOffset={-height * 0.035}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
@@ -81,7 +106,9 @@ export function CreatePost({ navigation }: { navigation: any }) {
                 // style={{ backgroundColor: "purple" }}
                 disabled={title ? false : true}
               >
-                <Text style={{ color: title ? "white" : "grey" }}>Next</Text>
+                <Text style={title ? styles.nextClose : styles.nextOpen}>
+                  Next
+                </Text>
               </Pressable>
             )}
             {selectedBook.id && selectedChapter.number && (
@@ -92,25 +119,38 @@ export function CreatePost({ navigation }: { navigation: any }) {
             )}
           </View>
 
-          <ScrollView horizontal={false}>
-            {(selectedBook.id || selectedChapter.number) && (
-              <CreatePostBookCard navigation={navigation} />
-            )}
-            <TitleInput />
-            {linkComponent && <LinkUrl />}
-            <View
-              style={{ flexDirection: "row", flexWrap: "wrap", width: "100%" }}
-            >
-              {media.map((media, index) => (
-                <SelectedMedia value={media} key={index} index={index} />
-              ))}
-            </View>
-            <BodyTextInput />
-          </ScrollView>
-          <View style={styles.footer}>
+          <View style={styles.contentContainer}>
+            <ScrollView horizontal={false} style={{ gap: 20 }}>
+              {(selectedBook.id || selectedChapter.number) && (
+                <CreatePostBookCard navigation={navigation} />
+              )}
+              <TitleInput />
+              {linkComponent && <LinkUrl />}
+              <View
+                style={{
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                  width: "100%",
+                  // backgroundColor: "blue",
+                  // position: "relative",
+                }}
+              >
+                {media[0] &&
+                  media.map((media, index) => (
+                    <SelectedMedia value={media} key={index} index={index} />
+                  ))}
+              </View>
+              <BodyTextInput />
+            </ScrollView>
+          </View>
+          <View
+            style={{
+              ...styles.footer,
+            }}
+          >
             <Pressable
               onPress={() => setIsVisible(true)}
-              // style={{ backgroundColor: "purple", height: 10]0 }}
+              // style={{ backgroundColor: "purple" }}
             >
               <View
                 style={{
@@ -121,22 +161,24 @@ export function CreatePost({ navigation }: { navigation: any }) {
                 }}
               >
                 {selectedTags[0] && (
-                  <Ionicons
-                    name="add"
-                    size={20}
-                    color="white"
-                    style={{ backgroundColor: "blue" }}
-                  />
+                  <View style={styles.tag}>
+                    <Ionicons
+                      name="add"
+                      size={18}
+                      color="white"
+                      // style={styles.ta}
+                    />
+                  </View>
                 )}
                 {!selectedTags[0] ? (
-                  <Text style={{ color: "white" }}>
-                    # Add tags to help people find your post
-                  </Text>
+                  <View style={styles.tagAdd}>
+                    <Text># Add tags to help people find your post</Text>
+                  </View>
                 ) : (
                   selectedTags.map((tag, index) => (
-                    <Text key={index} style={{ color: "white" }}>
-                      #{tag.tagName}
-                    </Text>
+                    <View key={index} style={styles.tag}>
+                      <Text style={styles.tagText}>#{tag.tagName}</Text>
+                    </View>
                   ))
                 )}
               </View>
@@ -230,30 +272,37 @@ export default function HomeStackScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "green",
+    backgroundColor: "#0d0c0c",
     width: "100%",
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingTop: height * 0.075,
+    paddingTop: height * 0.05,
     height: height * 0.115,
     width: "100%",
-    backgroundColor: "pink",
+    backgroundColor: "#4d4b49",
     paddingHorizontal: 15,
+    alignItems: "center",
+  },
+  contentContainer: {
+    // backgroundColor: "green",
+    paddingVertical: 10,
   },
   footer: {
-    backgroundColor: "pink",
+    // backgroundColor: "green",
     flexDirection: "column",
     alignItems: "flex-start",
     justifyContent: "space-between",
-    paddingHorizontal: 10,
-    height: height * 0.16,
+    paddingHorizontal: 15,
+    height: height * 0.135,
     position: "absolute",
-    paddingBottom: height * 0.06,
-    paddingTop: height * 0.02,
+    // paddingBottom: height * 0.06,
+    paddingVertical: height * 0.02,
     bottom: 0,
     width: "100%",
+    gap: 0,
+    marginBottom: height * 0.035,
   },
   footerBottom: {
     flexDirection: "row",
@@ -263,5 +312,30 @@ const styles = StyleSheet.create({
   submitButton: {
     height: "100%",
     justifyContent: "center",
+  },
+  tag: {
+    backgroundColor: "#1DA1F2",
+    borderRadius: 40,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    // borderColor: "green",
+  },
+  tagText: {
+    color: "white",
+  },
+  tagAdd: {
+    backgroundColor: "white",
+    borderRadius: 40,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+  },
+  // tagTextAdd:{
+  //   color:""
+  // }
+  nextOpen: {
+    backgroundColor: "#1DA1F2",
+  },
+  nextClose: {
+    backgroundColor: "grey",
   },
 });

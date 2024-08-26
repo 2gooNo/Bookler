@@ -22,12 +22,12 @@ const CustomHeaderTitle = ({ navigation, index }: any) => {
     <View style={{ flexDirection: "row" }}>
       <Button
         onPress={() => navigation.navigate("PostPage")}
-        title="For you"
+        title="Зөвхөн танд"
         color={index == 0 || !index ? "white" : "grey"}
       />
       <Button
         onPress={() => navigation.navigate("Following")}
-        title="Following"
+        title="Дагаж буй"
         color={index == 1 ? "white" : "grey"}
       />
     </View>

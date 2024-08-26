@@ -1,7 +1,5 @@
-import { AuthContext } from "@/context/authContext";
-import { LangContext } from "@/context/langContext";
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { Dimensions, FlatList, StyleSheet, View } from "react-native";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { FlatList, StyleSheet, View } from "react-native";
 import {
   GestureHandlerRootView,
   PanGestureHandler,
@@ -9,7 +7,6 @@ import {
 import {
   collection,
   getDoc,
-  getDocs,
   limit,
   onSnapshot,
   orderBy,

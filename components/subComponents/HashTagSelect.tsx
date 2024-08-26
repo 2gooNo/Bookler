@@ -8,11 +8,14 @@ import {
   KeyboardAvoidingView,
   Platform,
   Pressable,
+  ScrollView,
+  StyleSheet,
   Text,
   TextInput,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import Feather from "@expo/vector-icons/Feather";
 
 export default function HashTagSelect({ setIsVisible }: any) {
   const { selectedTags, setSelectedTags } = useContext(CreatePostContext);
@@ -88,8 +91,11 @@ export default function HashTagSelect({ setIsVisible }: any) {
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{
-        height: height * 0.3,
-        backgroundColor: "blue",
+        height: height * 0.25,
+        backgroundColor: "#1c1c1b",
+        paddingHorizontal: 15,
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
       }}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -99,33 +105,109 @@ export default function HashTagSelect({ setIsVisible }: any) {
             gap: 10,
             height: "100%",
             justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          <TextInput
-            onChangeText={(value) => searchTags(value)}
-            style={{ backgroundColor: "green", padding: 10 }}
-            onSubmitEditing={(event) => selectTag(event.nativeEvent.text)}
-          />
-          <View style={{ flexDirection: "row", gap: 10 }}>
+          <View
+            style={{
+              flexDirection: "row",
+            }}
+          >
+            <Text>Add tags</Text>
+            <Pressable>
+              <Text>Done</Text>
+            </Pressable>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              flexWrap: "wrap",
+              gap: 10,
+            }}
+          >
+            <Feather name="hash" size={18} color="#adabaa" />
             {selectedTags?.map((tag, index) => (
               <Pressable
                 key={index}
+                style={styles.selectedTag}
                 onPress={() => removeSelectedTag(tag?.tagName)}
               >
-                <Text style={{ color: "white", backgroundColor: "gray" }}>
-                  {tag?.tagName}
+                <Text
+                  style={{ color: "white", fontWeight: "500", fontSize: 15 }}
+                >
+                  #{tag?.tagName}
                 </Text>
               </Pressable>
             ))}
-            {suggestedTags?.map((tag, index) => (
-              <Pressable key={index} onPress={() => selectTag(tag?.tagName)}>
-                <Text style={{ color: "white" }}>{tag?.tagName}</Text>
-              </Pressable>
-            ))}
-            <Text style={{ color: "white" }}>{newTag}</Text>
+            <TextInput
+              placeholder="Add a tag.."
+              placeholderTextColor={"#adabaa"}
+              onChangeText={(value) => searchTags(value)}
+              style={{
+                flex: 1,
+                width: "auto",
+                paddingHorizontal: 10,
+                fontSize: 15,
+                color: "#adabaa",
+                // backgroundColor: "yellow",
+              }}
+              autoFocus={true}
+              onSubmitEditing={(event) => selectTag(event.nativeEvent.text)}
+            />
           </View>
+          <ScrollView
+            horizontal={true}
+            scrollEnabled={true}
+            style={{ width: "100%" }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                gap: 10,
+                backgroundColor: "green",
+                // width: 1000,
+                // overflow: "hidden",
+                alignItems: "flex-start",
+              }}
+            >
+              {suggestedTags?.map((tag, index) => (
+                <Pressable
+                  style={styles.tag}
+                  key={index}
+                  onPress={() => selectTag(tag?.tagName)}
+                >
+                  <Text
+                    style={{ color: "white", fontWeight: "500", fontSize: 15 }}
+                  >
+                    #{tag?.tagName}
+                  </Text>
+                </Pressable>
+              ))}
+
+              <Text style={{ color: "white" }}>{newTag}</Text>
+            </View>
+          </ScrollView>
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 }
+
+const styles = StyleSheet.create({
+  tag: {
+    borderRadius: 40,
+    borderColor: "white",
+    borderWidth: 0.5,
+    paddingHorizontal: 13,
+    paddingVertical: 7,
+  },
+  selectedTag: {
+    borderRadius: 40,
+    // borderColor: "white",
+    borderWidth: 0.5,
+    paddingHorizontal: 13,
+    paddingVertical: 7,
+    backgroundColor: "#1DA1F2",
+  },
+});

@@ -98,7 +98,7 @@ export function Profile({ navigation }: { navigation: any }) {
                 color: "white",
               }}
             >
-              Edit Profile
+              Профайл өөрчлөх
             </Text>
           </Pressable>
         </View>
@@ -133,7 +133,7 @@ export function Profile({ navigation }: { navigation: any }) {
                 color: "rgb(113, 118, 123)",
               }}
             >
-              Born in {stringMonth()} {year}
+              {year} {stringMonth()}-д төрсөн
             </Text>
           </View>
         </View>
@@ -148,7 +148,9 @@ export function Profile({ navigation }: { navigation: any }) {
             paddingRight: "4%",
             borderRadius: 30,
             marginTop: 10,
-            width: 89,
+            width: 80,
+            justifyContent: "center",
+            alignItems: "center",
           }}
           onPress={() => onLogout()}
         >
@@ -160,7 +162,7 @@ export function Profile({ navigation }: { navigation: any }) {
               color: "white",
             }}
           >
-            Log out
+            Гарах
           </Text>
         </Pressable>
       </View>
@@ -227,7 +229,7 @@ export default function HomeStackScreen() {
   const route = useRoute();
 
   useEffect(() => {
-    const routeIndex = navigation?.getState()?.routes?.[5].state?.index;
+    const routeIndex = navigation?.getState()?.routes?.[5]?.state?.index;
     const shouldHideTabBar = routeIndex === 1;
     navigation.setOptions({
       tabBarStyle: {

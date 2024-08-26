@@ -69,7 +69,7 @@ export function CommentCard({
               textInputField?.current.focus();
             }}
           >
-            <Text style={{ color: "grey" }}>reply</Text>
+            <Text style={{ color: "grey" }}>хариулах</Text>
           </Pressable>
           <CommentLikes item={comment} postId={postId} />
         </View>

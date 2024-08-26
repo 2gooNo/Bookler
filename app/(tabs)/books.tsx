@@ -106,7 +106,7 @@ export function BookCommunities({ navigation }: { navigation: any }) {
                   fontWeight: "400",
                 }}
               >
-                {book?.[0]?.chapters?.length} chapters
+                {book?.[0]?.chapters?.length}-н бүлэг
               </Text>
             </View>
           </Pressable>

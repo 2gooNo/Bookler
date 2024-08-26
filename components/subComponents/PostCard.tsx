@@ -33,6 +33,7 @@ export function PostCard({
       alert(`Unavailable URL: ${item?.post?.[0]?.link}`);
     }
   };
+
   if (!item) return;
   console.log(item);
   return (
@@ -87,14 +88,23 @@ export function PostCard({
             <View style={{ flexDirection: "row" }}>
               <Pressable
                 onPress={() =>
-                  router.navigate(`/details/${item?.post?.[0]?.book?.id}-${1}`)
+                  router.navigate(`/details/${(item?.post?.[0]?.book?.id, 1)}`)
                 }
               >
                 <Text style={{ color: "white" }}>
                   {item?.post?.[0]?.book?.name}
                 </Text>
               </Pressable>
-              <Pressable>
+              <Pressable
+                onPress={() =>
+                  router.navigate(
+                    `/details/${[
+                      item?.post?.[0]?.book?.id,
+                      item?.post?.[0]?.chapter?.number,
+                    ]}`
+                  )
+                }
+              >
                 <Text style={{ color: "white" }}>
                   / {item?.post?.[0]?.chapter?.number}
                   {item?.post?.[0]?.chapter?.name}

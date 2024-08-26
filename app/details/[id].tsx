@@ -22,25 +22,27 @@ import BackIcon from "@/assets/images/BackIcon";
 import { JoinCommuinityButton } from "@/components/subComponents/JoinCommuinityButton";
 
 export default function DetailsScreen() {
-  const { id, chapter } = useLocalSearchParams();
+  const { id } = useLocalSearchParams();
+  const [bookId, chapter] = typeof id == "string" ? id.split(",") : [];
   const [bookData, setBookData] = useState<any>();
-  const [activeTab, setActiveTab] = useState(1);
+  const [activeTab, setActiveTab] = useState(Number(chapter));
   const [categoryData, setCategoryData] = useState<any>();
   const [communityMembers, setCommunityMembers] = useState<number>(0);
   async function BookFetch() {
-    if (typeof id == "string") {
-      const docRef = doc(db, "books", id);
+    if (typeof bookId == "string") {
+      const docRef = doc(db, "books", bookId);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
+        console.log(docSnap?.data(), "---------");
         setBookData(docSnap?.data());
       }
     }
   }
-  console.log(chapter, id, "---");
+  console.log(bookId, chapter, id);
   async function UsersFetch() {
     const q = query(
       collection(db, "users"),
-      where("books", "array-contains", id)
+      where("books", "array-contains", id[0])
     );
     var number = 0;
     onSnapshot(q, async (snapshot) => {

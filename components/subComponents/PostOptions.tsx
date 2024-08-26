@@ -84,7 +84,7 @@ export function PostOptions() {
       {auth?.currentUser?.uid == currentPostData?.user?.userId && (
         <Pressable style={styles.pressable}>
           <FontAwesome name="pencil-square-o" size={24} color="#dedcdb" />
-          <Text style={{ color: "#dedcdb", fontSize: 18 }}>Edit</Text>
+          <Text style={{ color: "#dedcdb", fontSize: 18 }}>Засварлах</Text>
         </Pressable>
       )}
     </View>

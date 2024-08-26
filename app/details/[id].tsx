@@ -24,7 +24,7 @@ import { JoinCommuinityButton } from "@/components/subComponents/JoinCommuinityB
 export default function DetailsScreen() {
   const { id } = useLocalSearchParams();
   const [bookData, setBookData] = useState<any>();
-  const [activeTab, setActiveTab] = useState(1);
+  const [activeTab, setActiveTab] = useState(0);
   const [categoryData, setCategoryData] = useState<any>();
   const [communityMembers, setCommunityMembers] = useState<number>(0);
   async function BookFetch() {
@@ -148,10 +148,21 @@ export default function DetailsScreen() {
               fontWeight: "400",
             }}
           >
-            {communityMembers} Members
+            {communityMembers} Гишүүд
           </Text>
           <JoinCommuinityButton bookId={id} />
         </View>
+        <Text
+          style={{
+            color: "rgb(205,205,205)",
+            fontFamily: "Inherit",
+            fontSize: 17,
+            fontWeight: "400",
+            marginTop: 20,
+          }}
+        >
+          {bookData?.description}
+        </Text>
       </View>
       <View style={{ backgroundColor: "black", width: "100%" }}>
         <ScrollView horizontal={true} style={styles?.chapterContainer}>

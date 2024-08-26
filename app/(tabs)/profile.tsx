@@ -21,6 +21,7 @@ export function Profile({ navigation }: { navigation: any }) {
   const [isEn, setIsEn] = useState(
     userData?.defaultLang == "en" ? true : false
   );
+  const { onLogout } = useContext(AuthContext);
   const date = userData?.birthDate.toDate();
   const formattedDate = date?.toLocaleString();
   const year = formattedDate?.split(",")[0].split(".")[0];
@@ -71,7 +72,7 @@ export function Profile({ navigation }: { navigation: any }) {
         <View
           style={{
             width: "100%",
-            height: "10%",
+            height: "11%",
             justifyContent: "space-between",
             flexDirection: "row",
             alignItems: "center",
@@ -97,7 +98,7 @@ export function Profile({ navigation }: { navigation: any }) {
                 color: "white",
               }}
             >
-              Edit Profile
+              Профайл өөрчлөх
             </Text>
           </Pressable>
         </View>
@@ -132,10 +133,38 @@ export function Profile({ navigation }: { navigation: any }) {
                 color: "rgb(113, 118, 123)",
               }}
             >
-              Born in {stringMonth()} {year}
+              {year} {stringMonth()}-д төрсөн
             </Text>
           </View>
         </View>
+        <Pressable
+          style={{
+            borderColor: "rgb(83, 100, 113)",
+            borderStyle: "solid",
+            borderWidth: 1,
+            paddingTop: "2%",
+            paddingBottom: "2%",
+            paddingLeft: "4%",
+            paddingRight: "4%",
+            borderRadius: 30,
+            marginTop: 10,
+            width: 80,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          onPress={() => onLogout()}
+        >
+          <Text
+            style={{
+              fontFamily: "Inherit",
+              fontSize: 15,
+              fontWeight: "700",
+              color: "white",
+            }}
+          >
+            Гарах
+          </Text>
+        </Pressable>
       </View>
     </View>
   );
@@ -146,7 +175,7 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     height: Dimensions.get("window").height,
     width: Dimensions.get("window").width,
-    paddingTop: "12%",
+    paddingTop: 100,
     paddingLeft: "3%",
     paddingRight: "3%",
     position: "relative",
@@ -189,6 +218,7 @@ const styles = StyleSheet.create({
     paddingLeft: "4%",
     paddingRight: "4%",
     borderRadius: 30,
+    marginTop: 50,
   },
 });
 
@@ -199,7 +229,7 @@ export default function HomeStackScreen() {
   const route = useRoute();
 
   useEffect(() => {
-    const routeIndex = navigation?.getState()?.routes?.[5].state?.index;
+    const routeIndex = navigation?.getState()?.routes?.[5]?.state?.index;
     const shouldHideTabBar = routeIndex === 1;
     navigation.setOptions({
       tabBarStyle: {

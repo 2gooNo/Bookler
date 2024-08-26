@@ -85,7 +85,7 @@ export function ExitButton() {
           justifyContent: "flex-end",
         }}
         hasBackdrop={true}
-        backdropOpacity={0.5}
+        backdropOpacity={0}
         backdropColor={"pink"}
         avoidKeyboard={true}
       >

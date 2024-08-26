@@ -20,6 +20,7 @@ export function TitleInput() {
           color: "white",
           fontWeight: "bold",
         }}
+        // keyboardType=""
       ></TextInput>
     </TouchableWithoutFeedback>
   );

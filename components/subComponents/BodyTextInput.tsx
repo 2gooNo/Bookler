@@ -15,6 +15,7 @@ export function BodyTextInput() {
           paddingHorizontal: 10,
           fontSize: 15,
           color: "white",
+          backgroundColor: "yellow",
         }}
         placeholder="Body text"
         onChangeText={(e) => setBodyText(e)}

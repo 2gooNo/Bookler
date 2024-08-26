@@ -22,7 +22,7 @@ import BackIcon from "@/assets/images/BackIcon";
 import { JoinCommuinityButton } from "@/components/subComponents/JoinCommuinityButton";
 
 export default function DetailsScreen() {
-  const { id } = useLocalSearchParams();
+  const { id, chapter } = useLocalSearchParams();
   const [bookData, setBookData] = useState<any>();
   const [activeTab, setActiveTab] = useState(1);
   const [categoryData, setCategoryData] = useState<any>();
@@ -36,6 +36,7 @@ export default function DetailsScreen() {
       }
     }
   }
+  console.log(chapter, id, "---");
   async function UsersFetch() {
     const q = query(
       collection(db, "users"),

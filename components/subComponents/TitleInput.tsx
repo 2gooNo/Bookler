@@ -8,6 +8,7 @@ export function TitleInput() {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <TextInput
         value={title}
+        placeholderTextColor={"#adabaa"}
         placeholder="Title"
         onChangeText={(e) => setTitle(e)}
         multiline={true}

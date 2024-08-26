@@ -161,7 +161,7 @@ export function PostCard({
             gap: 15,
           }}
         >
-          <RepostButton />
+          <RepostButton post={item} />
           <Pressable>
             <FontAwesome6 name="retweet" size={20} color="white" />
           </Pressable>

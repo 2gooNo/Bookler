@@ -9,9 +9,9 @@ export function BodyTextInput() {
       <TextInput
         value={bodyText}
         multiline={true}
+        placeholderTextColor={"#adabaa"}
         textAlignVertical="top"
         style={{
-          // backgroundColor: "yellow",
           paddingHorizontal: 10,
           fontSize: 15,
           color: "white",

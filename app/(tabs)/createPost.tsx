@@ -2,8 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HashTagSelect from "@/components/subComponents/HashTagSelect";
 import { PhotoSelector } from "@/components/subComponents/PhotoSelector";
 import { CreatePostContext } from "@/context/createPostContext";
-import { router } from "expo-router";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import {
   Dimensions,
   Keyboard,
@@ -15,7 +14,6 @@ import {
   Text,
   View,
   TouchableWithoutFeedback,
-  Image,
 } from "react-native";
 import { Camera } from "@/components/subComponents/Camera";
 import { PhotoConfirm } from "@/components/subComponents/PhotoConfirm";
@@ -38,8 +36,6 @@ import { ExitButton } from "@/components/subComponents/CreatePostExitButton";
 
 const { height, width } = Dimensions.get("window");
 
-console.log(Keyboard);
-
 export function CreatePost({ navigation }: { navigation: any }) {
   const { lang } = useContext(LangContext);
   const {
@@ -50,31 +46,10 @@ export function CreatePost({ navigation }: { navigation: any }) {
     title,
     selectedBook,
     selectedChapter,
+    bodyText,
   } = useContext(CreatePostContext);
   const [isVisible, setIsVisible] = useState(false);
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
 
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
-      () => {
-        setKeyboardVisible(true);
-      }
-    );
-
-    const keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
-      () => {
-        setKeyboardVisible(false);
-      }
-    );
-
-    // Cleanup listeners on component unmount
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -103,12 +78,17 @@ export function CreatePost({ navigation }: { navigation: any }) {
             {(!selectedBook.id || !selectedChapter.number) && (
               <Pressable
                 onPress={() => navigation.navigate("BookSelect")}
-                // style={{ backgroundColor: "purple" }}
-                disabled={title ? false : true}
+                disabled={title || bodyText || media[0] ? false : true}
               >
-                <Text style={title ? styles.nextClose : styles.nextOpen}>
-                  Next
-                </Text>
+                <View
+                  style={
+                    title || bodyText || media[0]
+                      ? styles.nextOpen
+                      : styles.nextClose
+                  }
+                >
+                  <Text style={{ fontSize: 16 }}>Next</Text>
+                </View>
               </Pressable>
             )}
             {selectedBook.id && selectedChapter.number && (
@@ -120,7 +100,7 @@ export function CreatePost({ navigation }: { navigation: any }) {
           </View>
 
           <View style={styles.contentContainer}>
-            <ScrollView horizontal={false} style={{ gap: 20 }}>
+            <ScrollView horizontal={false}>
               {(selectedBook.id || selectedChapter.number) && (
                 <CreatePostBookCard navigation={navigation} />
               )}
@@ -131,8 +111,6 @@ export function CreatePost({ navigation }: { navigation: any }) {
                   flexDirection: "row",
                   flexWrap: "wrap",
                   width: "100%",
-                  // backgroundColor: "blue",
-                  // position: "relative",
                 }}
               >
                 {media[0] &&
@@ -148,10 +126,7 @@ export function CreatePost({ navigation }: { navigation: any }) {
               ...styles.footer,
             }}
           >
-            <Pressable
-              onPress={() => setIsVisible(true)}
-              // style={{ backgroundColor: "purple" }}
-            >
+            <Pressable onPress={() => setIsVisible(true)}>
               <View
                 style={{
                   flexDirection: "row",
@@ -162,12 +137,7 @@ export function CreatePost({ navigation }: { navigation: any }) {
               >
                 {selectedTags[0] && (
                   <View style={styles.tag}>
-                    <Ionicons
-                      name="add"
-                      size={18}
-                      color="white"
-                      // style={styles.ta}
-                    />
+                    <Ionicons name="add" size={18} color="white" />
                   </View>
                 )}
                 {!selectedTags[0] ? (
@@ -197,16 +167,6 @@ export function CreatePost({ navigation }: { navigation: any }) {
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
-    // <KeyboardAvoidingView
-    //   behavior={Platform.OS === "ios" ? "padding" : "height"}
-    //   style={styles.container}
-    //   keyboardVerticalOffset={height * 0.085}
-    // >
-    //   <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-    // <View style={{ paddingVertical: "30%" }}> */
-    //  </View>
-    //   </TouchableWithoutFeedback>
-    // </KeyboardAvoidingView>
   );
 }
 const HomeStack = createNativeStackNavigator();
@@ -281,7 +241,7 @@ const styles = StyleSheet.create({
     paddingTop: height * 0.05,
     height: height * 0.115,
     width: "100%",
-    backgroundColor: "#4d4b49",
+    backgroundColor: "#2e2c2b",
     paddingHorizontal: 15,
     alignItems: "center",
   },
@@ -334,8 +294,18 @@ const styles = StyleSheet.create({
   // }
   nextOpen: {
     backgroundColor: "#1DA1F2",
+    padding: 7,
+    paddingHorizontal: 10,
+    borderRadius: 30,
+  },
+  openText: {
+    color: "white",
   },
   nextClose: {
     backgroundColor: "grey",
+    padding: 7,
+    borderRadius: 30,
+    paddingHorizontal: 10,
   },
+  closeText: {},
 });

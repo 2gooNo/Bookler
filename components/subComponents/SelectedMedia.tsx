@@ -1,5 +1,5 @@
 import { CreatePostContext } from "@/context/createPostContext";
-import { Video } from "expo-av";
+import { ResizeMode, Video } from "expo-av";
 import { useContext, useEffect, useState } from "react";
 import { Dimensions, Image, Pressable, View } from "react-native";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
@@ -16,7 +16,7 @@ export function SelectedMedia({
 }) {
   const { setMedia, media } = useContext(CreatePostContext);
   const [thumnail, setThumnail] = useState(
-    "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAJQA3gMBIgACEQEDEQH/xAAXAAEBAQEAAAAAAAAAAAAAAAAAAQIH/8QAFRABAQAAAAAAAAAAAAAAAAAAAAH/xAAVAQEBAAAAAAAAAAAAAAAAAAAAAf/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AOIiAAAAAAAAACoIKACUVAFRQAAIqAKIAAAAKIKgAAAAACAACgAAAIoKgqCCooAAAAAAAEARUUAAUBABAVFSgogCgCgAAKDIqCKIAogCgAAAAAIqAoICoAKgAAAKgCgCgACKAgAgACgACNAgAAACKgAAAUAAFABAAFEUUBAVFAABAAAAAAUAAABBUEAAAAAAAAAAFAUAAAAAEAJAAFABFAAAAQKCAAAAAAAACoAokUUAAAECAAAoAIoAAAAipRAAAAAAAAAACKigAAACgAgCggAoAAAAlVBAAAAAAAAAAAAFAAAFABAAVUoAACAAJQAAAAAAAAAFAEhQBQBQACKAP//Z"
+    "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAJQAmAMBIgACEQEDEQH/xAAVAAEBAAAAAAAAAAAAAAAAAAAAB//EABQQAQAAAAAAAAAAAAAAAAAAAAD/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8AiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/Z"
   );
   const RemoveSelectedMedia = () => {
     setMedia((prev) => prev.filter((e) => e !== value));
@@ -25,13 +25,12 @@ export function SelectedMedia({
   console.log(index % 2 == 0, index);
   const generateThumbnail = async () => {
     try {
-      const { uri } = await VideoThumbnails.getThumbnailAsync(
-        "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4",
-        {
-          time: 15000,
-        }
-      );
-      setThumnail(uri);
+      if (value.slice(-4) !== ".jpg") {
+        const { uri } = await VideoThumbnails.getThumbnailAsync(value, {
+          time: 500,
+        });
+        setThumnail(uri);
+      }
     } catch (e) {
       console.warn(e);
     }
@@ -39,6 +38,11 @@ export function SelectedMedia({
   useEffect(() => {
     generateThumbnail();
   }, []);
+  console.log(
+    index == 0,
+    index % 2 == 0 && media.length - 1 == index,
+    media.length == 2
+  );
   return (
     <View
       style={{
@@ -53,9 +57,11 @@ export function SelectedMedia({
           style={{
             height: height * 0.3,
             width:
-              index == 0 || (index % 2 == 0 && media.length - 1 == index)
+              index == 0 ||
+              (index % 2 == 0 && media.length - 1 == index) ||
+              media.length == 2
                 ? width
-                : width * 0.5,
+                : width * 0.45,
           }}
           source={{ uri: value }}
         ></Image>
@@ -68,7 +74,9 @@ export function SelectedMedia({
           isMuted={false}
           style={{
             height:
-              index == 0 || (index % 2 == 0 && media.length - 1 == index)
+              index == 0 ||
+              (index % 2 == 0 && media.length - 1 == index) ||
+              media.length == 2
                 ? 350
                 : 200,
             width:
@@ -77,7 +85,7 @@ export function SelectedMedia({
                 : width * 0.5,
           }}
           source={{ uri: value }}
-          resizeMode="cover"
+          resizeMode={ResizeMode.CONTAIN}
           usePoster={true}
           isLooping={false}
         />

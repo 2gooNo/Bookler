@@ -33,11 +33,13 @@ import { CreatePostButton } from "@/components/subComponents/CreatePostButton";
 import { CreateDraftButton } from "@/components/subComponents/CreateDraftButton";
 import { CreatePostBookCard } from "@/components/subComponents/CreatePostBookCard";
 import { ExitButton } from "@/components/subComponents/CreatePostExitButton";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const { height, width } = Dimensions.get("window");
 
 export function CreatePost({ navigation }: { navigation: any }) {
   const { lang } = useContext(LangContext);
+  const [scrolling, setScrolling] = useState(false);
   const {
     media,
     linkComponent,
@@ -52,7 +54,7 @@ export function CreatePost({ navigation }: { navigation: any }) {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === "ios" ? "height" : "position"}
       style={styles.container}
       keyboardVerticalOffset={-height * 0.035}
     >
@@ -64,14 +66,18 @@ export function CreatePost({ navigation }: { navigation: any }) {
             onBackdropPress={() => setIsVisible(false)}
             isVisible={isVisible}
             onSwipeComplete={() => setIsVisible(false)}
-            swipeDirection={"down"}
+            swipeThreshold={20}
+            swipeDirection={scrolling ? [] : ["down"]}
             style={{
               margin: 0,
               flex: 1,
               justifyContent: "flex-end",
             }}
           >
-            <HashTagSelect setIsVisible={setIsVisible} />
+            <HashTagSelect
+              setIsVisible={setIsVisible}
+              setScrolling={setScrolling}
+            />
           </Modal>
           <View style={styles.header}>
             <ExitButton></ExitButton>
@@ -100,7 +106,14 @@ export function CreatePost({ navigation }: { navigation: any }) {
           </View>
 
           <View style={styles.contentContainer}>
-            <ScrollView horizontal={false}>
+            <KeyboardAwareScrollView
+              // automaticallyAdjustKeyboardInsets={true}
+              style={{ flex: 1, width: "100%" }} // Use flex instead of a fixed height
+              contentContainerStyle={{ flexGrow: 1 }} // Ensure the content grows within the scrollview
+              enableOnAndroid={true} // Enable keyboard-aware scrolling on Android
+              extraScrollHeight={20}
+            >
+              {/* Remove the nested ScrollView */}
               {(selectedBook.id || selectedChapter.number) && (
                 <CreatePostBookCard navigation={navigation} />
               )}
@@ -111,6 +124,7 @@ export function CreatePost({ navigation }: { navigation: any }) {
                   flexDirection: "row",
                   flexWrap: "wrap",
                   width: "100%",
+                  backgroundColor: "purple",
                 }}
               >
                 {media[0] &&
@@ -119,7 +133,7 @@ export function CreatePost({ navigation }: { navigation: any }) {
                   ))}
               </View>
               <BodyTextInput />
-            </ScrollView>
+            </KeyboardAwareScrollView>
           </View>
           <View
             style={{
@@ -250,21 +264,22 @@ const styles = StyleSheet.create({
   contentContainer: {
     // backgroundColor: "green",
     paddingVertical: 10,
+    flex: 1,
   },
   footer: {
-    // backgroundColor: "green",
+    backgroundColor: "#0d0c0c",
     flexDirection: "column",
     alignItems: "flex-start",
     justifyContent: "space-between",
     paddingHorizontal: 15,
-    height: height * 0.135,
+    height: height * 0.175,
     position: "absolute",
-    // paddingBottom: height * 0.06,
+    paddingBottom: height * 0.06,
     paddingVertical: height * 0.02,
     bottom: 0,
     width: "100%",
     gap: 0,
-    marginBottom: height * 0.035,
+    // marginBottom: height * 0.035,
   },
   footerBottom: {
     flexDirection: "row",

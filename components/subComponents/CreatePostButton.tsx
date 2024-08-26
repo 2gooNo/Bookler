@@ -106,7 +106,7 @@ export function CreatePostButton() {
         setSelectedChapter({ name: "", number: null });
         setSelectedBook({ id: "", name: "" });
         router.push("/home");
-        alert("Subcollection document written with ID: ");
+        // alert("Subcollection document written with ID: ");
       }
     } catch (err) {}
   };
@@ -119,7 +119,9 @@ export function CreatePostButton() {
   };
   return (
     <Pressable onPress={() => CreatePost()} style={{ backgroundColor: "pink" }}>
-      <Text>{homeTranslation?.[lang]?.["post"]}</Text>
+      <Text style={{ color: "white" }}>
+        {homeTranslation?.[lang]?.["post"]}post
+      </Text>
     </Pressable>
   );
 }

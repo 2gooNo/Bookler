@@ -17,7 +17,7 @@ import {
 } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
 
-export default function HashTagSelect({ setIsVisible }: any) {
+export default function HashTagSelect({ setIsVisible, setScrolling }: any) {
   const { selectedTags, setSelectedTags } = useContext(CreatePostContext);
   const [allTags, setAllTags] = useState<any[]>([]);
   const [suggestedTags, setSuggestedTags] = useState<any[]>([]);
@@ -25,6 +25,7 @@ export default function HashTagSelect({ setIsVisible }: any) {
 
   const searchTags = (value: string) => {
     setSuggestedTags([]);
+    setNewTag("");
     if (value.length !== 0) {
       const q = query(collection(db, "tags"));
 
@@ -32,6 +33,7 @@ export default function HashTagSelect({ setIsVisible }: any) {
         const tagInfo = snapshot.docs.map((doc) => {
           return doc.data();
         });
+
         setAllTags(tagInfo);
       });
 
@@ -45,30 +47,21 @@ export default function HashTagSelect({ setIsVisible }: any) {
           setSuggestedTags((prev) => [...prev, tag]);
         }
       });
+      if (
+        !selectedTags.some((selectedTag) => selectedTag.tagName === value) &&
+        suggestedTags[0]
+      ) {
+        console.log(
+          selectedTags.some((selectedTag) => selectedTag.tagName === value, "-")
+        );
+        setNewTag(value);
+      }
+    } else {
+      setNewTag("");
+      setSuggestedTags([]);
     }
   };
 
-  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
-
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
-      () => {
-        setIsKeyboardVisible(true);
-      }
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
-      () => {
-        setIsKeyboardVisible(false);
-      }
-    );
-
-    return () => {
-      keyboardDidHideListener.remove();
-      keyboardDidShowListener.remove();
-    };
-  }, []);
   const removeSelectedTag = (value: string) => {
     setSelectedTags((prev: any) => {
       if (prev.includes(value)) {
@@ -86,110 +79,132 @@ export default function HashTagSelect({ setIsVisible }: any) {
       });
     }
   };
+  console.log(selectedTags);
   const { height } = Dimensions.get("window");
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{
-        height: height * 0.25,
+        height: height * 0.3,
         backgroundColor: "#1c1c1b",
         paddingHorizontal: 15,
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
+        paddingTop: 30,
       }}
     >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}> */}
+      <View
+        style={{
+          flexDirection: "column",
+          gap: 20,
+          height: "100%",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <View
           style={{
-            flexDirection: "column",
-            gap: 10,
-            height: "100%",
-            justifyContent: "center",
+            flexDirection: "row",
+            justifyContent: "space-between",
             alignItems: "center",
+            // backgroundColor: "green",
+            width: "65%",
+            alignSelf: "flex-end",
           }}
         >
-          <View
-            style={{
-              flexDirection: "row",
-            }}
-          >
-            <Text>Add tags</Text>
-            <Pressable>
-              <Text>Done</Text>
+          <Text style={{ color: "white", fontWeight: "400", fontSize: 18 }}>
+            Add tags
+          </Text>
+          <Pressable onPress={() => setIsVisible(false)}>
+            <Text style={{ color: "#1DA1F2", fontWeight: "500", fontSize: 18 }}>
+              Done
+            </Text>
+          </Pressable>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: 8,
+          }}
+        >
+          <Feather name="hash" size={18} color="#adabaa" />
+          {selectedTags?.map((tag, index) => (
+            <Pressable
+              key={index}
+              style={styles.selectedTag}
+              onPress={() => removeSelectedTag(tag?.tagName)}
+            >
+              <Text style={{ color: "white", fontWeight: "500", fontSize: 15 }}>
+                #{tag?.tagName}
+              </Text>
             </Pressable>
-          </View>
-          <View
+          ))}
+          <TextInput
+            placeholder="Add a tag.."
+            placeholderTextColor={"#adabaa"}
+            onChangeText={(value) => searchTags(value)}
             style={{
-              flexDirection: "row",
-              alignItems: "center",
-              flexWrap: "wrap",
-              gap: 10,
+              flex: 1,
+              width: "auto",
+              paddingHorizontal: 10,
+              fontSize: 15,
+              color: "#adabaa",
+              // backgroundColor: "yellow",
             }}
-          >
-            <Feather name="hash" size={18} color="#adabaa" />
-            {selectedTags?.map((tag, index) => (
-              <Pressable
-                key={index}
-                style={styles.selectedTag}
-                onPress={() => removeSelectedTag(tag?.tagName)}
-              >
-                <Text
-                  style={{ color: "white", fontWeight: "500", fontSize: 15 }}
-                >
-                  #{tag?.tagName}
-                </Text>
-              </Pressable>
-            ))}
-            <TextInput
-              placeholder="Add a tag.."
-              placeholderTextColor={"#adabaa"}
-              onChangeText={(value) => searchTags(value)}
-              style={{
-                flex: 1,
-                width: "auto",
-                paddingHorizontal: 10,
-                fontSize: 15,
-                color: "#adabaa",
-                // backgroundColor: "yellow",
-              }}
-              autoFocus={true}
-              onSubmitEditing={(event) => selectTag(event.nativeEvent.text)}
-            />
-          </View>
-          <ScrollView
-            horizontal={true}
-            scrollEnabled={true}
-            style={{ width: "100%" }}
-          >
-            <View
+            autoFocus={true}
+            onSubmitEditing={(event) => selectTag(event.nativeEvent.text)}
+          />
+        </View>
+        <ScrollView
+          horizontal={true}
+          scrollEnabled={true}
+          // style={{ flexDirection: "row", width: "100%" }}
+          onScrollBeginDrag={() => setScrolling(true)}
+          onScrollEndDrag={() => setScrolling(false)}
+          contentContainerStyle={{
+            flexDirection: "row",
+            gap: 5,
+            backgroundColor: "green",
+            width: 1000,
+            // overflow: "hidden",
+            alignItems: "flex-start",
+          }}
+        >
+          {/* <View
               style={{
                 flexDirection: "row",
                 gap: 10,
                 backgroundColor: "green",
-                // width: 1000,
+                width: "100%",
                 // overflow: "hidden",
                 alignItems: "flex-start",
               }}
+            > */}
+          {suggestedTags?.map((tag, index) => (
+            <Pressable
+              style={styles.tag}
+              key={index}
+              onPress={() => selectTag(tag?.tagName)}
             >
-              {suggestedTags?.map((tag, index) => (
-                <Pressable
-                  style={styles.tag}
-                  key={index}
-                  onPress={() => selectTag(tag?.tagName)}
-                >
-                  <Text
-                    style={{ color: "white", fontWeight: "500", fontSize: 15 }}
-                  >
-                    #{tag?.tagName}
-                  </Text>
-                </Pressable>
-              ))}
-
-              <Text style={{ color: "white" }}>{newTag}</Text>
-            </View>
-          </ScrollView>
-        </View>
-      </TouchableWithoutFeedback>
+              <Text style={{ color: "white", fontWeight: "500", fontSize: 15 }}>
+                #{tag?.tagName}
+              </Text>
+            </Pressable>
+          ))}
+          {newTag && (
+            <Pressable style={styles.tag} onPress={() => selectTag(newTag)}>
+              <Text style={{ color: "white", fontWeight: "500", fontSize: 15 }}>
+                {newTag}
+              </Text>
+            </Pressable>
+          )}
+          {/* </View> */}
+        </ScrollView>
+      </View>
+      {/* </TouchableWithoutFeedback> */}
     </KeyboardAvoidingView>
   );
 }

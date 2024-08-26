@@ -33,8 +33,9 @@ export function PostCard({
       alert(`Unavailable URL: ${item?.post?.[0]?.link}`);
     }
   };
-  if (!item) return;
 
+  if (!item) return;
+  console.log(item);
   return (
     <GestureHandlerRootView
       style={{
@@ -84,10 +85,32 @@ export function PostCard({
             <Text style={{ color: "white" }}>
               {item?.user?.userName || "Unavailable user"}
             </Text>
-            <Text style={{ color: "white" }}>
-              {item?.post?.[0]?.book?.name} / {item?.post?.[0]?.chapter?.number}{" "}
-              {item?.post?.[0]?.chapter?.name}
-            </Text>
+            <View style={{ flexDirection: "row" }}>
+              <Pressable
+                onPress={() =>
+                  router.navigate(`/details/${(item?.post?.[0]?.book?.id, 1)}`)
+                }
+              >
+                <Text style={{ color: "white" }}>
+                  {item?.post?.[0]?.book?.name}
+                </Text>
+              </Pressable>
+              <Pressable
+                onPress={() =>
+                  router.navigate(
+                    `/details/${[
+                      item?.post?.[0]?.book?.id,
+                      item?.post?.[0]?.chapter?.number,
+                    ]}`
+                  )
+                }
+              >
+                <Text style={{ color: "white" }}>
+                  / {item?.post?.[0]?.chapter?.number}
+                  {item?.post?.[0]?.chapter?.name}
+                </Text>
+              </Pressable>
+            </View>
           </View>
         </View>
 

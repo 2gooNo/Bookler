@@ -41,7 +41,7 @@ export function BookPosts({ navigation, chapter, bookId }: any) {
     setPosts([]);
     const q = query(
       collection(db, "posts"),
-      // where("book.id", "==", bookId),
+      where("book.id", "==", bookId),
       where("chapter.number", "==", Number(chapter))
     );
     console.log(q);

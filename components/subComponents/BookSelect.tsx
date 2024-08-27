@@ -40,21 +40,48 @@ export function BookSelect({ navigation }: any) {
         backgroundColor: "#121212",
         flexDirection: "column",
         paddingVertical: 60,
+        width: "100%",
+        paddingHorizontal: 20,
+        gap: 10,
       }}
     >
-      <Text>Post to</Text>
-      <View style={{ flexDirection: "row" }}>
+      <View
+        style={{
+          flexDirection: "row",
+          width: "100%",
+          justifyContent: "space-between",
+        }}
+      >
+        <Pressable onPress={() => navigation.navigate("CreatePost")}>
+          <AntDesign name="delete" size={24} color="white" />
+        </Pressable>
+        <Text
+          style={{
+            color: "white",
+            fontSize: 18,
+
+            textAlign: "center",
+            justifyContent: "center",
+          }}
+        >
+          Post to
+        </Text>
+        {/* {selectedBook.id && ( */}
         <Pressable
-          onPress={() => navigation.navigate("CreatePost")}
-        ></Pressable>
-        {selectedBook.id && (
-          <Pressable
-            style={{ backgroundColor: "red" }}
-            onPress={() => navigation.navigate("ChapterSelect")}
+          disabled={selectedBook.id ? false : true}
+          // style={{ backgroundColor: "red" }}
+          onPress={() => navigation.navigate("ChapterSelect")}
+        >
+          <Text
+            style={{
+              color: selectedBook.id ? "#1DA1F2" : "grey",
+              fontSize: 17,
+            }}
           >
-            <Text style={{ color: "white" }}>Next</Text>
-          </Pressable>
-        )}
+            Next
+          </Text>
+        </Pressable>
+        {/* )} */}
       </View>
       {books[0] ? (
         books.map((book, index) => <BookCard key={index} book={book} />)
@@ -64,13 +91,15 @@ export function BookSelect({ navigation }: any) {
         </Text>
       )}
 
-      <Pressable
-        onPress={() => {
-          setSearchNumber(searchNumber + 5);
-        }}
-      >
-        <Text style={{ color: "grey" }}>More</Text>
-      </Pressable>
+      {userData?.books.length >= userData?.books.length - 5 && (
+        <Pressable
+          onPress={() => {
+            setSearchNumber(searchNumber + 5);
+          }}
+        >
+          <Text style={{ color: "grey" }}>More</Text>
+        </Pressable>
+      )}
     </View>
   );
 }
@@ -96,7 +125,8 @@ function BookCard({ book }: any) {
         paddingVertical: 5,
         justifyContent: "flex-start",
         alignItems: "center",
-        backgroundColor: selectedBook.id == book?.[1] ? "grey" : "transparent",
+        gap: 15,
+        // backgroundColor: selectedBook.id == book?.[1] ? "grey" : "transparent",
       }}
       onPress={() => selectBook()}
     >

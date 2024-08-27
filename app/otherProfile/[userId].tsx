@@ -14,7 +14,9 @@ import { db } from "@/common";
 import BackIcon from "@/assets/images/BackIcon";
 import CalendarIcon from "@/assets/images/CalendarIcon";
 import { BookPosts } from "@/components/subComponents/BookPosts";
-export default function Profile() {
+import { ProfilePosts } from "@/components/subComponents/ProfilePosts";
+
+export default function Profile({ navigation }: any) {
   const { userId } = useLocalSearchParams();
   const [userData, setUserData] = useState<any>();
   const date = userData?.birthDate.toDate();
@@ -129,7 +131,7 @@ export default function Profile() {
         </View>
       </View>
 
-      <BookPosts userId={userId} />
+      <ProfilePosts userId={userData?.userId} navigation={navigation} />
     </View>
   );
 }

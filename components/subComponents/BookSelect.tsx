@@ -4,6 +4,7 @@ import { CreatePostContext } from "@/context/createPostContext";
 import { doc, getDoc } from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
 import { Image, Pressable, Text, View } from "react-native";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 export function BookSelect({ navigation }: any) {
   const { userData } = useContext(AuthContext);
@@ -39,7 +40,7 @@ export function BookSelect({ navigation }: any) {
         paddingVertical: 60,
       }}
     >
-      <Text>Post to</Text>
+      {/* <Text>Post to</Text>
       <View style={{ flexDirection: "row" }}>
         <Pressable
           onPress={() => navigation.navigate("CreatePost")}
@@ -67,7 +68,7 @@ export function BookSelect({ navigation }: any) {
         }}
       >
         <Text style={{ color: "grey" }}>More</Text>
-      </Pressable>
+      </Pressable> */}
     </View>
   );
 }
@@ -95,6 +96,14 @@ function BookCard({ book }: any) {
     >
       <Image style={{ height: "100%" }}></Image>
       <Text style={{ color: "white" }}> {book?.[0]?.name}</Text>
+      {selectedBook.id == book?.[1] && (
+        <AntDesign
+          name="check"
+          size={20}
+          color="#1DA1F2"
+          style={{ textAlignVertical: "bottom" }}
+        />
+      )}
     </Pressable>
   );
 }

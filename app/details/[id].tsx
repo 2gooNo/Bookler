@@ -6,6 +6,7 @@ import {
   Dimensions,
   Pressable,
   ScrollView,
+  FlatList,
 } from "react-native";
 import { db } from "@/common";
 import {
@@ -20,14 +21,14 @@ import { useEffect, useState } from "react";
 import { Image } from "expo-image";
 import BackIcon from "@/assets/images/BackIcon";
 import { JoinCommuinityButton } from "@/components/subComponents/JoinCommuinityButton";
+import { BookSelect } from "@/components/subComponents/BookSelect";
 
-export default function DetailsScreen() {
+export default function DetailsScreen({ navigation }: any) {
   const { id } = useLocalSearchParams();
   const [bookId, chapter] = typeof id == "string" ? id.split(",") : [];
   const [bookData, setBookData] = useState<any>();
 
   const [activeTab, setActiveTab] = useState(Number(chapter));
-
   const [categoryData, setCategoryData] = useState<any>();
   const [communityMembers, setCommunityMembers] = useState<number>(0);
   async function BookFetch() {
@@ -40,21 +41,18 @@ export default function DetailsScreen() {
       }
     }
   }
-  console.log(bookId, chapter, id);
+
+  console.log(bookId, chapter, "--");
+
   async function UsersFetch() {
     const q = query(
       collection(db, "users"),
-      where("books", "array-contains", id[0])
+      where("books", "array-contains", bookId)
     );
-    var number = 0;
+
     onSnapshot(q, async (snapshot) => {
       setCommunityMembers(snapshot.docs.length);
-      const userPromises = snapshot.docs.map((postDoc) => {
-        // console.log("=====", postDoc.data());
-        // console.log(number);
-        // number = number + 1;
-        // setCommunityMembers((prev) => prev + 1);
-      });
+      const userPromises = snapshot.docs.map((postDoc) => {});
     });
   }
 
@@ -91,118 +89,120 @@ export default function DetailsScreen() {
   // }
 
   return (
-    <ScrollView style={styles.allContainer}>
-      <Image style={styles.banner} source={{ uri: bookData?.bookImg }} />
-      <Pressable
-        onPress={() => router.navigate("../(tabs)/books")}
-        style={styles.iconWrapper}
-      >
-        <BackIcon style={styles.icon} />
-      </Pressable>
-      <View
-        style={{
-          paddingLeft: "3%",
-          width: "100%",
-          marginBottom: 30,
-          paddingRight: 30,
-        }}
-      >
-        <Text
-          style={{
-            color: "white",
-            fontFamily: "Inherit",
-            fontSize: 30,
-            fontWeight: "800",
-            marginBottom: 10,
-          }}
-        >
-          {bookData?.name}
-        </Text>
-        <View style={styles.categories}>
-          {/* {categoryData?.map((category: { name: string }, index: number) => (
-          <View style={styles?.category} key={index}>
-            <Text style={{ color: "white" }}>{category?.name}</Text>
-          </View>
-        ))} */}
-          <View style={styles?.category}>
-            <Text
-              style={{
-                color: "white",
-                fontFamily: "Inherit",
-                fontSize: 13,
-                fontWeight: "700",
-              }}
-            >
-              {categoryData?.name}
-            </Text>
-          </View>
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            gap: 51,
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Text
-            style={{
-              color: "rgb(205,205,205)",
-              fontFamily: "Inherit",
-              fontSize: 17,
-              fontWeight: "400",
-            }}
-          >
-            {communityMembers} Гишүүд
-          </Text>
-          <JoinCommuinityButton bookId={id} />
-        </View>
-        <Text
-          style={{
-            color: "rgb(205,205,205)",
-            fontFamily: "Inherit",
-            fontSize: 17,
-            fontWeight: "400",
-            marginTop: 20,
-          }}
-        >
-          {bookData?.description}
-        </Text>
-      </View>
-      <View style={{ backgroundColor: "black", width: "100%" }}>
-        <ScrollView horizontal={true} style={styles?.chapterContainer}>
-          {bookData?.chapters?.map((chapter: string, index: number) => (
-            <Pressable
-              style={{
-                borderBottomColor: `${
-                  activeTab == index ? "rgb(73,152,232)" : "black"
-                }`,
-                borderBottomWidth: 5,
-                marginTop: 15,
-                marginLeft: 35,
-                height: 40,
-              }}
-              key={index}
-              onPress={() => SelectChapter(index)}
-            >
-              <Text
-                style={{
-                  color: "white",
-                  fontFamily: "Inherit",
-                  fontSize: 17,
-                  fontWeight: "700",
-                }}
-              >
-                {chapter}
-              </Text>
-            </Pressable>
-          ))}
-        </ScrollView>
-        <View style={styles?.postContainer}>
-          {/* <ContentShower data={getActiveContet(activeTab)} /> */}
-        </View>
-      </View>
-    </ScrollView>
+    <BookSelect chapter={chapter} bookId={bookId} navigation={navigation} />
+    // <ScrollView style={styles.allContainer}>
+    //   <Image style={styles.banner} source={{ uri: bookData?.bookImg }} />
+    //   <Pressable
+    //     onPress={() => router.navigate("../(tabs)/books")}
+    //     style={styles.iconWrapper}
+    //   >
+    //     <BackIcon style={styles.icon} />
+    //   </Pressable>
+    //   <View
+    //     style={{
+    //       paddingLeft: "3%",
+    //       width: "100%",
+    //       marginBottom: 30,
+    //       paddingRight: 30,
+    //     }}
+    //   >
+    //     <Text
+    //       style={{
+    //         color: "white",
+    //         fontFamily: "Inherit",
+    //         fontSize: 30,
+    //         fontWeight: "800",
+    //         marginBottom: 10,
+    //       }}
+    //     >
+    //       {bookData?.name}
+    //     </Text>
+    //     <View style={styles.categories}>
+    //       {/* {categoryData?.map((category: { name: string }, index: number) => (
+    //       <View style={styles?.category} key={index}>
+    //         <Text style={{ color: "white" }}>{category?.name}</Text>
+    //       </View>
+    //     ))} */}
+    //       <View style={styles?.category}>
+    //         <Text
+    //           style={{
+    //             color: "white",
+    //             fontFamily: "Inherit",
+    //             fontSize: 13,
+    //             fontWeight: "700",
+    //           }}
+    //         >
+    //           {categoryData?.name}
+    //         </Text>
+    //       </View>
+    //     </View>
+    //     <View
+    //       style={{
+    //         flexDirection: "row",
+    //         gap: 51,
+    //         alignItems: "center",
+    //         justifyContent: "space-between",
+    //       }}
+    //     >
+    //       <Text
+    //         style={{
+    //           color: "rgb(205,205,205)",
+    //           fontFamily: "Inherit",
+    //           fontSize: 17,
+    //           fontWeight: "400",
+    //         }}
+    //       >
+    //         {communityMembers} Гишүүд
+    //       </Text>
+    //       <JoinCommuinityButton bookId={bookId} />
+    //     </View>
+    //     <Text
+    //       style={{
+    //         color: "rgb(205,205,205)",
+    //         fontFamily: "Inherit",
+    //         fontSize: 17,
+    //         fontWeight: "400",
+    //         marginTop: 20,
+    //       }}
+    //     >
+    //       {bookData?.description}
+    //     </Text>
+    //   </View>
+    //   <View style={{ backgroundColor: "black", width: "100%" }}>
+    //     <ScrollView horizontal={true} style={styles?.chapterContainer}>
+    //       {bookData?.chapters?.map((chapter: string, index: number) => (
+    //         <Pressable
+    //           style={{
+    //             borderBottomColor: `${
+    //               activeTab == index ? "rgb(73,152,232)" : "black"
+    //             }`,
+    //             borderBottomWidth: 5,
+    //             marginTop: 15,
+    //             marginLeft: 35,
+    //             height: 40,
+    //           }}
+    //           key={index}
+    //           onPress={() => SelectChapter(index)}
+    //         >
+    //           <Text
+    //             style={{
+    //               color: "white",
+    //               fontFamily: "Inherit",
+    //               fontSize: 17,
+    //               fontWeight: "700",
+    //             }}
+    //           >
+    //             {chapter}
+    //           </Text>
+    //         </Pressable>
+    //       ))}
+    //     </ScrollView>
+    //     <View style={styles?.postContainer}>
+    //       {/* <ContentShower data={getActiveContet(activeTab)} /> */}
+    //     </View>
+    //   </View>
+
+    // </ScrollView>
   );
 }
 

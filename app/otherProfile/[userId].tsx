@@ -110,7 +110,7 @@ export default function Profile({ navigation }: any) {
           )}
           <ProfileFollow userId={userId} otherUser={user} />
         </View>
-        <View style={{ gap: 8 }}>
+        <View style={{ gap: 8, marginBottom: 20 }}>
           <Text
             style={{
               fontFamily: "Inherit",
@@ -145,9 +145,8 @@ export default function Profile({ navigation }: any) {
             </Text>
           </View>
         </View>
+        <ProfilePosts userId={userId} navigation={navigation} />
       </View>
-
-      <ProfilePosts userId={userData?.userId} navigation={navigation} />
     </View>
   );
 }

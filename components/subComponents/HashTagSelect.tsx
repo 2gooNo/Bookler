@@ -39,21 +39,18 @@ export default function HashTagSelect({ setIsVisible, setScrolling }: any) {
 
       allTags.forEach((tag) => {
         if (
-          tag.tagName.includes(value) &&
-          !selectedTags.some(
-            (selectedTag) => selectedTag.tagName === tag.tagName
+          tag?.tagName?.includes(value) &&
+          !selectedTags?.some(
+            (selectedTag) => selectedTag?.tagName === tag?.tagName
           )
         ) {
           setSuggestedTags((prev) => [...prev, tag]);
         }
       });
       if (
-        !selectedTags.some((selectedTag) => selectedTag.tagName === value) &&
-        suggestedTags[0]
+        !selectedTags?.some((selectedTag) => selectedTag?.tagName === value) &&
+        suggestedTags?.[0]
       ) {
-        console.log(
-          selectedTags.some((selectedTag) => selectedTag.tagName === value, "-")
-        );
         setNewTag(value);
       }
     } else {
@@ -64,16 +61,16 @@ export default function HashTagSelect({ setIsVisible, setScrolling }: any) {
 
   const removeSelectedTag = (value: string) => {
     setSelectedTags((prev: any) => {
-      if (prev.includes(value)) {
+      if (prev?.includes(value)) {
         return prev;
       }
     });
   };
   const selectTag = (value: string) => {
-    if (value.length > 0) {
+    if (value?.length > 0) {
       setSelectedTags((prev) => [...prev, { tagName: value }]);
       setSuggestedTags((prev: any) => {
-        if (prev && prev.includes(value)) {
+        if (prev && prev?.includes(value)) {
           return prev;
         }
       });
@@ -154,7 +151,9 @@ export default function HashTagSelect({ setIsVisible, setScrolling }: any) {
               // backgroundColor: "yellow",
             }}
             autoFocus={true}
-            onSubmitEditing={(event) => selectTag(event.nativeEvent.text)}
+            onSubmitEditing={(event) => {
+              selectTag(event?.nativeEvent?.text);
+            }}
           />
         </View>
         <ScrollView

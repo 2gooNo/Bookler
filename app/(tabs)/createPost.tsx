@@ -123,6 +123,7 @@ export function CreatePost({ navigation }: { navigation: any }) {
                 <CreatePostBookCard navigation={navigation} />
               )}
               <TitleInput />
+              <BodyTextInput />
               {linkComponent && <LinkUrl />}
               <View
                 style={{
@@ -136,7 +137,6 @@ export function CreatePost({ navigation }: { navigation: any }) {
                     <SelectedMedia value={media} key={index} index={index} />
                   ))}
               </View>
-              <BodyTextInput />
             </View>
           </KeyboardAwareScrollView>
 

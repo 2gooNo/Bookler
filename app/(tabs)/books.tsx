@@ -35,7 +35,11 @@ export function BookCommunities({ navigation }: { navigation: any }) {
   }, []);
 
   return (
-    <ScrollView horizontal={false} style={styles.allContainer}>
+    <ScrollView
+      horizontal={false}
+      style={styles.allContainer}
+      showsVerticalScrollIndicator={false}
+    >
       <View
         style={{
           width: "100%",
@@ -123,13 +127,14 @@ export function BookCommunities({ navigation }: { navigation: any }) {
 const styles = StyleSheet.create({
   allContainer: {
     backgroundColor: "black",
-    height: Dimensions.get("window").height,
+    flex: 1,
     width: Dimensions.get("window").width,
-    paddingTop: 50,
+    marginTop: 50,
     paddingLeft: "3%",
     paddingRight: "3%",
     position: "relative",
     gap: 20,
+    paddingBottom: 20,
   },
   headerImage: {
     color: "#808080",
@@ -152,15 +157,6 @@ export default function HomeStackScreen() {
   const navigation = useNavigation();
   const route = useRoute();
 
-  useEffect(() => {
-    const routeIndex = navigation?.getState()?.routes?.[5]?.state?.index;
-    const shouldHideTabBar = routeIndex === 1;
-    navigation.setOptions({
-      tabBarStyle: {
-        display: shouldHideTabBar ? "none" : "flex",
-      },
-    });
-  }, [navigation, route]);
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen
@@ -168,12 +164,6 @@ export default function HomeStackScreen() {
         component={BookCommunities}
         options={{ headerShown: false }}
       />
-      <HomeStack.Screen
-        name="BookDetails"
-        component={BookDetail}
-        options={{ headerShown: false }}
-      />
-
       <HomeStack.Screen
         name="CreateBook"
         component={CreateBook}

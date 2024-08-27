@@ -84,13 +84,13 @@ export function PostCard({
             <Text style={{ color: "white" }}>
               {item?.user?.userName || "Unavailable user"}
             </Text>
-            <View style={{ flexDirection: "row" }}>
+            <View style={{ flexDirection: "row", gap: 2 }}>
               <Pressable
                 onPress={() =>
                   router.navigate(`/details/${[item?.post?.[0]?.book?.id, 1]}`)
                 }
               >
-                <Text style={{ color: "white" }}>
+                <Text style={{ color: "grey" }}>
                   {item?.post?.[0]?.book?.name}
                 </Text>
               </Pressable>
@@ -104,8 +104,12 @@ export function PostCard({
                   )
                 }
               >
-                <Text style={{ color: "white", width: 240 }}>
-                  {/* / {item?.post?.[0]?.chapter?.number + 1} */}/
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode={"tail"}
+                  style={{ color: "grey", width: 180, overflow: "hidden" }}
+                >
+                  {/* / {item?.post?.[0]?.chapter?.number + 1} */}/{" "}
                   {item?.post?.[0]?.chapter?.name}
                 </Text>
               </Pressable>

@@ -14,25 +14,11 @@ import { db } from "@/common";
 import { PostCard } from "./PostCard";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { sortBy } from "lodash";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { PostBottomSheet } from "./PostBottomSheet";
 
-export function ProfilePosts({ navigation, userId }: any) {
+export function ProfilePosts({ navigation, userId, bottomSheetRef }: any) {
   const [posts, setPosts] = useState<any[]>([]);
-  const bottomSheetRef = useRef<BottomSheet>(null);
-  const handleSheetChanges = useCallback((index: number) => {
-    if (index == -1) {
-      navigation.getParent().setOptions({
-        tabBarStyle: {
-          display: "flex",
-        },
-      });
-    } else if (index == 1) {
-      navigation.getParent().setOptions({
-        tabBarStyle: {
-          display: "none",
-        },
-      });
-    }
-  }, []);
 
   const getPostsAndUserInfo = async () => {
     console.log(userId, "-0-");
@@ -97,13 +83,10 @@ export function ProfilePosts({ navigation, userId }: any) {
       } catch (error) {}
     });
   };
-  console.log(posts, ":))");
+
   useEffect(() => {
     getPostsAndUserInfo();
-    console.log("what");
   }, []);
-  console.log("+++", userId);
-  console.log("+", posts);
 
   return (
     // <FlatList
@@ -118,6 +101,7 @@ export function ProfilePosts({ navigation, userId }: any) {
     //   )}
     //   ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
     // />
+
     <View
       style={{
         gap: 10,

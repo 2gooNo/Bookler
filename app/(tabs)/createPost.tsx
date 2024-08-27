@@ -98,7 +98,14 @@ export function CreatePost({ navigation }: { navigation: any }) {
               </Pressable>
             )}
             {selectedBook.id && selectedChapter.number && (
-              <View style={{ flexDirection: "row", gap: 10 }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  gap: 10,
+                  // backgroundColor: "yellow",
+                  justifyContent: "flex-end",
+                }}
+              >
                 <CreateDraftButton />
                 <CreatePostButton />
               </View>

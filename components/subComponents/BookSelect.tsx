@@ -5,6 +5,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
 import { Dimensions, Image, Pressable, Text, View } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
 const { height, width } = Dimensions.get("window");
 
@@ -34,6 +35,7 @@ export function BookSelect({ navigation }: any) {
     GetBooks();
   }, [userData, searchNumber]);
 
+  console.log(userData?.books.length);
   return (
     <View
       style={{
@@ -41,8 +43,9 @@ export function BookSelect({ navigation }: any) {
         flexDirection: "column",
         paddingVertical: 60,
         width: "100%",
-        paddingHorizontal: 20,
-        gap: 10,
+        paddingHorizontal: 10,
+        gap: 30,
+        height: "100%",
       }}
     >
       <View
@@ -50,10 +53,11 @@ export function BookSelect({ navigation }: any) {
           flexDirection: "row",
           width: "100%",
           justifyContent: "space-between",
+          paddingHorizontal: 10,
         }}
       >
         <Pressable onPress={() => navigation.navigate("CreatePost")}>
-          <AntDesign name="delete" size={24} color="white" />
+          <FontAwesome6 name="x" size={15} color="white" />
         </Pressable>
         <Text
           style={{
@@ -91,7 +95,7 @@ export function BookSelect({ navigation }: any) {
         </Text>
       )}
 
-      {userData?.books.length >= userData?.books.length - 5 && (
+      {searchNumber < userData?.books.length && (
         <Pressable
           onPress={() => {
             setSearchNumber(searchNumber + 5);
@@ -121,7 +125,7 @@ function BookCard({ book }: any) {
         width: "100%",
         height: height * 0.08,
         flexDirection: "row",
-        paddingHorizontal: 10,
+        // paddingHorizontal: 10,
         paddingVertical: 5,
         justifyContent: "flex-start",
         alignItems: "center",
@@ -134,7 +138,7 @@ function BookCard({ book }: any) {
         style={{ height: "100%", width: width * 0.15 }}
         source={{ uri: book?.[0]?.bookImg }}
       ></Image>
-      <Text style={{ color: "white" }}> {book?.[0]?.name}</Text>
+      <Text style={{ color: "white", fontSize: 15 }}> {book?.[0]?.name}</Text>
       {selectedBook.id == book?.[1] && (
         <AntDesign
           name="check"

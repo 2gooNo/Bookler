@@ -45,7 +45,6 @@ export function SelectedMedia({
         flexDirection: "row",
         flexWrap: "wrap",
         position: "relative",
-        backgroundColor: "green",
       }}
     >
       {value.slice(-4) == ".jpg" ? (

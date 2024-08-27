@@ -102,6 +102,7 @@ export function ProfilePosts({ navigation, userId }: any) {
     getPostsAndUserInfo();
     console.log("what");
   }, []);
+  console.log("+++", userId);
   return (
     <FlatList
       showsVerticalScrollIndicator={false}
@@ -110,7 +111,6 @@ export function ProfilePosts({ navigation, userId }: any) {
       onEndReachedThreshold={0.5}
       style={{
         gap: 10,
-        backgroundColor: "green",
         width: "100%",
         height: "100%",
       }}

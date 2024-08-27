@@ -262,7 +262,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   contentContainer: {
-    // backgroundColor: "green",
     paddingVertical: 10,
     flex: 1,
   },
@@ -295,7 +294,6 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     paddingVertical: 6,
     paddingHorizontal: 10,
-    // borderColor: "green",
   },
   tagText: {
     color: "white",

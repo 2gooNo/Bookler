@@ -139,9 +139,11 @@ export function PostCard({
               color: "white",
               fontSize: 18,
               fontWeight: "500",
+
               // backgroundColor: "green",
               width: "100%",
               // flexGrow: 1,
+
             }}
           >
             {item?.post?.[0]?.title}

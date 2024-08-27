@@ -106,7 +106,7 @@ function ChapterCard({ chapter, index }: { chapter: string; index: number }) {
     }, 300),
     [selectedChapter, index]
   );
-
+  console.log(selectedChapter, "ypu fu kcer");
   return (
     <Pressable
       onPress={() => {

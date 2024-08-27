@@ -15,7 +15,7 @@ import { PostCard } from "./PostCard";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { sortBy } from "lodash";
 
-export function BookPosts({ navigation, userId }: any) {
+export function ProfilePosts({ navigation, userId }: any) {
   const [posts, setPosts] = useState<any[]>([]);
   const bottomSheetRef = useRef<BottomSheet>(null);
   const handleSheetChanges = useCallback((index: number) => {
@@ -100,6 +100,7 @@ export function BookPosts({ navigation, userId }: any) {
   useEffect(() => {
     getPostsAndUserInfo();
   }, []);
+  console.log("+++", userId);
   return (
     <FlatList
       showsVerticalScrollIndicator={false}
@@ -108,7 +109,6 @@ export function BookPosts({ navigation, userId }: any) {
       onEndReachedThreshold={0.5}
       style={{
         gap: 10,
-        backgroundColor: "green",
         width: "100%",
         height: "100%",
       }}

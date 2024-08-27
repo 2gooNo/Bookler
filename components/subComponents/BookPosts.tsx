@@ -36,21 +36,24 @@ export function BookPosts({ navigation, chapter, bookId }: any) {
   }, []);
 
   const getPostsAndUserInfo = async () => {
+    setPosts([]);
     const q = query(
       collection(db, "posts"),
-      where("book.id", "==", bookId),
+      // where("book.id", "==", bookId),
       where("chapter.number", "==", Number(chapter))
     );
-
+    console.log(q);
     onSnapshot(q, async (snapshot) => {
+      console.log("promise");
       const postPromises = snapshot.docs.map(async (postDoc) => {
+        console.log("inside proflie");
         const postData = [postDoc.data(), postDoc.id];
-
+        console.log(postDoc.data(), postDoc.id);
         const userRef =
           postData?.[0] && typeof postData?.[0] !== "string"
             ? postData?.[0].userRef
             : null;
-
+        console.log(postDoc.id);
         setLastVisible(postDoc.id);
 
         let userData = null;
@@ -99,31 +102,43 @@ export function BookPosts({ navigation, chapter, bookId }: any) {
       } catch (error) {}
     });
   };
-  console.log(posts, ":))");
+
   useEffect(() => {
     getPostsAndUserInfo();
-  }, []);
+    console.log("_--", chapter, "---------");
+  }, [chapter]);
+  console.log(posts, ":))", bookId, chapter, typeof chapter);
   return (
-    <FlatList
-      showsVerticalScrollIndicator={false}
-      showsHorizontalScrollIndicator={false}
-      // onEndReached={() => getPostsAndUserInfo()}
-      onEndReachedThreshold={0.5}
+    // <FlatList
+    //   showsVerticalScrollIndicator={false}
+    //   showsHorizontalScrollIndicator={false}
+    //   // onEndReached={() => getPostsAndUserInfo()}
+    //   onEndReachedThreshold={0.5}
+
+    //   data={posts}
+    //   renderItem={({ item }) => (
+    //     <PostCard
+    //       item={item}
+    //       bottomSheetRef={bottomSheetRef}
+    //       navigation={navigation}
+    //     />
+    //   )}
+    //   ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+    // />
+    <View
       style={{
         gap: 10,
-        backgroundColor: "green",
-        width: "100%",
         height: "100%",
       }}
-      data={posts}
-      renderItem={({ item }) => (
+    >
+      {posts?.map((item, index) => (
         <PostCard
+          key={index}
           item={item}
           bottomSheetRef={bottomSheetRef}
           navigation={navigation}
         />
-      )}
-      ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-    />
+      ))}
+    </View>
   );
 }

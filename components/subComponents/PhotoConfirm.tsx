@@ -9,7 +9,7 @@ export function PhotoConfirm({ navigation }: { navigation: any }) {
   return (
     <View>
       <Pressable
-        style={{ backgroundColor: "yellow", height: 100, width: 100 }}
+        style={{ height: 100, width: 100 }}
         onPress={() => {
           navigation.navigate("Camera");
           setTakenMedia("");
@@ -18,7 +18,7 @@ export function PhotoConfirm({ navigation }: { navigation: any }) {
         <Text style={{ color: "black" }}>Take a dif phto</Text>
       </Pressable>
       <Pressable
-        style={{ backgroundColor: "green", height: 100, width: 100 }}
+        style={{ height: 100, width: 100 }}
         onPress={() => {
           navigation.navigate("CreatePost");
           setMedia((prev) => [...prev, takenMedia]);

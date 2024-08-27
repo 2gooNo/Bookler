@@ -35,7 +35,6 @@ export function PostCard({
   };
 
   if (!item) return;
-  console.log(item, "+++++++++++++++++");
   return (
     <GestureHandlerRootView
       style={{
@@ -105,8 +104,8 @@ export function PostCard({
                   )
                 }
               >
-                <Text style={{ color: "white" }}>
-                  / {item?.post?.[0]?.chapter?.number + 1}
+                <Text style={{ color: "white", width: 240 }}>
+                  {/* / {item?.post?.[0]?.chapter?.number + 1} */}/
                   {item?.post?.[0]?.chapter?.name}
                 </Text>
               </Pressable>

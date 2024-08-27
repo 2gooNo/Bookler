@@ -18,6 +18,9 @@ import {
   PinchGestureHandler,
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 
 type FlashMode = "off" | "on" | "auto";
 
@@ -104,19 +107,26 @@ export function Camera({ navigation }: { navigation: any }) {
               style={styles.button}
               onPress={toggleCameraFacing}
             >
-              <Text style={styles.text}>Flip Camera</Text>
+              <MaterialIcons name="flip-camera-ios" size={44} color="white" />
             </TouchableOpacity>
-            <Pressable
-              onLongPress={startRecording}
-              onPress={takePhoto}
-              onPressOut={stopRecording}
-            >
-              <Text style={styles.text}>I'm pressable!</Text>
-            </Pressable>
+
             <TouchableOpacity style={styles.button} onPress={changeFlash}>
-              <Text style={styles.text}>Flash</Text>
+              {flash !== "off" && (
+                <Ionicons name="flash-off-outline" size={44} color="white" />
+              )}
+              {flash == "off" && (
+                <Ionicons name="flash-outline" size={44} color="white" />
+              )}
             </TouchableOpacity>
           </View>
+          <Pressable
+            onLongPress={startRecording}
+            onPress={takePhoto}
+            onPressOut={stopRecording}
+            style={{ position: "absolute", bottom: 50, left: "40%" }}
+          >
+            <FontAwesome5 name="circle" size={64} color="white" />
+          </Pressable>
         </CameraView>
       </PinchGestureHandler>
     </GestureHandlerRootView>
@@ -126,13 +136,15 @@ export function Camera({ navigation }: { navigation: any }) {
 const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
-    backgroundColor: "yellow",
+    backgroundColor: "grey",
     width: "100%",
     height: "100%",
+    position: "relative",
   },
   message: {
     textAlign: "center",
     paddingBottom: 10,
+    color: "white",
   },
   camera: {
     // backgroundColor: "yellow",
@@ -142,8 +154,13 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     backgroundColor: "transparent",
-    margin: 64,
+    // margin: 64,
     flexWrap: "wrap",
+    position: "absolute",
+    width: "100%",
+    justifyContent: "space-between",
+    padding: 30,
+    top: 40,
   },
   button: {
     alignSelf: "flex-end",

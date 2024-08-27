@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { Dimensions, Image, Pressable, View } from "react-native";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import * as VideoThumbnails from "expo-video-thumbnails";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 const { height, width } = Dimensions.get("window");
 
@@ -18,6 +19,7 @@ export function SelectedMedia({
   const [thumnail, setThumnail] = useState(
     "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAJQAmAMBIgACEQEDEQH/xAAVAAEBAAAAAAAAAAAAAAAAAAAAB//EABQQAQAAAAAAAAAAAAAAAAAAAAD/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8AiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/Z"
   );
+  const [pause, setPause] = useState<any[]>([false]);
   const RemoveSelectedMedia = () => {
     setMedia((prev) => prev.filter((e) => e !== value));
   };
@@ -35,6 +37,15 @@ export function SelectedMedia({
       }
     }
   };
+  const pauseFunction = () => {
+    if (!pause[1]) {
+      setPause([true, value]);
+    } else if (pause[1] == value) {
+      setPause([false]);
+    } else if (pause[1] !== value && pause[1]) {
+      setPause([true, value]);
+    }
+  };
   useEffect(() => {
     generateThumbnail();
   }, []);
@@ -45,8 +56,34 @@ export function SelectedMedia({
         flexDirection: "row",
         flexWrap: "wrap",
         position: "relative",
+        // backgroundColor: "green",
       }}
     >
+      {value.slice(-4) == ".mp4" && (
+        <Pressable
+          onPress={() => pauseFunction()}
+          style={{
+            position: "absolute",
+            // top: 160,
+            shadowColor: "black",
+            shadowOpacity: 50,
+            shadowOffset: { height: 10, width: 10 },
+            shadowRadius: 50,
+            zIndex: 60,
+            justifyContent: "center",
+            alignSelf: "center",
+            // left: width * 0.45,
+            left: "45%",
+            // verticalAlign: "center",
+          }}
+        >
+          {pause[0] && pause[1] == value ? (
+            <AntDesign name="pause" size={24} color="white" />
+          ) : (
+            <AntDesign name="caretright" size={24} color="white" />
+          )}
+        </Pressable>
+      )}
       {value.slice(-4) == ".jpg" ? (
         <Image
           style={{
@@ -65,7 +102,7 @@ export function SelectedMedia({
           posterSource={{
             uri: thumnail,
           }}
-          shouldPlay={false}
+          shouldPlay={pause[1] == value && pause[0]}
           isMuted={false}
           style={{
             height:
@@ -82,9 +119,10 @@ export function SelectedMedia({
           source={{ uri: value }}
           resizeMode={ResizeMode.CONTAIN}
           usePoster={true}
-          isLooping={false}
+          isLooping={true}
         />
       )}
+
       <Pressable
         onPress={() => RemoveSelectedMedia()}
         style={{

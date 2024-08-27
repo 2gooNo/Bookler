@@ -105,15 +105,13 @@ export function CreatePost({ navigation }: { navigation: any }) {
             )}
           </View>
 
-          <View style={styles.contentContainer}>
-            <KeyboardAwareScrollView
-              // automaticallyAdjustKeyboardInsets={true}
-              style={{ flex: 1, width: "100%" }} // Use flex instead of a fixed height
-              contentContainerStyle={{ flexGrow: 1 }} // Ensure the content grows within the scrollview
-              enableOnAndroid={true} // Enable keyboard-aware scrolling on Android
-              extraScrollHeight={20}
-            >
-              {/* Remove the nested ScrollView */}
+          <KeyboardAwareScrollView
+            style={{ flex: 1, width: "100%" }}
+            contentContainerStyle={{ flexGrow: 1 }}
+            enableOnAndroid={true}
+            extraScrollHeight={20}
+          >
+            <View style={styles.contentContainer}>
               {selectedBook.id && (
                 <CreatePostBookCard navigation={navigation} />
               )}
@@ -124,7 +122,6 @@ export function CreatePost({ navigation }: { navigation: any }) {
                   flexDirection: "row",
                   flexWrap: "wrap",
                   width: "100%",
-                  backgroundColor: "purple",
                 }}
               >
                 {media[0] &&
@@ -133,8 +130,9 @@ export function CreatePost({ navigation }: { navigation: any }) {
                   ))}
               </View>
               <BodyTextInput />
-            </KeyboardAwareScrollView>
-          </View>
+            </View>
+          </KeyboardAwareScrollView>
+
           <View
             style={{
               ...styles.footer,
@@ -264,6 +262,8 @@ const styles = StyleSheet.create({
   contentContainer: {
     paddingVertical: 10,
     flex: 1,
+    flexDirection: "column",
+    gap: 10,
   },
   footer: {
     backgroundColor: "#0d0c0c",

@@ -138,7 +138,6 @@ export function PostCard({
               color: "white",
               fontSize: 18,
               fontWeight: "500",
-              backgroundColor: "green",
             }}
           >
             {item?.post?.[0]?.title}
@@ -160,9 +159,7 @@ export function PostCard({
         )}
 
         {item?.post?.[0]?.bodyText && (
-          <Text style={{ color: "white", backgroundColor: "yellow" }}>
-            {item?.post?.[0]?.bodyText}
-          </Text>
+          <Text style={{ color: "white" }}>{item?.post?.[0]?.bodyText}</Text>
         )}
         {item?.post?.[0]?.media?.[0] && (
           <Swiper

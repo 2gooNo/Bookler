@@ -108,7 +108,6 @@ export default function HashTagSelect({ setIsVisible, setScrolling }: any) {
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
-            // backgroundColor: "green",
             width: "65%",
             alignSelf: "flex-end",
           }}
@@ -167,7 +166,6 @@ export default function HashTagSelect({ setIsVisible, setScrolling }: any) {
           contentContainerStyle={{
             flexDirection: "row",
             gap: 5,
-            backgroundColor: "green",
             width: 1000,
             // overflow: "hidden",
             alignItems: "flex-start",

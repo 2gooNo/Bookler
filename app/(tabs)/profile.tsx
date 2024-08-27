@@ -16,12 +16,14 @@ import { useNavigation } from "expo-router";
 import { useRoute } from "@react-navigation/native";
 import CalendarIcon from "@/assets/images/CalendarIcon";
 import { BookPosts } from "@/components/subComponents/BookPosts";
+import { ScrollView } from "react-native-gesture-handler";
+import { ProfilePosts } from "@/components/subComponents/ProfilePosts";
 
 export function Profile({ navigation }: { navigation: any }) {
   const { userData } = useContext(AuthContext);
-  const [isEn, setIsEn] = useState(
-    userData?.defaultLang == "en" ? true : false
-  );
+  // const [isEn, setIsEn] = useState(
+  //   userData?.defaultLang == "en" ? true : false
+  // );
   const { onLogout } = useContext(AuthContext);
   const date = userData?.birthDate.toDate();
   const formattedDate = date?.toLocaleString();
@@ -56,7 +58,7 @@ export function Profile({ navigation }: { navigation: any }) {
   }
 
   return (
-    <View style={styles.allContainer}>
+    <ScrollView contentContainerStyle={styles.allContainer}>
       {userData?.banner ? (
         <Image style={styles.banner} source={{ uri: userData?.banner }} />
       ) : (
@@ -167,8 +169,8 @@ export function Profile({ navigation }: { navigation: any }) {
           </Text>
         </Pressable>
       </View>
-      <BookPosts userId={userData?.userId} />
-    </View>
+      <ProfilePosts userId={userData?.userId} navigation={navigation} />
+    </ScrollView>
   );
 }
 

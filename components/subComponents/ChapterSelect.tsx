@@ -101,17 +101,18 @@ function ChapterCard({ chapter, index }: { chapter: string; index: number }) {
         setSelectedChapter({ name: "", number: null });
       } else if (index == 0) {
         setSelectedChapter({ name: chapter, number: 69 });
-      } else if (chapter) {
+      } else {
         console.log(selectedChapter, chapter, index);
         setSelectedChapter({ name: chapter, number: index });
       }
     }, 300),
     [selectedChapter, index]
   );
-
+  console.log(selectedChapter, "ypu fu kcer");
   return (
     <Pressable
       onPress={() => {
+        selectChapter();
         console.log(index, chapter);
       }}
       style={{

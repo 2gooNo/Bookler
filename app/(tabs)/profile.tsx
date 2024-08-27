@@ -10,13 +10,13 @@ import {
   Text,
   Pressable,
   Image,
+  ScrollView
 } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useNavigation } from "expo-router";
 import { useRoute } from "@react-navigation/native";
 import CalendarIcon from "@/assets/images/CalendarIcon";
 import { BookPosts } from "@/components/subComponents/BookPosts";
-import { ScrollView } from "react-native-gesture-handler";
 import { ProfilePosts } from "@/components/subComponents/ProfilePosts";
 
 export function Profile({ navigation }: { navigation: any }) {
@@ -169,8 +169,10 @@ export function Profile({ navigation }: { navigation: any }) {
           </Text>
         </Pressable>
       </View>
+
       <ProfilePosts userId={userData?.userId} navigation={navigation} />
     </ScrollView>
+
   );
 }
 

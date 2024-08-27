@@ -14,6 +14,7 @@ import { db } from "@/common";
 import { PostCard } from "./PostCard";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { number } from "yup";
+import { PostBottomSheet } from "./PostBottomSheet";
 
 export function BookPosts({ navigation, chapter, bookId }: any) {
   const [posts, setPosts] = useState<any[]>([]);
@@ -109,22 +110,7 @@ export function BookPosts({ navigation, chapter, bookId }: any) {
   }, [chapter]);
   console.log(posts, ":))", bookId, chapter, typeof chapter);
   return (
-    // <FlatList
-    //   showsVerticalScrollIndicator={false}
-    //   showsHorizontalScrollIndicator={false}
-    //   // onEndReached={() => getPostsAndUserInfo()}
-    //   onEndReachedThreshold={0.5}
 
-    //   data={posts}
-    //   renderItem={({ item }) => (
-    //     <PostCard
-    //       item={item}
-    //       bottomSheetRef={bottomSheetRef}
-    //       navigation={navigation}
-    //     />
-    //   )}
-    //   ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-    // />
     <View
       style={{
         gap: 10,
@@ -139,6 +125,11 @@ export function BookPosts({ navigation, chapter, bookId }: any) {
           navigation={navigation}
         />
       ))}
+ <PostBottomSheet
+        bottomSheetRef={bottomSheetRef}
+        handleSheetChanges={handleSheetChanges}
+        navigation={navigation}
+      />
     </View>
   );
 }

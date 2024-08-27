@@ -35,6 +35,7 @@ export function ProfilePosts({ navigation, userId }: any) {
   }, []);
 
   const getPostsAndUserInfo = async () => {
+    console.log(userId, "-0-");
     const q = query(
       collection(db, "posts"),
       where("userId", "==", userId),
@@ -99,6 +100,7 @@ export function ProfilePosts({ navigation, userId }: any) {
   console.log(posts, ":))");
   useEffect(() => {
     getPostsAndUserInfo();
+    console.log("what");
   }, []);
   console.log("+++", userId);
   return (

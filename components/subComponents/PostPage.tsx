@@ -17,6 +17,7 @@ import { db } from "@/common";
 import { PostCard } from "./PostCard";
 import { PostOptions } from "./PostOptions";
 import BottomSheet from "@gorhom/bottom-sheet";
+import { PostBottomSheet } from "./PostBottomSheet";
 
 export function PostPage({ navigation }: { navigation: any }) {
   const [posts, setPosts] = useState<any[]>([]);
@@ -145,7 +146,12 @@ export function PostPage({ navigation }: { navigation: any }) {
         </View>
       </PanGestureHandler>
 
-      <BottomSheet
+      <PostBottomSheet
+        bottomSheetRef={bottomSheetRef}
+        handleSheetChanges={handleSheetChanges}
+        navigation={navigation}
+      />
+      {/* <BottomSheet 
         snapPoints={[400, 230]}
         onChange={handleSheetChanges}
         ref={bottomSheetRef}
@@ -170,7 +176,7 @@ export function PostPage({ navigation }: { navigation: any }) {
         }
       >
         <PostOptions />
-      </BottomSheet>
+      </BottomSheet> */}
     </GestureHandlerRootView>
   );
 }

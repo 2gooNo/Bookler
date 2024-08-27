@@ -12,6 +12,8 @@ import {
   onSnapshot,
   query,
   serverTimestamp,
+  startAfter,
+  where,
 } from "firebase/firestore";
 import { useContext, useEffect, useRef, useState } from "react";
 import {
@@ -42,7 +44,10 @@ export default function CommentPage({ navigation }: any) {
 
   const getComments = async () => {
     if (typeof postId === "string" && !Array.isArray(postId)) {
-      const q = query(collection(db, "posts", postId, "comments"));
+      const q = query(
+        collection(db, "posts", postId, "comments"),
+        where("userId", "!=", null)
+      );
 
       onSnapshot(q, async (snapshot) => {
         const commentPromises = snapshot.docs.map(async (commentDoc) => {
@@ -114,7 +119,7 @@ export default function CommentPage({ navigation }: any) {
       setComments([]);
     }
   };
-
+  console.log(comments);
   const createComment = async () => {
     if (typeof postId === "string" && !Array.isArray(postId)) {
       try {

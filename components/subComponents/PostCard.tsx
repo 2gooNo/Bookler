@@ -131,38 +131,63 @@ export function PostCard({
           <Entypo name="dots-three-horizontal" size={24} color="white" />
         </Pressable>
       </View>
-      {item?.post?.[0]?.title && (
-        <Text style={{ color: "white" }}>{item?.post?.[0]?.title || ""}</Text>
-      )}
-      {item?.post?.[0]?.link && (
-        <Pressable onPress={handlePress}>
-          <Text style={{ color: "blue" }}>{item?.post?.[0]?.link}</Text>
-        </Pressable>
-      )}
-      {item?.post?.[0]?.bodytext && <Text>{item?.post?.[0]?.bodytext}</Text>}
-      {item?.post?.[0]?.media?.[0] && (
-        <Swiper
-          showsButtons={true}
-          style={{ backgroundColor: "transparent", borderRadius: 10 }}
-          loop={false}
-          index={0}
-          height={300}
-        >
-          {item?.post?.[0]?.media?.map((media: any, index: number) => (
-            <PostCardMedia key={index} media={media} />
-          ))}
-        </Swiper>
-      )}
+      <View style={{ flexDirection: "column", gap: 10 }}>
+        {item?.post?.[0]?.title && (
+          <Text
+            style={{
+              color: "white",
+              fontSize: 18,
+              fontWeight: "500",
+              backgroundColor: "green",
+            }}
+          >
+            {item?.post?.[0]?.title}
+          </Text>
+        )}
+        {item?.post?.[0]?.link && (
+          <Pressable
+            onPress={handlePress}
+            style={{
+              paddingHorizontal: 10,
+              paddingVertical: 6,
+              borderColor: "grey",
+              borderWidth: 0.5,
+              borderRadius: 50,
+            }}
+          >
+            <Text style={{ color: "white" }}>{item?.post?.[0]?.link}</Text>
+          </Pressable>
+        )}
 
-      {item?.post?.[0]?.tags && (
-        <View style={{ flexDirection: "row", gap: 10 }}>
-          {item?.post?.[0]?.tags.map((hashtag: any, index: number) => (
-            <Pressable key={index}>
-              <Text style={{ color: "#d3d3d3" }}>#{hashtag.tagName}</Text>
-            </Pressable>
-          ))}
-        </View>
-      )}
+        {item?.post?.[0]?.bodyText && (
+          <Text style={{ color: "white", backgroundColor: "yellow" }}>
+            {item?.post?.[0]?.bodyText}
+          </Text>
+        )}
+        {item?.post?.[0]?.media?.[0] && (
+          <Swiper
+            showsButtons={true}
+            style={{ backgroundColor: "transparent", borderRadius: 10 }}
+            loop={false}
+            index={0}
+            height={300}
+          >
+            {item?.post?.[0]?.media?.map((media: any, index: number) => (
+              <PostCardMedia key={index} media={media} />
+            ))}
+          </Swiper>
+        )}
+
+        {item?.post?.[0]?.tags && (
+          <View style={{ flexDirection: "row", gap: 10 }}>
+            {item?.post?.[0]?.tags.map((hashtag: any, index: number) => (
+              <Pressable key={index}>
+                <Text style={{ color: "#d3d3d3" }}>#{hashtag.tagName}</Text>
+              </Pressable>
+            ))}
+          </View>
+        )}
+      </View>
       <View
         style={{
           borderBottomColor: "black",

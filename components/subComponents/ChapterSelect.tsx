@@ -1,9 +1,10 @@
 import { CreatePostContext } from "@/context/createPostContext";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/common";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import debounce from "lodash/debounce";
 
 export function ChapterSelect({ navigation }: any) {
   const { setSelectedChapter, selectedBook, selectedChapter } =
@@ -86,23 +87,34 @@ export function ChapterSelect({ navigation }: any) {
 }
 
 function ChapterCard({ chapter, index }: { chapter: string; index: number }) {
-  const { setSelectedChapter, selectedBook, selectedChapter } =
-    useContext(CreatePostContext);
-  const selectChapter = () => {
-    if (selectedChapter.number == index) {
-      setSelectedChapter({ name: "", number: null });
-    } else {
-      setSelectedChapter({ name: chapter, number: index });
-    }
-  };
+  const { setSelectedChapter, selectedChapter } = useContext(CreatePostContext);
+  const selectChapter = useCallback(
+    debounce(() => {
+      console.log(
+        selectedChapter,
+        selectedChapter.number,
+        index,
+        selectedChapter.number
+      );
+      if (selectedChapter.number === index) {
+        console.log(selectedChapter);
+        setSelectedChapter({ name: "", number: null });
+      } else if (index == 0) {
+        setSelectedChapter({ name: chapter, number: 69 });
+      } else if (chapter) {
+        console.log(selectedChapter, chapter, index);
+        setSelectedChapter({ name: chapter, number: index });
+      }
+    }, 300),
+    [selectedChapter, index]
+  );
+
   return (
     <Pressable
-      onPress={() => selectChapter()}
+      onPress={() => {
+        console.log(index, chapter);
+      }}
       style={{
-        // backgroundColor:
-        // selectedChapter.number == index ? "grey" : "transparent",
-        // borderTopColor: "lightgrey",
-        // borderTopWidth: 0.5,
         paddingVertical: 5,
         flexDirection: "row",
         justifyContent: "flex-start",
@@ -111,14 +123,7 @@ function ChapterCard({ chapter, index }: { chapter: string; index: number }) {
         marginBottom: 10,
       }}
     >
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          gap: 10,
-          height: "100%",
-        }}
-      >
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
         <Text
           style={{
             color: "white",
@@ -127,7 +132,7 @@ function ChapterCard({ chapter, index }: { chapter: string; index: number }) {
             textAlign: "center",
           }}
         >
-          {index}
+          {index + 1}
         </Text>
         <View
           style={{
@@ -136,16 +141,11 @@ function ChapterCard({ chapter, index }: { chapter: string; index: number }) {
             backgroundColor: "white",
             marginLeft: 1,
           }}
-        ></View>
+        />
         <Text style={{ color: "white", fontSize: 16 }}>{chapter}</Text>
       </View>
-      {selectedChapter.number == index && (
-        <AntDesign
-          name="check"
-          size={20}
-          color="#1DA1F2"
-          style={{ textAlignVertical: "bottom" }}
-        />
+      {selectedChapter.number === index && (
+        <AntDesign name="check" size={20} color="#1DA1F2" />
       )}
     </Pressable>
   );

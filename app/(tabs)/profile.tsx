@@ -30,7 +30,7 @@ export function Profile({ navigation }: { navigation: any }) {
   const numberMonth = formattedDate?.split(",")[0]?.split(".")[1];
   function stringMonth() {
     if (numberMonth == "01") {
-      return "January";
+      return "Нэгдүгээр сард";
     } else if (numberMonth == "02") {
       return "February";
     } else if (numberMonth == "03") {
@@ -138,7 +138,7 @@ export function Profile({ navigation }: { navigation: any }) {
                 color: "rgb(113, 118, 123)",
               }}
             >
-              {year} {stringMonth()}-д төрсөн
+              {year} {stringMonth()} төрсөн
             </Text>
           </View>
         </View>
@@ -170,9 +170,10 @@ export function Profile({ navigation }: { navigation: any }) {
             Гарах
           </Text>
         </Pressable>
+        <ProfilePosts userId={userData?.userId} navigation={navigation} />
       </View>
       {/* <View style={{ backgroundColor: "red" }}> */}
-      <ProfilePosts userId={userData?.userId} navigation={navigation} />
+
       {/* </View> */}
     </ScrollView>
   );

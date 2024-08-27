@@ -10,7 +10,7 @@ import {
   Text,
   Pressable,
   Image,
-  ScrollView
+  ScrollView,
 } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useNavigation } from "expo-router";
@@ -58,7 +58,10 @@ export function Profile({ navigation }: { navigation: any }) {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.allContainer}>
+    <ScrollView
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={styles.allContainer}
+    >
       {userData?.banner ? (
         <Image style={styles.banner} source={{ uri: userData?.banner }} />
       ) : (
@@ -172,7 +175,6 @@ export function Profile({ navigation }: { navigation: any }) {
 
       <ProfilePosts userId={userData?.userId} navigation={navigation} />
     </ScrollView>
-
   );
 }
 

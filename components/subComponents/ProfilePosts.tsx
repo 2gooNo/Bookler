@@ -104,25 +104,33 @@ export function ProfilePosts({ navigation, userId }: any) {
   }, []);
   console.log("+++", userId);
   return (
-    <FlatList
-      showsVerticalScrollIndicator={false}
-      showsHorizontalScrollIndicator={false}
-      //   onEndReached={() => getPostsAndUserInfo()}
-      onEndReachedThreshold={0.5}
+    // <FlatList
+    //   showsVerticalScrollIndicator={false}
+
+    //   //   onEndReached={() => getPostsAndUserInfo()}
+    //   onEndReachedThreshold={0.5}
+
+    //   data={posts}
+    //   renderItem={({ item }) => (
+
+    //   )}
+    //   ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+    // />
+    <View
       style={{
         gap: 10,
         width: "100%",
-        height: "100%",
       }}
-      data={posts}
-      renderItem={({ item }) => (
-        <PostCard
-          item={item}
-          bottomSheetRef={bottomSheetRef}
-          navigation={navigation}
-        />
-      )}
-      ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-    />
+    >
+      {posts?.map((item) => {
+        return (
+          <PostCard
+            item={item}
+            bottomSheetRef={bottomSheetRef}
+            navigation={navigation}
+          />
+        );
+      })}
+    </View>
   );
 }

@@ -15,6 +15,7 @@ import { PostCard } from "./PostCard";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { number } from "yup";
 import { PostBottomSheet } from "./PostBottomSheet";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export function BookPosts({ navigation, chapter, bookId }: any) {
   const [posts, setPosts] = useState<any[]>([]);
@@ -110,26 +111,27 @@ export function BookPosts({ navigation, chapter, bookId }: any) {
   }, [chapter]);
   console.log(posts, ":))", bookId, chapter, typeof chapter);
   return (
-
-    <View
-      style={{
-        gap: 10,
-        height: "100%",
-      }}
-    >
-      {posts?.map((item, index) => (
-        <PostCard
-          key={index}
-          item={item}
+    <GestureHandlerRootView>
+      <View
+        style={{
+          gap: 10,
+          height: "100%",
+        }}
+      >
+        {posts?.map((item, index) => (
+          <PostCard
+            key={index}
+            item={item}
+            bottomSheetRef={bottomSheetRef}
+            navigation={navigation}
+          />
+        ))}
+        <PostBottomSheet
           bottomSheetRef={bottomSheetRef}
+          handleSheetChanges={handleSheetChanges}
           navigation={navigation}
         />
-      ))}
- <PostBottomSheet
-        bottomSheetRef={bottomSheetRef}
-        handleSheetChanges={handleSheetChanges}
-        navigation={navigation}
-      />
-    </View>
+      </View>
+    </GestureHandlerRootView>
   );
 }

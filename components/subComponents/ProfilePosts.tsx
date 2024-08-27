@@ -103,6 +103,8 @@ export function ProfilePosts({ navigation, userId }: any) {
     console.log("what");
   }, []);
   console.log("+++", userId);
+  console.log("+", posts);
+
   return (
     // <FlatList
     //   showsVerticalScrollIndicator={false}
@@ -122,15 +124,14 @@ export function ProfilePosts({ navigation, userId }: any) {
         width: "100%",
       }}
     >
-      {posts?.map((item) => {
-        return (
-          <PostCard
-            item={item}
-            bottomSheetRef={bottomSheetRef}
-            navigation={navigation}
-          />
-        );
-      })}
+      {posts?.map((item, index) => (
+        <PostCard
+          key={index}
+          item={item}
+          bottomSheetRef={bottomSheetRef}
+          navigation={navigation}
+        />
+      ))}
     </View>
   );
 }

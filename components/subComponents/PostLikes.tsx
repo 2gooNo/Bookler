@@ -54,7 +54,7 @@ export function PostLikes({ item }: any) {
 
   useEffect(() => {
     if (item) {
-      item?.likes.forEach((like: any) => {
+      item?.likes?.forEach((like: any) => {
         if (like?.data?.likedBy == userData.userId && like?.data?.type) {
           console.log("--", like?.data?.type);
           setInteracted(like?.data?.type);

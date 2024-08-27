@@ -35,7 +35,7 @@ export function PostCard({
   };
 
   if (!item) return;
-  console.log(item);
+  console.log(item, "+++++++++++++++++");
   return (
     <GestureHandlerRootView
       style={{
@@ -143,7 +143,6 @@ export function PostCard({
               // backgroundColor: "green",
               width: "100%",
               // flexGrow: 1,
-
             }}
           >
             {item?.post?.[0]?.title}

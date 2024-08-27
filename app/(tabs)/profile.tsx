@@ -16,6 +16,7 @@ import { useNavigation } from "expo-router";
 import { useRoute } from "@react-navigation/native";
 import CalendarIcon from "@/assets/images/CalendarIcon";
 import { BookPosts } from "@/components/subComponents/BookPosts";
+import { ProfilePosts } from "@/components/subComponents/ProfilePosts";
 
 export function Profile({ navigation }: { navigation: any }) {
   const { userData } = useContext(AuthContext);
@@ -167,7 +168,7 @@ export function Profile({ navigation }: { navigation: any }) {
           </Text>
         </Pressable>
       </View>
-      <BookPosts userId={userData?.userId} />
+      <ProfilePosts userId={userData?.userId} />
     </View>
   );
 }

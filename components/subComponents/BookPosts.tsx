@@ -14,6 +14,7 @@ import { db } from "@/common";
 import { PostCard } from "./PostCard";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { number } from "yup";
+import { PostBottomSheet } from "./PostBottomSheet";
 
 export function BookPosts({ navigation, chapter, bookId }: any) {
   const [posts, setPosts] = useState<any[]>([]);
@@ -104,26 +105,33 @@ export function BookPosts({ navigation, chapter, bookId }: any) {
     getPostsAndUserInfo();
   }, []);
   return (
-    <FlatList
-      showsVerticalScrollIndicator={false}
-      showsHorizontalScrollIndicator={false}
-      // onEndReached={() => getPostsAndUserInfo()}
-      onEndReachedThreshold={0.5}
-      style={{
-        gap: 10,
-        backgroundColor: "green",
-        width: "100%",
-        height: "100%",
-      }}
-      data={posts}
-      renderItem={({ item }) => (
-        <PostCard
-          item={item}
-          bottomSheetRef={bottomSheetRef}
-          navigation={navigation}
-        />
-      )}
-      ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-    />
+    <View>
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        // onEndReached={() => getPostsAndUserInfo()}
+        onEndReachedThreshold={0.5}
+        style={{
+          gap: 10,
+          backgroundColor: "green",
+          width: "100%",
+          height: "100%",
+        }}
+        data={posts}
+        renderItem={({ item }) => (
+          <PostCard
+            item={item}
+            bottomSheetRef={bottomSheetRef}
+            navigation={navigation}
+          />
+        )}
+        ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+      />
+      <PostBottomSheet
+        bottomSheetRef={bottomSheetRef}
+        handleSheetChanges={handleSheetChanges}
+        navigation={navigation}
+      />
+    </View>
   );
 }

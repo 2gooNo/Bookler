@@ -114,7 +114,7 @@ export function CreatePost({ navigation }: { navigation: any }) {
               extraScrollHeight={20}
             >
               {/* Remove the nested ScrollView */}
-              {(selectedBook.id || selectedChapter.number) && (
+              {selectedBook.id && (
                 <CreatePostBookCard navigation={navigation} />
               )}
               <TitleInput />

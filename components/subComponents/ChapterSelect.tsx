@@ -99,11 +99,9 @@ function ChapterCard({ chapter, index }: { chapter: string; index: number }) {
       if (selectedChapter.number === index) {
         console.log(selectedChapter);
         setSelectedChapter({ name: "", number: null });
-      } else if (index == 0) {
-        setSelectedChapter({ name: chapter, number: 69 });
       } else if (chapter) {
         console.log(selectedChapter, chapter, index);
-        setSelectedChapter({ name: chapter, number: index });
+        setSelectedChapter({ name: chapter, number: index + 1 });
       }
     }, 300),
     [selectedChapter, index]
@@ -112,6 +110,7 @@ function ChapterCard({ chapter, index }: { chapter: string; index: number }) {
   return (
     <Pressable
       onPress={() => {
+        selectChapter();
         console.log(index, chapter);
       }}
       style={{
@@ -144,7 +143,7 @@ function ChapterCard({ chapter, index }: { chapter: string; index: number }) {
         />
         <Text style={{ color: "white", fontSize: 16 }}>{chapter}</Text>
       </View>
-      {selectedChapter.number === index && (
+      {selectedChapter?.number && selectedChapter?.number - 1 === index && (
         <AntDesign name="check" size={20} color="#1DA1F2" />
       )}
     </Pressable>

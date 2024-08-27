@@ -24,25 +24,21 @@ export function SelectedMedia({
   console.log(media.length - 1);
   console.log(index % 2 == 0, index);
   const generateThumbnail = async () => {
-    try {
-      if (value.slice(-4) !== ".jpg") {
+    if (value.slice(-4) !== ".jpg") {
+      try {
         const { uri } = await VideoThumbnails.getThumbnailAsync(value, {
           time: 500,
         });
         setThumnail(uri);
+      } catch (e) {
+        console.warn(e);
       }
-    } catch (e) {
-      console.warn(e);
     }
   };
   useEffect(() => {
     generateThumbnail();
   }, []);
-  console.log(
-    index == 0,
-    index % 2 == 0 && media.length - 1 == index,
-    media.length == 2
-  );
+  console.log(index == 0, index % 2 == 0 && media.length - 1 == index, value);
   return (
     <View
       style={{

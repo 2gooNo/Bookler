@@ -70,7 +70,11 @@ export function CreatePostButton() {
 
       const uploadedMedia = await mediaUploader(media);
 
-      if (tags.length == selectedTags.length && uploadedMedia) {
+      if (
+        tags.length == selectedTags.length &&
+        uploadedMedia &&
+        selectedChapter?.number
+      ) {
         const docRef = await addDoc(collection(db, "posts"), {
           userId: user.uid,
           userRef: doc(db, "users", user.uid),
@@ -80,7 +84,10 @@ export function CreatePostButton() {
           tags: tags,
           link: linkUrl,
           createdAt: serverTimestamp(),
-          chapter: selectedChapter,
+          chapter: {
+            name: selectedChapter.name,
+            number: selectedChapter?.number - 1,
+          },
           book: selectedBook,
         });
         const likesCollectionRef = collection(
@@ -118,9 +125,25 @@ export function CreatePostButton() {
     const docSnap = await getDoc(docRef);
   };
   return (
-    <Pressable onPress={() => CreatePost()} style={{ backgroundColor: "pink" }}>
-      <Text style={{ color: "white" }}>
-        {homeTranslation?.[lang]?.["post"]}post
+    <Pressable
+      onPress={() => CreatePost()}
+      style={{
+        backgroundColor: "#1DA1F2",
+        borderRadius: 25,
+        paddingVertical: 5,
+        alignItems: "center",
+        justifyContent: "center",
+        paddingHorizontal: 15,
+      }}
+    >
+      <Text
+        style={{
+          color: "#e8e3e0",
+          fontSize: 15,
+          fontWeight: "bold",
+        }}
+      >
+        {homeTranslation?.[lang]?.["post"]}
       </Text>
     </Pressable>
   );

@@ -15,7 +15,7 @@ import { PostCard } from "./PostCard";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { sortBy } from "lodash";
 
-export function BookPosts({ navigation, userId }: any) {
+export function ProfilePosts({ navigation, userId }: any) {
   const [posts, setPosts] = useState<any[]>([]);
   const bottomSheetRef = useRef<BottomSheet>(null);
   const handleSheetChanges = useCallback((index: number) => {
@@ -35,6 +35,7 @@ export function BookPosts({ navigation, userId }: any) {
   }, []);
 
   const getPostsAndUserInfo = async () => {
+    console.log(userId, "-0-");
     const q = query(
       collection(db, "posts"),
       where("userId", "==", userId),
@@ -99,6 +100,7 @@ export function BookPosts({ navigation, userId }: any) {
   console.log(posts, ":))");
   useEffect(() => {
     getPostsAndUserInfo();
+    console.log("what");
   }, []);
   return (
     <FlatList

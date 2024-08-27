@@ -96,7 +96,7 @@ function ChapterCard({ chapter, index }: { chapter: string; index: number }) {
         index,
         selectedChapter.number
       );
-      if (selectedChapter.number === index) {
+      if (selectedChapter?.number - 1 === index) {
         console.log(selectedChapter);
         setSelectedChapter({ name: "", number: null });
       } else if (chapter) {

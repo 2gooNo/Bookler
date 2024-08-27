@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Dimensions,
   StyleSheet,
@@ -15,9 +15,13 @@ import BackIcon from "@/assets/images/BackIcon";
 import CalendarIcon from "@/assets/images/CalendarIcon";
 import { BookPosts } from "@/components/subComponents/BookPosts";
 import { ProfilePosts } from "@/components/subComponents/ProfilePosts";
+import { AuthContext } from "@/context/authContext";
+import { BlockedUser } from "@/components/subComponents/BlockedUser";
+import { ProfileFollow } from "@/components/subComponents/ProflieFollow";
 
 export default function Profile({ navigation }: any) {
   const { userId } = useLocalSearchParams();
+  const { userData: user } = useContext(AuthContext);
   const [userData, setUserData] = useState<any>();
   const date = userData?.birthDate.toDate();
   const formattedDate = date?.toLocaleString();
@@ -61,7 +65,18 @@ export default function Profile({ navigation }: any) {
   useEffect(() => {
     UserFetch();
   }, []);
-
+  if (
+    // user?.blockedUsers.includes(userId) ||
+    // userData?.blockedUsers.includes(user?.userId)
+    user
+  ) {
+    return (
+      <BlockedUser
+        userId={userId}
+        youBlocked={user?.blockedUsers.includes(userId) ? true : false}
+      />
+    );
+  }
   return (
     <View style={styles.allContainer}>
       {userData?.banner ? (
@@ -93,6 +108,7 @@ export default function Profile({ navigation }: any) {
           ) : (
             <View style={styles.profileImg}></View>
           )}
+          <ProfileFollow userId={userId} otherUser={user} />
         </View>
         <View style={{ gap: 8 }}>
           <Text

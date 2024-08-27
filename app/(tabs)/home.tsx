@@ -14,7 +14,7 @@ import { LangContext } from "@/context/langContext";
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
 import { PostPage } from "@/components/subComponents/PostPage";
-import { FollowingPost } from "@/components/subComponents/FollowingPost";
+import { FollowingPosts } from "@/components/subComponents/FollowingPost";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 const CustomHeaderTitle = ({ navigation, index }: any) => {
@@ -78,7 +78,7 @@ export default function HomeStackScreen() {
 
       <HomeStack.Screen
         name="Following"
-        component={FollowingPost}
+        component={FollowingPosts}
         options={({ navigation }) => ({
           gestureEnabled: true,
           gestureDirection: "horizontal",

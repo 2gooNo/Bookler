@@ -3,6 +3,7 @@ import { auth, db } from "@/common";
 import { useContext } from "react";
 import { PostContext } from "@/context/postContext";
 import {
+  arrayRemove,
   arrayUnion,
   collection,
   deleteDoc,
@@ -46,6 +47,10 @@ export function PostOptions() {
       const d = doc(db, "users", auth?.currentUser?.uid);
       await updateDoc(d, {
         blockedUsers: arrayUnion(currentPostData?.user?.userId),
+      });
+      const docFriend = doc(db, "users", auth?.currentUser?.uid);
+      await updateDoc(docFriend, {
+        following: arrayRemove(currentPostData?.user?.userId),
       });
     }
   };

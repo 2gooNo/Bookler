@@ -56,6 +56,7 @@ export function PasswordConfirm() {
             blockedUsers: [],
             defaultLang: "en",
             colorScheme: "dark",
+            following: [],
           })
         );
         setUser(user);

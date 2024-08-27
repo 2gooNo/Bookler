@@ -88,7 +88,7 @@ export function PostCard({
             <View style={{ flexDirection: "row" }}>
               <Pressable
                 onPress={() =>
-                  router.navigate(`/details/${(item?.post?.[0]?.book?.id, 1)}`)
+                  router.navigate(`/details/${[item?.post?.[0]?.book?.id, 1]}`)
                 }
               >
                 <Text style={{ color: "white" }}>
@@ -106,7 +106,7 @@ export function PostCard({
                 }
               >
                 <Text style={{ color: "white" }}>
-                  / {item?.post?.[0]?.chapter?.number}
+                  / {item?.post?.[0]?.chapter?.number + 1}
                   {item?.post?.[0]?.chapter?.name}
                 </Text>
               </Pressable>

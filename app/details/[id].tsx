@@ -41,9 +41,6 @@ export default function DetailsScreen({ navigation }: any) {
       }
     }
   }
-
-  console.log(bookData?.chapters, "--");
-
   async function UsersFetch() {
     const q = query(
       collection(db, "users"),

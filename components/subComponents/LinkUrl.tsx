@@ -43,11 +43,19 @@ export function LinkUrl() {
         keyboardType="url"
         placeholder="Add a link URL ... "
         style={styles.input}
+        placeholderTextColor={"grey"}
       />
       <Text style={{ display: errorMessage ? "flex" : "none", color: "white" }}>
         {errorMessage ? errorMessage : ""}
       </Text>
-      <Pressable onPress={() => setLinkComponent(false)} style={styles.delete}>
+      <Pressable
+        onPress={() => {
+          setLinkComponent(false);
+          setLocalUrl("");
+          setLinkUrl("");
+        }}
+        style={styles.delete}
+      >
         <FontAwesome6 name="x" size={15} color="black" />
       </Pressable>
     </View>
@@ -76,5 +84,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     width: "95%",
     borderRadius: 5,
+    color: "white",
   },
 });

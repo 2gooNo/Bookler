@@ -13,6 +13,7 @@ import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "@/common";
 import BackIcon from "@/assets/images/BackIcon";
 import CalendarIcon from "@/assets/images/CalendarIcon";
+import { BookPosts } from "@/components/subComponents/BookPosts";
 export default function Profile() {
   const { userId } = useLocalSearchParams();
   const [userData, setUserData] = useState<any>();
@@ -127,6 +128,8 @@ export default function Profile() {
           </View>
         </View>
       </View>
+
+      <BookPosts userId={userId} />
     </View>
   );
 }

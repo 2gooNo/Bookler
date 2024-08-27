@@ -13,11 +13,10 @@ import {
 import { db } from "@/common";
 import { PostCard } from "./PostCard";
 import BottomSheet from "@gorhom/bottom-sheet";
-import { number } from "yup";
+import { sortBy } from "lodash";
 
-export function BookPosts({ navigation, chapter, bookId }: any) {
+export function BookPosts({ navigation, userId }: any) {
   const [posts, setPosts] = useState<any[]>([]);
-  const [lastVisible, setLastVisible] = useState<any>(null);
   const bottomSheetRef = useRef<BottomSheet>(null);
   const handleSheetChanges = useCallback((index: number) => {
     if (index == -1) {
@@ -38,8 +37,8 @@ export function BookPosts({ navigation, chapter, bookId }: any) {
   const getPostsAndUserInfo = async () => {
     const q = query(
       collection(db, "posts"),
-      where("book.id", "==", bookId),
-      where("chapter.number", "==", Number(chapter))
+      where("userId", "==", userId),
+      limit(4)
     );
 
     onSnapshot(q, async (snapshot) => {
@@ -50,8 +49,6 @@ export function BookPosts({ navigation, chapter, bookId }: any) {
           postData?.[0] && typeof postData?.[0] !== "string"
             ? postData?.[0].userRef
             : null;
-
-        setLastVisible(postDoc.id);
 
         let userData = null;
         if (userRef) {
@@ -107,7 +104,7 @@ export function BookPosts({ navigation, chapter, bookId }: any) {
     <FlatList
       showsVerticalScrollIndicator={false}
       showsHorizontalScrollIndicator={false}
-      // onEndReached={() => getPostsAndUserInfo()}
+      //   onEndReached={() => getPostsAndUserInfo()}
       onEndReachedThreshold={0.5}
       style={{
         gap: 10,

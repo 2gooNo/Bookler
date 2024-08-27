@@ -40,7 +40,7 @@ export function BookSelect({ navigation }: any) {
         paddingVertical: 60,
       }}
     >
-      {/* <Text>Post to</Text>
+      <Text>Post to</Text>
       <View style={{ flexDirection: "row" }}>
         <Pressable
           onPress={() => navigation.navigate("CreatePost")}
@@ -68,7 +68,7 @@ export function BookSelect({ navigation }: any) {
         }}
       >
         <Text style={{ color: "grey" }}>More</Text>
-      </Pressable> */}
+      </Pressable>
     </View>
   );
 }

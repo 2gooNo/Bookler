@@ -15,6 +15,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useNavigation } from "expo-router";
 import { useRoute } from "@react-navigation/native";
 import CalendarIcon from "@/assets/images/CalendarIcon";
+import { BookPosts } from "@/components/subComponents/BookPosts";
 
 export function Profile({ navigation }: { navigation: any }) {
   const { userData } = useContext(AuthContext);
@@ -166,6 +167,7 @@ export function Profile({ navigation }: { navigation: any }) {
           </Text>
         </Pressable>
       </View>
+      <BookPosts userId={userData?.userId} />
     </View>
   );
 }

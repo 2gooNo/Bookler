@@ -67,7 +67,7 @@ export function BookCommunities({ navigation }: { navigation: any }) {
       <View style={{ width: "100%", gap: 30 }}>
         {bookData?.map((book: any, index: number) => (
           <Pressable
-            onPress={() => router.navigate(`/details/${book?.[1]}`)}
+            onPress={() => router.navigate(`/details/${[book?.[1], 1]}`)}
             style={{
               width: "100%",
               flexDirection: "row",

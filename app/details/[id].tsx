@@ -22,6 +22,7 @@ import { Image } from "expo-image";
 import BackIcon from "@/assets/images/BackIcon";
 import { JoinCommuinityButton } from "@/components/subComponents/JoinCommuinityButton";
 import { BookSelect } from "@/components/subComponents/BookSelect";
+import { BookPosts } from "@/components/subComponents/BookPosts";
 
 export default function DetailsScreen({ navigation }: any) {
   const { id } = useLocalSearchParams();
@@ -89,7 +90,7 @@ export default function DetailsScreen({ navigation }: any) {
   // }
 
   return (
-    <BookSelect chapter={chapter} bookId={bookId} navigation={navigation} />
+    <BookPosts chapter={chapter} bookId={bookId} navigation={navigation} />
     // <ScrollView style={styles.allContainer}>
     //   <Image style={styles.banner} source={{ uri: bookData?.bookImg }} />
     //   <Pressable

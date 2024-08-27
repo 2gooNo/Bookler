@@ -16,7 +16,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useNavigation } from "expo-router";
 import { useRoute } from "@react-navigation/native";
 import CalendarIcon from "@/assets/images/CalendarIcon";
-import { BookPosts } from "@/components/subComponents/BookPosts";
 import { ProfilePosts } from "@/components/subComponents/ProfilePosts";
 
 export function Profile({ navigation }: { navigation: any }) {
@@ -78,7 +77,7 @@ export function Profile({ navigation }: { navigation: any }) {
         <View
           style={{
             width: "100%",
-            height: "11%",
+            height: 90,
             justifyContent: "space-between",
             flexDirection: "row",
             alignItems: "center",
@@ -172,8 +171,9 @@ export function Profile({ navigation }: { navigation: any }) {
           </Text>
         </Pressable>
       </View>
-
+      {/* <View style={{ backgroundColor: "red" }}> */}
       <ProfilePosts userId={userData?.userId} navigation={navigation} />
+      {/* </View> */}
     </ScrollView>
   );
 }
@@ -181,7 +181,6 @@ export function Profile({ navigation }: { navigation: any }) {
 const styles = StyleSheet.create({
   allContainer: {
     backgroundColor: "black",
-    height: Dimensions.get("window").height,
     width: Dimensions.get("window").width,
     paddingTop: 100,
     paddingLeft: "3%",
@@ -192,7 +191,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     width: "111%",
-    height: "17%",
+    height: 140,
   },
   icon: {
     width: "60%",

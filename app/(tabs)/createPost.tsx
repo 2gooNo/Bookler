@@ -123,6 +123,7 @@ export function CreatePost({ navigation }: { navigation: any }) {
                 <CreatePostBookCard navigation={navigation} />
               )}
               <TitleInput />
+              <BodyTextInput />
               {linkComponent && <LinkUrl />}
               <View
                 style={{
@@ -136,7 +137,6 @@ export function CreatePost({ navigation }: { navigation: any }) {
                     <SelectedMedia value={media} key={index} index={index} />
                   ))}
               </View>
-              <BodyTextInput />
             </View>
           </KeyboardAwareScrollView>
 
@@ -154,12 +154,12 @@ export function CreatePost({ navigation }: { navigation: any }) {
                   justifyContent: "flex-start",
                 }}
               >
-                {selectedTags[0] && (
+                {selectedTags?.[0] && (
                   <View style={styles.tag}>
                     <Ionicons name="add" size={18} color="white" />
                   </View>
                 )}
-                {!selectedTags[0] ? (
+                {!selectedTags?.[0] ? (
                   <View style={styles.tagAdd}>
                     <Text>
                       # Шошго нэмж таны постыг олоход хялбар болгоорой

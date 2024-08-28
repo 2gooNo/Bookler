@@ -68,7 +68,7 @@ export default function Profile({ navigation }: any) {
   }
   useEffect(() => {
     UserFetch();
-  }, []);
+  }, [userId]);
 
   if (
     user?.blockedUsers.includes(userId) ||
@@ -112,8 +112,10 @@ export default function Profile({ navigation }: any) {
           ) : (
             <View style={styles.profileImg}></View>
           )}
-          <ProfileFollow userId={userId} otherUser={userData} />
-          <BlockUserButton blockingUser={userId} />
+          <View style={{ flexDirection: "column" }}>
+            <ProfileFollow userId={userId} otherUser={userData} />
+            <BlockUserButton blockingUser={userId} />
+          </View>
         </View>
         <View style={{ gap: 8 }}>
           <Text
@@ -150,13 +152,12 @@ export default function Profile({ navigation }: any) {
             </Text>
           </View>
         </View>
+        <ProfilePosts
+          userId={userId}
+          navigation={navigation}
+          bottomSheetRef={bottomSheetRef}
+        />
       </View>
-
-      <ProfilePosts
-        userId={userId}
-        navigation={navigation}
-        bottomSheetRef={bottomSheetRef}
-      />
     </View>
   );
 }

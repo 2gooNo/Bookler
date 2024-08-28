@@ -18,7 +18,7 @@ export function BlockUserButton({ blockingUser }: any) {
   };
   return (
     <Pressable onPress={() => blockUser()}>
-      <Text style={{ color: "white" }}>Block user</Text>
+      <Text style={{ color: "white", fontSize: 17 }}>Block user</Text>
     </Pressable>
   );
 }

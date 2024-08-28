@@ -36,6 +36,7 @@ export function ProfilePosts({ navigation, userId, bottomSheetRef }: any) {
   }, []);
 
   const getPostsAndUserInfo = async () => {
+    setPosts([]);
     const q = query(collection(db, "posts"), where("userId", "==", userId));
 
     onSnapshot(q, async (snapshot) => {
@@ -100,7 +101,7 @@ export function ProfilePosts({ navigation, userId, bottomSheetRef }: any) {
 
   useEffect(() => {
     getPostsAndUserInfo();
-  }, []);
+  }, [userId]);
   console.log(userId, "-0-", posts);
   return (
     // <FlatList

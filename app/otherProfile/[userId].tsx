@@ -117,7 +117,7 @@ export default function Profile({ navigation }: any) {
             <BlockUserButton blockingUser={userId} />
           </View>
         </View>
-        <View style={{ gap: 8 }}>
+        <View style={{ gap: 8, marginBottom: 20 }}>
           <Text
             style={{
               fontFamily: "Inherit",
@@ -157,6 +157,7 @@ export default function Profile({ navigation }: any) {
           navigation={navigation}
           bottomSheetRef={bottomSheetRef}
         />
+
       </View>
     </View>
   );

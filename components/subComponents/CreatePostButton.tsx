@@ -4,6 +4,7 @@ import { CreatePostContext } from "@/context/createPostContext";
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   FieldValue,
   getDoc,
@@ -34,6 +35,7 @@ export function CreatePostButton() {
     linkUrl,
     selectedBook,
     selectedChapter,
+    draft,
     setBodyText,
     setMedia,
     setSelectedTags,
@@ -41,6 +43,7 @@ export function CreatePostButton() {
     setLinkUrl,
     setSelectedBook,
     setSelectedChapter,
+    setDraft,
   } = useContext(CreatePostContext);
   const [tags, setTags] = useState<any>([]);
   const CreatePost = async () => {
@@ -67,7 +70,10 @@ export function CreatePostButton() {
           }
         });
       });
-
+      if (draft[1]) {
+        const docRef = doc(db, "drafts", draft[1]);
+        await deleteDoc(docRef);
+      }
       const uploadedMedia = await mediaUploader(media);
 
       if (
@@ -112,6 +118,7 @@ export function CreatePostButton() {
         setLinkUrl("");
         setSelectedChapter({ name: "", number: null });
         setSelectedBook({ id: "", name: "" });
+        setDraft([]);
         router.push("/home");
         // alert("Subcollection document written with ID: ");
       }

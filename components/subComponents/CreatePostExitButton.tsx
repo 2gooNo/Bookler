@@ -23,6 +23,7 @@ export function ExitButton() {
     bodyText,
     linkUrl,
     selectedBook,
+    draft,
     setTakenMedia,
     setBodyText,
     setLinkUrl,
@@ -32,6 +33,7 @@ export function ExitButton() {
     setSelectedTags,
     setLinkComponent,
     setTitle,
+    setDraft,
   } = useContext(CreatePostContext);
   const [modalVisible, setModalVisible] = useState(false);
   console.log(title);
@@ -42,7 +44,8 @@ export function ExitButton() {
       title ||
       bodyText ||
       linkUrl ||
-      selectedBook?.id
+      selectedBook?.id ||
+      draft[1] !== ""
     ) {
       setModalVisible(true);
     } else {
@@ -105,7 +108,7 @@ export function ExitButton() {
             >
               <Text style={styles.textStyle}>Discard</Text>
             </Pressable>
-            <CreateDraftButton />
+            <CreateDraftButton setModalVisible={setModalVisible} />
           </View>
         </View>
         {/* </View> */}

@@ -1,14 +1,17 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 
 import {
   collection,
+  DocumentData,
   getDoc,
+  getDocs,
   limit,
   onSnapshot,
   orderBy,
   query,
   startAfter,
+  where,
 } from "firebase/firestore";
 
 import { PostCard } from "./PostCard";
@@ -18,8 +21,11 @@ import {
   GestureHandlerRootView,
   PanGestureHandler,
 } from "react-native-gesture-handler";
+import { AuthContext } from "@/context/authContext";
+import { db } from "@/common";
 
 export function FollowingPosts({ navigation }: { navigation: any }) {
+  const { userData } = useContext(AuthContext);
   const [posts, setPosts] = useState<any[]>([]);
   const bottomSheetRef = useRef<BottomSheet>(null);
   const handleSheetChanges = useCallback((index: number) => {
@@ -39,108 +45,95 @@ export function FollowingPosts({ navigation }: { navigation: any }) {
   }, []);
 
   const getPostsAndUserInfo = async () => {
-    // const q = lastVisible
-    //   ? query(
-    //       collection(db, "posts"),
-    //       // orderBy("__name__"),
-    //       // startAfter(lastVisible),
-    //       limit(4)
-    //     )
-    //   : query(collection(db, "posts"), limit(4));
-    // onSnapshot(q, async (snapshot) => {
-    //   const postPromises = snapshot.docs.map(async (postDoc) => {
-    //     const postData = [postDoc.data(), postDoc.id];
-    //     const userRef =
-    //       postData?.[0] && typeof postData?.[0] !== "string"
-    //         ? postData?.[0].userRef
-    //         : null;
-    //     setLastVisible(postDoc.id);
-    //     let userData = null;
-    //     if (userRef) {
-    //       const userDoc = await getDoc(userRef);
-    //       if (userDoc.exists()) {
-    //         userData = userDoc.data();
-    //       }
-    //     }
-    //     onSnapshot(
-    //       query(collection(db, "posts", postDoc.id, "likes")),
-    //       (likesSnapshot) => {
-    //         const likes = [] as any[];
-    //         likesSnapshot.forEach((doc) => {
-    //           likes.push({ id: doc.id, data: doc.data() });
-    //         });
-    //         setPosts((prev) => {
-    //           return prev.map((item) => {
-    //             if (item.post[1] === postDoc.id) {
-    //               return {
-    //                 ...item,
-    //                 likes: likes,
-    //               };
-    //             }
-    //             return item;
-    //           });
-    //         });
-    //       }
-    //     );
-    //     return {
-    //       post: postData,
-    //       user: userData,
-    //       likes: [],
-    //     };
-    //   });
-    //   try {
-    //     const results = await Promise.all(postPromises);
-    //     if (results) {
-    //       setPosts((prev) => [...prev, ...results]);
-    //     }
-    //   } catch (error) {}
-    // });
+    console.log("pl");
+    setPosts([]);
+    if (userData?.following[0]) {
+      for (const element of userData?.following || []) {
+        console.log(element);
+
+        const q = query(
+          collection(db, "posts"),
+          where("userId", "==", element)
+        );
+        const querySnapshot = await getDocs(q);
+
+        querySnapshot.forEach(async (doc) => {
+          const postData = [doc.data(), doc.id];
+          const userRef = postData?.[0]?.userRef || null;
+
+          let userData = null;
+          if (userRef) {
+            const userDoc = await getDoc(userRef);
+            if (userDoc.exists()) {
+              userData = userDoc.data();
+            }
+          }
+
+          const unsubscribe = onSnapshot(
+            query(collection(db, "posts", doc.id, "likes")),
+            (likesSnapshot) => {
+              const likes = [] as any[];
+              likesSnapshot.forEach((doc) => {
+                likes.push({ id: doc.id, data: doc.data() });
+              });
+
+              setPosts((prev) => [
+                ...prev,
+                { post: postData, likes: likes, user: userData },
+              ]);
+            }
+          );
+
+          return () => unsubscribe();
+        });
+      }
+    }
   };
   useEffect(() => {
     getPostsAndUserInfo();
   }, []);
-
+  console.log(posts);
   return (
     <GestureHandlerRootView>
-      <View>
-        <View style={{ position: "relative", paddingTop: 10 }}>
-          {/* <Pressable onPress={() => onLogout()}>
+      {/* <View> */}
+      <View style={{ position: "relative", paddingTop: 10, height: "100%" }}>
+        {/* <Pressable onPress={() => onLogout()}>
             <Text style={{ backgroundColor: "blue" }}>
               {homeTranslation?.[lang]?.["logOutBtn"]}
             </Text>
           </Pressable> */}
-          {posts[0] ? (
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={false}
-              onEndReached={() => getPostsAndUserInfo()}
-              onEndReachedThreshold={0.5}
-              style={{ gap: 10 }}
-              data={posts}
-              renderItem={({ item }) => (
-                <PostCard
-                  item={item}
-                  bottomSheetRef={bottomSheetRef}
-                  navigation={navigation}
-                />
-              )}
-              ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-            />
-          ) : (
-            <Text
-              style={{
-                height: "100%",
-                color: "grey",
-                fontSize: 18,
-                justifyContent: "center",
-                textAlign: "center",
-                marginTop: 50,
-              }}
-            >
-              You havent followed anyone :)
-            </Text>
-          )}
-        </View>
+        {posts[0] ? (
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            // onEndReached={() => getPostsAndUserInfo()}
+            onEndReachedThreshold={0.5}
+            style={{ gap: 10 }}
+            data={posts}
+            renderItem={({ item }) => (
+              <PostCard
+                item={item}
+                bottomSheetRef={bottomSheetRef}
+                navigation={navigation}
+              />
+            )}
+            ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+          />
+        ) : (
+          <Text
+            style={{
+              height: "100%",
+              color: "grey",
+              fontSize: 18,
+              justifyContent: "center",
+              textAlign: "center",
+              marginTop: 50,
+            }}
+          >
+            You havent followed anyone :)
+          </Text>
+        )}
+        {/* </View> */}
 
         <PostBottomSheet
           bottomSheetRef={bottomSheetRef}

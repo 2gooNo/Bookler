@@ -1,5 +1,5 @@
 "use client";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import {
   Dimensions,
   StyleSheet,
@@ -13,11 +13,12 @@ import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "@/common";
 import BackIcon from "@/assets/images/BackIcon";
 import CalendarIcon from "@/assets/images/CalendarIcon";
-import { BookPosts } from "@/components/subComponents/BookPosts";
 import { ProfilePosts } from "@/components/subComponents/ProfilePosts";
 import { AuthContext } from "@/context/authContext";
 import { BlockedUser } from "@/components/subComponents/BlockedUser";
 import { ProfileFollow } from "@/components/subComponents/ProflieFollow";
+import { BlockUserButton } from "@/components/subComponents/BlockUserButton";
+import BottomSheet from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheet/BottomSheet";
 
 export default function Profile({ navigation }: any) {
   const { userId } = useLocalSearchParams();
@@ -27,6 +28,7 @@ export default function Profile({ navigation }: any) {
   const formattedDate = date?.toLocaleString();
   const year = formattedDate?.split(",")[0].split(".")[0];
   const numberMonth = formattedDate?.split(",")[0]?.split(".")[1];
+  const bottomSheetRef = useRef<BottomSheet>(null);
   function stringMonth() {
     if (numberMonth == "01") {
       return "January";
@@ -55,20 +57,22 @@ export default function Profile({ navigation }: any) {
     }
   }
   async function UserFetch() {
-    const q = query(collection(db, "users"), where("userId", "==", userId));
-    onSnapshot(q, (snapshot) => {
-      const userInfo = snapshot.docs.map((doc) => {
-        setUserData(doc.data());
+    if (typeof userId == "string") {
+      const q = query(collection(db, "users"), where("userId", "==", userId));
+      onSnapshot(q, (snapshot) => {
+        snapshot.docs.map((doc) => {
+          setUserData(doc.data());
+        });
       });
-    });
+    }
   }
   useEffect(() => {
     UserFetch();
   }, []);
+
   if (
-    // user?.blockedUsers.includes(userId) ||
-    // userData?.blockedUsers.includes(user?.userId)
-    user
+    user?.blockedUsers.includes(userId) ||
+    userData?.blockedUsers.includes(user?.userId)
   ) {
     return (
       <BlockedUser
@@ -108,7 +112,8 @@ export default function Profile({ navigation }: any) {
           ) : (
             <View style={styles.profileImg}></View>
           )}
-          <ProfileFollow userId={userId} otherUser={user} />
+          <ProfileFollow userId={userId} otherUser={userData} />
+          <BlockUserButton blockingUser={userId} />
         </View>
         <View style={{ gap: 8 }}>
           <Text
@@ -147,7 +152,11 @@ export default function Profile({ navigation }: any) {
         </View>
       </View>
 
-      <ProfilePosts userId={userData?.userId} navigation={navigation} />
+      <ProfilePosts
+        userId={userId}
+        navigation={navigation}
+        bottomSheetRef={bottomSheetRef}
+      />
     </View>
   );
 }

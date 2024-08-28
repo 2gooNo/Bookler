@@ -33,6 +33,8 @@ type PostContextType = {
   setSelectedBook: React.Dispatch<React.SetStateAction<SelectedBookType>>;
   selectedChapter: SelectedChapterType;
   setSelectedChapter: React.Dispatch<React.SetStateAction<SelectedChapterType>>;
+  draft: any[];
+  setDraft: React.Dispatch<React.SetStateAction<any[]>>;
 };
 export const CreatePostContext = React.createContext<PostContextType>(
   {} as PostContextType
@@ -45,6 +47,7 @@ export const CreatePostProvider = ({ children }: Props) => {
   const [bodyText, setBodyText] = useState<string>("");
   const [takenMedia, setTakenMedia] = useState<string>("");
   const [linkUrl, setLinkUrl] = useState<string>("");
+  const [draft, setDraft] = useState<any[]>([]);
   const [linkComponent, setLinkComponent] = useState<boolean>(false);
   const [selectedBook, setSelectedBook] = useState<SelectedBookType>({
     id: "",
@@ -75,6 +78,8 @@ export const CreatePostProvider = ({ children }: Props) => {
         selectedChapter,
         setSelectedChapter,
         setSelectedBook,
+        draft,
+        setDraft,
       }}
     >
       {children}

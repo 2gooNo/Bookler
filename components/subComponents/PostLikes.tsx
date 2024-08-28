@@ -86,7 +86,8 @@ export function PostLikes({ item }: any) {
         <FontAwesome
           name="arrow-up"
           size={20}
-          color={interacted == 1 ? "orange" : "white"}
+
+          color={interacted == 1 ? "#1DA1F2" : "white"}
         />
       </Pressable>
       <Text style={{ color: "white" }}>

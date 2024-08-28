@@ -52,8 +52,10 @@ export function BookSelect({ navigation }: any) {
         style={{
           flexDirection: "row",
           width: "100%",
-          justifyContent: "space-between",
+          justifyContent: "center",
           paddingHorizontal: 10,
+          alignItems: "center",
+          gap: 50,
         }}
       >
         <Pressable onPress={() => navigation.navigate("CreatePost")}>
@@ -63,26 +65,45 @@ export function BookSelect({ navigation }: any) {
           style={{
             color: "white",
             fontSize: 18,
-
+            fontFamily: "Inherit",
             textAlign: "center",
             justifyContent: "center",
+            fontStyle: "normal",
+            fontWeight: "600",
           }}
         >
-          Post to
+          Таны нэгдсэн номнууд
         </Text>
         {/* {selectedBook.id && ( */}
         <Pressable
-          disabled={selectedBook.id ? false : true}
+          disabled={selectedBook?.id ? false : true}
+          style={
+            selectedBook?.id
+              ? {
+                  borderRadius: 30,
+                  padding: 10,
+                  elevation: 2,
+                  paddingVertical: 15,
+                  backgroundColor: "#1DA1F2",
+                  width: 67.5,
+                  alignItems: "center",
+                }
+              : { width: "auto" }
+          }
           // style={{ backgroundColor: "red" }}
           onPress={() => navigation.navigate("ChapterSelect")}
         >
           <Text
-            style={{
-              color: selectedBook.id ? "#1DA1F2" : "grey",
-              fontSize: 17,
-            }}
+            style={
+              selectedBook?.id
+                ? { color: "#e8e3e0", fontSize: 15, fontWeight: "bold" }
+                : {
+                    color: "grey",
+                    fontSize: 17,
+                  }
+            }
           >
-            Next
+            Дараа
           </Text>
         </Pressable>
         {/* )} */}
@@ -91,7 +112,7 @@ export function BookSelect({ navigation }: any) {
         books.map((book, index) => <BookCard key={index} book={book} />)
       ) : (
         <Text style={{ color: "grey" }}>
-          No books please enter a commuinity first :)
+          No books please enter a commuinity first :
         </Text>
       )}
 
@@ -135,18 +156,23 @@ function BookCard({ book }: any) {
       onPress={() => selectBook()}
     >
       <Image
-        style={{ height: "100%", width: width * 0.15 }}
+        style={{ height: "100%", width: width * 0.15, borderRadius: 15 }}
         source={{ uri: book?.[0]?.bookImg }}
       ></Image>
-      <Text style={{ color: "white", fontSize: 15 }}> {book?.[0]?.name}</Text>
-      {selectedBook.id == book?.[1] && (
-        <AntDesign
-          name="check"
-          size={20}
-          color="#1DA1F2"
-          style={{ textAlignVertical: "bottom" }}
-        />
-      )}
+      <View style={{ flexDirection: "row", gap: 30, alignItems: "center" }}>
+        <Text style={{ color: "#e8e3e0", fontSize: 15, fontWeight: "bold" }}>
+          {" "}
+          {book?.[0]?.name}
+        </Text>
+        {selectedBook.id == book?.[1] && (
+          <AntDesign
+            name="check"
+            size={30}
+            color="#1DA1F2"
+            style={{ textAlignVertical: "bottom" }}
+          />
+        )}
+      </View>
     </Pressable>
   );
 }

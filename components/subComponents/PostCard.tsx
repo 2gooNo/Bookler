@@ -119,13 +119,12 @@ export function PostCard({
 
         <Pressable
           onPress={() => {
-            if (navigation) {
-              navigation.getParent().setOptions({
-                tabBarStyle: {
-                  display: "none",
-                },
-              });
-            }
+
+            navigation?.getParent()?.setOptions({
+              tabBarStyle: {
+                display: "none",
+              },
+            });
             if (bottomSheetRef.current) {
               bottomSheetRef.current.expand();
 

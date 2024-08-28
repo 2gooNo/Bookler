@@ -1,16 +1,27 @@
+import { db } from "@/common";
 import { AuthContext } from "@/context/authContext";
+import { router } from "expo-router";
+import { arrayRemove, doc, updateDoc } from "firebase/firestore";
 import { useContext } from "react";
 import { Pressable, Text, View } from "react-native";
 
 export function BlockedUser({ userId, youBlocked }: any) {
   const { userData } = useContext(AuthContext);
-  const unblockUser = () => {};
+  const unblockUser = async () => {
+    console.log(userId, userData?.userId);
+    const d = doc(db, "users", userData?.userId);
+    await updateDoc(d, {
+      blockedUsers: arrayRemove(userId),
+    });
+  };
   return (
     <View
       style={{
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "black",
+        height: "100%",
+        width: "100%",
       }}
     >
       {youBlocked ? (
@@ -19,16 +30,17 @@ export function BlockedUser({ userId, youBlocked }: any) {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
+            gap: 10,
           }}
         >
-          <Text style={{ color: "white" }}>
+          <Text style={{ color: "white", fontSize: 16, textAlign: "center" }}>
             You have this user blocked would you like to unblock them
           </Text>
           <Pressable onPress={() => unblockUser()}>
-            <Text style={{ color: "white" }}>Unblock user</Text>
+            <Text style={{ color: "#1DA1F2", fontSize: 16 }}>Unblock user</Text>
           </Pressable>
-          <Pressable>
-            <Text style={{ color: "white" }}>Go back</Text>
+          <Pressable onPress={() => router.push("/home")}>
+            <Text style={{ color: "grey", fontSize: 16 }}>Go back</Text>
           </Pressable>
         </View>
       ) : (
@@ -37,11 +49,14 @@ export function BlockedUser({ userId, youBlocked }: any) {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
+            gap: 10,
           }}
         >
-          <Text>This user has you blocked </Text>
-          <Pressable>
-            <Text style={{ color: "white" }}>Go back</Text>
+          <Text style={{ color: "white", fontSize: 16 }}>
+            This user has you blocked
+          </Text>
+          <Pressable onPress={() => router.push("/home")}>
+            <Text style={{ color: "grey", fontSize: 16 }}>Go back</Text>
           </Pressable>
         </View>
       )}

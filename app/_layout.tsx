@@ -12,7 +12,10 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import { AuthProvider } from "@/context/authContext";
 import { LangProvider } from "@/context/langContext";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { Pressable } from "react-native";
+import { Pressable, Text } from "react-native";
+import { CreatePostProvider } from "@/context/createPostContext";
+import { Postprovider } from "@/context/postContext";
+import Toast from "react-native-toast-message";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -39,32 +42,88 @@ export default function RootLayout() {
         <ThemeProvider
           value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
         >
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="+not-found" />
-            <Stack.Screen
-              name="details/[id]"
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="otherProfile/[userId]"
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="commentPage/[postId]"
-              options={({ navigation }) => ({
-                headerTitle: () => "",
-                headerLeft: () => (
-                  <Pressable onPress={() => navigation.goBack()}>
-                    <AntDesign name="arrowleft" size={20} color="white" />
-                  </Pressable>
-                ),
-                gestureEnabled: true,
-                gestureDirection: "horizontal",
-                animation: "slide_from_right",
-              })}
-            />
-          </Stack>
+          <CreatePostProvider>
+            <Postprovider>
+              <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen name="+not-found" />
+                <Stack.Screen
+                  name="details/[id]"
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="otherProfile/[userId]"
+                  options={{
+                    headerShown: false,
+                    gestureDirection: "horizontal",
+                    animation: "slide_from_right",
+                  }}
+                />
+                <Stack.Screen
+                  name="draftPage/[userId]"
+                  options={({ navigation }) => ({
+                    headerTitle: () => (
+                      <Text
+                        style={{
+                          color: "#e8e6e4",
+                          fontSize: 17,
+                          fontWeight: "500",
+                        }}
+                      >
+                        Draft
+                      </Text>
+                    ),
+                    headerLeft: () => (
+                      <Pressable onPress={() => navigation.goBack()}>
+                        <AntDesign name="arrowleft" size={20} color="white" />
+                      </Pressable>
+                    ),
+                    headerShown: true,
+                    gestureDirection: "horizontal",
+                    animation: "slide_from_right",
+                  })}
+                />
+                <Stack.Screen
+                  name="favorites/[userId]"
+                  options={({ navigation }) => ({
+                    headerTitle: () => (
+                      <Text
+                        style={{
+                          color: "#e8e6e4",
+                          fontSize: 17,
+                          fontWeight: "500",
+                        }}
+                      >
+                        Favorites
+                      </Text>
+                    ),
+                    headerLeft: () => (
+                      <Pressable onPress={() => navigation.goBack()}>
+                        <AntDesign name="arrowleft" size={20} color="white" />
+                      </Pressable>
+                    ),
+                    headerShown: true,
+                    gestureDirection: "horizontal",
+                    animation: "slide_from_right",
+                  })}
+                />
+                <Stack.Screen
+                  name="commentPage/[postId]"
+                  options={({ navigation }) => ({
+                    headerTitle: () => "",
+                    headerLeft: () => (
+                      <Pressable onPress={() => navigation.goBack()}>
+                        <AntDesign name="arrowleft" size={20} color="white" />
+                      </Pressable>
+                    ),
+                    gestureEnabled: true,
+                    gestureDirection: "horizontal",
+                    animation: "slide_from_right",
+                  })}
+                />
+              </Stack>
+            </Postprovider>
+          </CreatePostProvider>
         </ThemeProvider>
       </LangProvider>
     </AuthProvider>

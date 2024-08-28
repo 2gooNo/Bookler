@@ -17,12 +17,14 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Image } from "expo-image";
 import BackIcon from "@/assets/images/BackIcon";
 import { JoinCommuinityButton } from "@/components/subComponents/JoinCommuinityButton";
 import { BookSelect } from "@/components/subComponents/BookSelect";
 import { BookPosts } from "@/components/subComponents/BookPosts";
+import { PostBottomSheet } from "@/components/subComponents/PostBottomSheet";
+import BottomSheet from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheet/BottomSheet";
 
 export default function DetailsScreen({ navigation }: any) {
   const { id } = useLocalSearchParams();
@@ -31,6 +33,10 @@ export default function DetailsScreen({ navigation }: any) {
   const [activeTab, setActiveTab] = useState(Number(chapter));
   const [categoryData, setCategoryData] = useState<any>();
   const [communityMembers, setCommunityMembers] = useState<number>(0);
+  const bottomSheetRef = useRef<BottomSheet>(null);
+
+  const handleSheetChanges = useCallback((index: number) => {}, []);
+
   async function BookFetch() {
     if (typeof bookId == "string") {
       const docRef = doc(db, "books", bookId);
@@ -217,8 +223,14 @@ export default function DetailsScreen({ navigation }: any) {
           chapter={activeTab}
           bookId={bookId}
           navigation={navigation}
+          bottomSheetRef={bottomSheetRef}
         />
       </View>
+      <PostBottomSheet
+        bottomSheetRef={bottomSheetRef}
+        handleSheetChanges={handleSheetChanges}
+        navigation={navigation}
+      />
     </ScrollView>
   );
 }

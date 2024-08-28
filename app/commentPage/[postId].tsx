@@ -279,6 +279,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.4,
     width: width * 0.7,
     maxHeight: 96,
+    color: "white",
   },
   replyingTo: {
     flexDirection: "row",

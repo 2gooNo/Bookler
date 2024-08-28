@@ -119,6 +119,7 @@ export function PostCard({
 
         <Pressable
           onPress={() => {
+
             navigation?.getParent()?.setOptions({
               tabBarStyle: {
                 display: "none",

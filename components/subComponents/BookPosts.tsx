@@ -17,25 +17,14 @@ import { number } from "yup";
 import { PostBottomSheet } from "./PostBottomSheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
-export function BookPosts({ navigation, chapter, bookId }: any) {
+export function BookPosts({
+  navigation,
+  chapter,
+  bookId,
+  bottomSheetRef,
+}: any) {
   const [posts, setPosts] = useState<any[]>([]);
   const [lastVisible, setLastVisible] = useState<any>(null);
-  const bottomSheetRef = useRef<BottomSheet>(null);
-  const handleSheetChanges = useCallback((index: number) => {
-    if (index == -1) {
-      navigation.getParent().setOptions({
-        tabBarStyle: {
-          display: "flex",
-        },
-      });
-    } else if (index == 1) {
-      navigation.getParent().setOptions({
-        tabBarStyle: {
-          display: "none",
-        },
-      });
-    }
-  }, []);
 
   const getPostsAndUserInfo = async () => {
     setPosts([]);
@@ -44,7 +33,7 @@ export function BookPosts({ navigation, chapter, bookId }: any) {
       where("book.id", "==", bookId),
       where("chapter.number", "==", Number(chapter))
     );
-    console.log(q);
+
     onSnapshot(q, async (snapshot) => {
       console.log("promise");
       const postPromises = snapshot.docs.map(async (postDoc) => {
@@ -126,11 +115,6 @@ export function BookPosts({ navigation, chapter, bookId }: any) {
             navigation={navigation}
           />
         ))}
-        <PostBottomSheet
-          bottomSheetRef={bottomSheetRef}
-          handleSheetChanges={handleSheetChanges}
-          navigation={navigation}
-        />
       </View>
     </GestureHandlerRootView>
   );

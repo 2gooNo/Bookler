@@ -20,16 +20,19 @@ import { ProfilePosts } from "@/components/subComponents/ProfilePosts";
 import { PostBottomSheet } from "@/components/subComponents/PostBottomSheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import BottomSheet from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheet/BottomSheet";
+import { ProfileSettings } from "@/components/subComponents/ProfileSettings";
+import Drawer from "react-native-drawer";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 export function Profile({ navigation }: { navigation: any }) {
   const { userData } = useContext(AuthContext);
-
-  const { onLogout } = useContext(AuthContext);
   const date = userData?.birthDate.toDate();
   const formattedDate = date?.toLocaleString();
   const year = formattedDate?.split(",")[0].split(".")[0];
   const numberMonth = formattedDate?.split(",")[0]?.split(".")[1];
   const bottomSheetRef = useRef<BottomSheet>(null);
+
+  const drawer = useRef(null);
   const handleSheetChanges = useCallback((index: number) => {
     if (index == -1) {
       navigation.getParent().setOptions({
@@ -75,133 +78,136 @@ export function Profile({ navigation }: { navigation: any }) {
   }
 
   return (
-    <GestureHandlerRootView>
-      <ScrollView
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.allContainer}
-      >
-        {userData?.banner ? (
-          <Image style={styles.banner} source={{ uri: userData?.banner }} />
-        ) : (
-          <View style={{ ...styles.banner, backgroundColor: "grey" }}></View>
-        )}
-        <View
-          style={{
-            width: "100%",
-            height: "100%",
-            flexDirection: "column",
-            gap: 10,
-          }}
+    <Drawer
+      ref={drawer}
+      type="displace"
+      content={<ProfileSettings />}
+      tapToClose={true}
+      openDrawerOffset={0.2}
+      panCloseMask={0.2}
+      acceptPanOnDrawer={true}
+      closedDrawerOffset={-3}
+      tweenHandler={(ratio) => ({
+        main: { opacity: (2 - ratio) / 2 },
+      })}
+    >
+      <GestureHandlerRootView>
+        <ScrollView
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.allContainer}
         >
+          <Pressable
+            onPress={() => drawer?.current && drawer?.current?.open()}
+            style={{ position: "absolute", top: 40, left: 20, zIndex: 100 }}
+          >
+            <Ionicons
+              name="settings-sharp"
+              size={35}
+              color="white"
+              style={{
+                shadowColor: "black",
+                shadowOpacity: 1,
+                shadowOffset: { width: 0, height: 1 },
+                shadowRadius: 20,
+              }}
+            />
+          </Pressable>
+          {userData?.banner ? (
+            <Image style={styles.banner} source={{ uri: userData?.banner }} />
+          ) : (
+            <View style={{ ...styles.banner, backgroundColor: "grey" }}></View>
+          )}
           <View
             style={{
               width: "100%",
-              height: 90,
-              justifyContent: "space-between",
-              flexDirection: "row",
-              alignItems: "center",
+              height: "100%",
+              flexDirection: "column",
+              gap: 10,
             }}
           >
-            {userData?.photoUrl ? (
-              <Image
-                style={styles.profileImg}
-                source={{ uri: userData?.photoUrl }}
-              />
-            ) : (
-              <View style={styles?.profileImg}></View>
-            )}
-            <Pressable
-              onPress={() => navigation.navigate("EditProfile")}
-              style={styles.editProfile}
+            <View
+              style={{
+                width: "100%",
+                height: 90,
+                justifyContent: "space-between",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
             >
+              {userData?.photoUrl ? (
+                <Image
+                  style={styles.profileImg}
+                  source={{ uri: userData?.photoUrl }}
+                />
+              ) : (
+                <View style={styles?.profileImg}></View>
+              )}
+              <Pressable
+                onPress={() => navigation.navigate("EditProfile")}
+                style={styles.editProfile}
+              >
+                <Text
+                  style={{
+                    fontFamily: "Inherit",
+                    fontSize: 15,
+                    fontWeight: "700",
+                    color: "white",
+                  }}
+                >
+                  Профайл өөрчлөх
+                </Text>
+              </Pressable>
+            </View>
+            <View style={{ gap: 8 }}>
               <Text
                 style={{
                   fontFamily: "Inherit",
-                  fontSize: 15,
-                  fontWeight: "700",
+                  fontSize: 20,
+                  fontWeight: "800",
                   color: "white",
                 }}
               >
-                Профайл өөрчлөх
+                {userData?.userName}
               </Text>
-            </Pressable>
-          </View>
-          <View style={{ gap: 8 }}>
-            <Text
-              style={{
-                fontFamily: "Inherit",
-                fontSize: 20,
-                fontWeight: "800",
-                color: "white",
-              }}
-            >
-              {userData?.userName}
-            </Text>
-            <Text
-              style={{
-                color: "white",
-                fontFamily: "Inherit",
-                fontSize: 15,
-                fontWeight: "600",
-              }}
-            >
-              {userData?.bio}
-            </Text>
-            <View style={{ flexDirection: "row", gap: 5 }}>
-              <CalendarIcon style={{ width: "5%" }} />
               <Text
                 style={{
+                  color: "white",
                   fontFamily: "Inherit",
                   fontSize: 15,
-                  fontWeight: "500",
-                  color: "rgb(113, 118, 123)",
+                  fontWeight: "600",
                 }}
               >
-                {year} {stringMonth()} төрсөн
+                {userData?.bio}
               </Text>
+              <View style={{ flexDirection: "row", gap: 5 }}>
+                <CalendarIcon style={{ width: "5%" }} />
+                <Text
+                  style={{
+                    fontFamily: "Inherit",
+                    fontSize: 15,
+                    fontWeight: "500",
+                    color: "rgb(113, 118, 123)",
+                  }}
+                >
+                  {year} {stringMonth()} төрсөн
+                </Text>
+              </View>
             </View>
+
+            <ProfilePosts
+              userId={userData?.userId}
+              navigation={navigation}
+              bottomSheetRef={bottomSheetRef}
+            />
           </View>
-          <Pressable
-            style={{
-              borderColor: "rgb(83, 100, 113)",
-              borderStyle: "solid",
-              borderWidth: 1,
-              paddingTop: "2%",
-              paddingBottom: "2%",
-              paddingLeft: "4%",
-              paddingRight: "4%",
-              borderRadius: 30,
-              marginTop: 10,
-              width: 80,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-            onPress={() => onLogout()}
-          >
-            <Text
-              style={{
-                fontFamily: "Inherit",
-                fontSize: 15,
-                fontWeight: "700",
-                color: "white",
-              }}
-            >
-              Гарах
-            </Text>
-          </Pressable>
-          <ProfilePosts
-            userId={userData?.userId}
-            navigation={navigation}
-            bottomSheetRef={bottomSheetRef}
-          />
-        </View>
-      </ScrollView>
-      <PostBottomSheet
-        bottomSheetRef={bottomSheetRef}
-        handleSheetChanges={handleSheetChanges}
-        navigation={navigation}
-      />
-    </GestureHandlerRootView>
+        </ScrollView>
+        <PostBottomSheet
+          bottomSheetRef={bottomSheetRef}
+          handleSheetChanges={handleSheetChanges}
+          navigation={navigation}
+        />
+      </GestureHandlerRootView>
+    </Drawer>
   );
 }
 
@@ -271,6 +277,7 @@ export default function HomeStackScreen() {
       },
     });
   }, [navigation, route]);
+
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen
@@ -278,7 +285,6 @@ export default function HomeStackScreen() {
         component={Profile}
         options={{ headerShown: false }}
       />
-
       <HomeStack.Screen
         name="EditProfile"
         component={EditProfileModal}
@@ -290,3 +296,32 @@ export default function HomeStackScreen() {
     </HomeStack.Navigator>
   );
 }
+
+// Create Stack Navigator
+// const Stack = createNativeStackNavigator();
+
+// function MyStack() {
+//   return (
+//     <Stack.Navigator initialRouteName="DrawerNav">
+//       <Stack.Screen
+//         name="DrawerNav"
+//         component={MyDrawer}
+//         options={{ headerShown: false }}
+//       />
+//       <Stack.Screen
+//         name="EditProfile"
+//         component={EditProfileModal}
+//         options={{ presentation: "modal" }}
+//       />
+//     </Stack.Navigator>
+//   );
+// }
+
+// // Combine both navigators
+// export default function App() {
+//   return (
+//     <NavigationContainer>
+//       <MyStack />
+//     </NavigationContainer>
+//   );
+// }

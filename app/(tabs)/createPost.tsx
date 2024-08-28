@@ -51,7 +51,7 @@ export function CreatePost({ navigation }: { navigation: any }) {
     bodyText,
   } = useContext(CreatePostContext);
   const [isVisible, setIsVisible] = useState(false);
-
+  console.log("uriu");
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "height" : "position"}

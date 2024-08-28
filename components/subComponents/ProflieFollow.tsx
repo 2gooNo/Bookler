@@ -21,25 +21,25 @@ export function ProfileFollow({ userId, otherUser }: any) {
   return (
     <View style={{ flex: 1 }}>
       {userData?.following.includes(userId) &&
-        !otherUser.following.includes(userId) && (
+        !otherUser?.following.includes(userId) && (
           <Pressable onPress={() => UnfollowUser()}>
             <Text style={styles.text}>UnFollow</Text>
           </Pressable>
         )}
       {!userData?.following.includes(userId) &&
-        otherUser.following.includes(userId) && (
+        otherUser?.following.includes(userId) && (
           <Pressable onPress={() => FollowUser()}>
             <Text style={styles.text}>Follow back</Text>
           </Pressable>
         )}
       {userData?.following.includes(userId) &&
-        otherUser.following.includes(userId) && (
+        otherUser?.following.includes(userId) && (
           <Pressable onPress={() => UnfollowUser()}>
             <Text style={styles.text}>Mutuals</Text>
           </Pressable>
         )}
       {!userData?.following.includes(userId) &&
-        !otherUser.following.includes(userId) && (
+        !otherUser?.following.includes(userId) && (
           <Pressable onPress={() => FollowUser()}>
             <Text style={styles.text}>Follow</Text>
           </Pressable>

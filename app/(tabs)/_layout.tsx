@@ -16,85 +16,85 @@ export default function TabLayout() {
   const { lang } = useContext(LangContext);
 
   return (
-    <AuthProvider>
-      <CreatePostProvider>
-        <Postprovider>
-          <Tabs
-            screenOptions={({ route }) => ({
-              tabBarLabel: () => {
-                return null;
-              },
-              tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-              headerShown: false,
-              tabBarStyle: {
-                display:
-                  route.name === "index" || "createPost" == route.name
-                    ? "none"
-                    : "flex",
-                backgroundColor: "black",
-                paddingTop: 5,
-              },
-              tabBarButton: ["index"].includes(route.name)
-                ? () => {
-                    return null;
-                  }
-                : undefined,
-            })}
-          >
-            <Tabs.Screen
-              name="index"
-              options={{
-                tabBarStyle: { display: "none" },
-              }}
+    // <AuthProvider>
+    //   <CreatePostProvider>
+    //     <Postprovider>
+    <Tabs
+      screenOptions={({ route }) => ({
+        tabBarLabel: () => {
+          return null;
+        },
+        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+        headerShown: false,
+        tabBarStyle: {
+          display:
+            route.name === "index" || "createPost" == route.name
+              ? "none"
+              : "flex",
+          backgroundColor: "black",
+          paddingTop: 5,
+        },
+        tabBarButton: ["index"].includes(route.name)
+          ? () => {
+              return null;
+            }
+          : undefined,
+      })}
+    >
+      <Tabs.Screen
+        name="index"
+        options={{
+          tabBarStyle: { display: "none" },
+        }}
+      />
+      <Tabs.Screen
+        name="home"
+        options={{
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              name={focused ? "home" : "home-outline"}
+              color={color}
             />
-            <Tabs.Screen
-              name="home"
-              options={{
-                tabBarIcon: ({ color, focused }) => (
-                  <TabBarIcon
-                    name={focused ? "home" : "home-outline"}
-                    color={color}
-                  />
-                ),
-              }}
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="books"
+        options={{
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              name={focused ? "book" : "book-outline"}
+              color={color}
             />
-            <Tabs.Screen
-              name="books"
-              options={{
-                tabBarIcon: ({ color, focused }) => (
-                  <TabBarIcon
-                    name={focused ? "book" : "book-outline"}
-                    color={color}
-                  />
-                ),
-              }}
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="createPost"
+        options={{
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              size={30}
+              name={focused ? "add" : "add-outline"}
+              color={color}
             />
-            <Tabs.Screen
-              name="createPost"
-              options={{
-                tabBarIcon: ({ color, focused }) => (
-                  <TabBarIcon
-                    size={30}
-                    name={focused ? "add" : "add-outline"}
-                    color={color}
-                  />
-                ),
-              }}
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name={`profile`}
+        options={{
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              name={focused ? "person" : "person-outline"}
+              color={color}
             />
-            <Tabs.Screen
-              name={`profile`}
-              options={{
-                tabBarIcon: ({ color, focused }) => (
-                  <TabBarIcon
-                    name={focused ? "person" : "person-outline"}
-                    color={color}
-                  />
-                ),
-              }}
-            />
-          </Tabs>
-        </Postprovider>
-      </CreatePostProvider>
-    </AuthProvider>
+          ),
+        }}
+      />
+    </Tabs>
+    //     </Postprovider>
+    //   </CreatePostProvider>
+    // </AuthProvider>
   );
 }

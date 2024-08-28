@@ -93,7 +93,15 @@ export function CreatePost({ navigation }: { navigation: any }) {
                       : styles.nextClose
                   }
                 >
-                  <Text style={{ fontSize: 16 }}>Дараах</Text>
+                  <Text
+                    style={{
+                      color: "#e8e3e0",
+                      fontSize: 15,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Дараах
+                  </Text>
                 </View>
               </Pressable>
             )}

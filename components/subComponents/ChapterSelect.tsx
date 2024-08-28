@@ -7,7 +7,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import debounce from "lodash/debounce";
 
 export function ChapterSelect({ navigation }: any) {
-  const { setSelectedChapter, selectedBook, selectedChapter } =
+  const { setSelectedChapter, selectedBook, selectedChapter }: any =
     useContext(CreatePostContext);
   const [book, setBook] = useState<any>();
 
@@ -48,37 +48,35 @@ export function ChapterSelect({ navigation }: any) {
           gap: 80,
         }}
       >
-        <Text
-          style={{
-            fontSize: 15,
-            color: "grey",
-            fontWeight: "500",
-            textAlign: "left",
-          }}
-        >
+        <Text style={{ color: "#e8e3e0", fontSize: 15, fontWeight: "bold" }}>
           Select chapter
         </Text>
         <Pressable
           style={{
-            paddingHorizontal: 10,
-            paddingVertical: 8,
-            borderRadius: 5,
+            borderRadius: 30,
+            padding: 10,
+            elevation: 2,
+            paddingVertical: 15,
+            backgroundColor: "#1DA1F2",
+            width: 67.5,
+            alignItems: "center",
           }}
           disabled={selectedChapter.number ? false : true}
           onPress={() => navigation.navigate("CreatePost")}
         >
           <Text
-            style={{
-              color: selectedChapter.number ? "#1DA1F2" : "grey",
-              fontSize: 14,
-            }}
+            style={
+              selectedChapter?.number
+                ? { color: "white", fontSize: 15, fontWeight: "bold" }
+                : { width: "auto" }
+            }
           >
-            Next
+            Дараах
           </Text>
         </Pressable>
       </View>
       <ScrollView style={{ gap: 5, width: "100%" }}>
-        {book?.chapters.map((chapter: string, index: number) => (
+        {book?.chapters?.map((chapter: string, index: number) => (
           <ChapterCard key={index} chapter={chapter} index={index} />
         ))}
       </ScrollView>
@@ -96,17 +94,19 @@ function ChapterCard({ chapter, index }: { chapter: string; index: number }) {
         index,
         selectedChapter.number
       );
-      if (selectedChapter?.number - 1 === index) {
-        console.log(selectedChapter);
-        setSelectedChapter({ name: "", number: null });
-      } else if (chapter) {
-        console.log(selectedChapter, chapter, index);
-        setSelectedChapter({ name: chapter, number: index + 1 });
+      if (selectedChapter?.number) {
+        if (selectedChapter?.number - 1 === index) {
+          console.log(selectedChapter);
+          setSelectedChapter({ name: "", number: null });
+        } else if (chapter) {
+          console.log(selectedChapter, chapter, index);
+          setSelectedChapter({ name: chapter, number: index + 1 });
+        }
       }
     }, 300),
     [selectedChapter, index]
   );
-  console.log(selectedChapter, "ypu fu kcer");
+  // console.log(selectedChapter, "ypu fu kcer");
   return (
     <Pressable
       onPress={() => {
@@ -123,14 +123,7 @@ function ChapterCard({ chapter, index }: { chapter: string; index: number }) {
       }}
     >
       <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-        <Text
-          style={{
-            color: "white",
-            fontSize: 18,
-            width: 25,
-            textAlign: "center",
-          }}
-        >
+        <Text style={{ color: "#e8e3e0", fontSize: 18, fontWeight: "bold" }}>
           {index + 1}
         </Text>
         <View
@@ -141,10 +134,21 @@ function ChapterCard({ chapter, index }: { chapter: string; index: number }) {
             marginLeft: 1,
           }}
         />
-        <Text style={{ color: "white", fontSize: 16 }}>{chapter}</Text>
+        <Text
+          style={{
+            width: 400,
+            color: "#e8e3e0",
+            fontSize: 18,
+            fontWeight: "bold",
+          }}
+        >
+          {chapter}
+        </Text>
       </View>
-      {selectedChapter?.number && selectedChapter?.number - 1 === index && (
+      {selectedChapter?.number && selectedChapter?.number - 1 === index ? (
         <AntDesign name="check" size={20} color="#1DA1F2" />
+      ) : (
+        ""
       )}
     </Pressable>
   );

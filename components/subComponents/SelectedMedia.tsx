@@ -28,7 +28,7 @@ export function SelectedMedia({
   const generateThumbnail = async () => {
     if (value.slice(-4) !== ".jpg") {
       try {
-        const { uri } = await VideoThumbnails.getThumbnailAsync(value, {
+        const { uri } = await VideoThumbnails?.getThumbnailAsync(value, {
           time: 500,
         });
         setThumnail(uri);

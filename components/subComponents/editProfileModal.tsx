@@ -151,8 +151,16 @@ export function EditProfileModal() {
         </Pressable>
       </View>
       {photos?.bannerUrl == "" ? (
-        <Pressable onPress={() => pickImage(true)}>
-          <BannerIcon />
+        <Pressable
+          style={{
+            height: "18%",
+            width: "100%",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          onPress={() => pickImage(true)}
+        >
+          <BannerIcon style={styles.banner} />
         </Pressable>
       ) : (
         <Pressable
@@ -164,8 +172,19 @@ export function EditProfileModal() {
       )}
 
       {photos?.profileUrl == "" ? (
-        <Pressable onPress={() => pickImage(false)}>
-          <UserIcon />
+        <Pressable
+          style={{
+            height: "10%",
+            top: "19.5%",
+            position: "absolute",
+            left: "3%",
+            width: "22%",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          onPress={() => pickImage(false)}
+        >
+          <UploadImgIcon style={styles.uploadIcon} />
         </Pressable>
       ) : (
         <Pressable

@@ -19,11 +19,15 @@ import BooklerLogo from "@/assets/images/BooklerLogo";
 import { router } from "expo-router";
 import { homeTranslation } from "@/localization/translate";
 import { LangContext } from "@/context/langContext";
+import SeePassIcon from "@/assets/images/SeePassIcon";
+import NotSeePassIcon from "@/assets/images/NotSeePassIcon";
 
 export function PasswordConfirm() {
   const { username, email, birthDate, setUser } = useContext(AuthContext);
   const { lang } = useContext(LangContext);
   const [canSubmit, setCanSubmit] = useState<boolean>(true);
+  const [seePasswordOne, setSeePasswordOne] = useState(true);
+  const [seePassword, setSeePassword] = useState(true);
 
   const signUp = async (values: {
     password: string;
@@ -93,37 +97,134 @@ export function PasswordConfirm() {
                 paddingRight: "10%",
               }}
             >
-              <View style={{ marginBottom: "10%", gap: 10 }}>
-                <TextInput
-                  placeholder={homeTranslation[lang]["password"]}
-                  style={[
-                    styles.input,
-                    errors.password == undefined || errors.password == ""
-                      ? { borderColor: "rgb(98,101,105)" }
-                      : { borderColor: "red" },
-                  ]}
-                  onChangeText={handleChange("password")}
-                  onBlur={handleBlur("password")}
-                  value={values.password}
-                  onSubmitEditing={() => canSubmit && handleSubmit()}
-                />
-                <Text style={{ color: "red" }}>{errors.password}</Text>
+              <View
+                style={{
+                  width: "100%",
+                  height: "17%",
+                  marginBottom: "15%",
+                  gap: 10,
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    width: "100%",
+                    height: "100%",
+                    borderBottomWidth: 1,
+                    borderStyle: "solid",
+                    borderColor: `${
+                      errors?.password == undefined || errors?.password == ""
+                        ? "rgb(98,101,105)"
+                        : "red"
+                    }`,
+                    justifyContent: "space-between",
+                    paddingRight: "5%",
+                    marginBottom: 20,
+                    paddingLeft: 10,
+                    // backgroundColor: "red",
+                  }}
+                >
+                  <TextInput
+                    placeholder={homeTranslation[lang]["password"]}
+                    // style={[
+                    //   styles.input,
+                    //   errors.password == undefined || errors.password == ""
+                    //     ? { borderColor: "rgb(98,101,105)" }
+                    //     : { borderColor: "red" },
+                    // ]}
+                    style={{
+                      height: "auto",
+                      paddingBottom: "3%",
+                      fontFamily: "Inter",
+                      fontSize: 18,
+                      fontWeight: "400",
+                      color: "rgb(74,153,233)",
+                      paddingRight: "20%",
+                      width: "90%",
+                    }}
+                    onChangeText={handleChange("password")}
+                    onBlur={handleBlur("password")}
+                    value={values.password}
+                    secureTextEntry={seePassword}
+                    onSubmitEditing={() => canSubmit && handleSubmit()}
+                  />
+                  <Pressable
+                    onPress={() => setSeePassword(!seePassword)}
+                    style={{
+                      width: "10%",
+                      height: "100%",
+                    }}
+                  >
+                    {seePassword ? (
+                      <NotSeePassIcon style={styles.passVisibilityIcon} />
+                    ) : (
+                      <SeePassIcon style={styles.passVisibilityIcon} />
+                    )}
+                  </Pressable>
+                  {/* <Text style={{ color: "red" }}>{errors.password}</Text> */}
+                </View>
+                <Text style={{ color: "red" }}>{errors?.password}</Text>
               </View>
-              <View style={{ marginBottom: "10%", gap: 10 }}>
-                <TextInput
-                  placeholder={homeTranslation[lang]["confirmPassword"]}
-                  style={[
-                    styles.input,
-                    errors.confirmPassword == undefined ||
-                    errors.confirmPassword == ""
-                      ? { borderColor: "rgb(98,101,105)" }
-                      : { borderColor: "red" },
-                  ]}
-                  onChangeText={handleChange("confirmPassword")}
-                  onBlur={handleBlur("confirmPassword")}
-                  value={values.confirmPassword}
-                  onSubmitEditing={() => canSubmit && handleSubmit()}
-                />
+              <View
+                style={{
+                  width: "100%",
+                  height: "17%",
+                  marginBottom: "15%",
+                  gap: 10,
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    width: "100%",
+                    height: "100%",
+                    borderBottomWidth: 1,
+                    borderStyle: "solid",
+                    borderColor: `${
+                      errors?.confirmPassword == undefined ||
+                      errors?.confirmPassword == ""
+                        ? "rgb(98,101,105)"
+                        : "red"
+                    }`,
+                    justifyContent: "space-between",
+                    paddingRight: "5%",
+                    marginBottom: 20,
+                    paddingLeft: 10,
+                    // backgroundColor: "red",
+                  }}
+                >
+                  <TextInput
+                    placeholder={homeTranslation[lang]["confirmPassword"]}
+                    style={{
+                      height: "auto",
+                      paddingBottom: "3%",
+                      fontFamily: "Inter",
+                      fontSize: 18,
+                      fontWeight: "400",
+                      color: "rgb(74,153,233)",
+                      paddingRight: "20%",
+                      width: "90%",
+                    }}
+                    onChangeText={handleChange("confirmPassword")}
+                    onBlur={handleBlur("confirmPassword")}
+                    value={values.confirmPassword}
+                    secureTextEntry={seePasswordOne}
+                    onSubmitEditing={() => canSubmit && handleSubmit()}
+                  />
+                  <Pressable
+                    onPress={() => setSeePasswordOne(!seePasswordOne)}
+                    style={{
+                      width: "10%",
+                      height: "100%",
+                    }}
+                  >
+                    {seePassword ? (
+                      <NotSeePassIcon style={styles.passVisibilityIcon} />
+                    ) : (
+                      <SeePassIcon style={styles.passVisibilityIcon} />
+                    )}
+                  </Pressable>
+                </View>
                 <Text style={{ color: "red" }}>{errors.confirmPassword}</Text>
               </View>
               <View
@@ -188,6 +289,11 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
     marginBottom: "20%",
     paddingLeft: "8%",
+  },
+  passVisibilityIcon: {
+    width: "100%",
+    height: "100%",
+    color: "white",
   },
   xLogo: {
     marginBottom: "10%",

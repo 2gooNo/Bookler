@@ -6,7 +6,6 @@ import {
   Dimensions,
   Pressable,
   ScrollView,
-  FlatList,
 } from "react-native";
 import { db } from "@/common";
 import {
@@ -25,6 +24,7 @@ import { BookSelect } from "@/components/subComponents/BookSelect";
 import { BookPosts } from "@/components/subComponents/BookPosts";
 import { PostBottomSheet } from "@/components/subComponents/PostBottomSheet";
 import BottomSheet from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheet/BottomSheet";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function DetailsScreen({ navigation }: any) {
   const { id } = useLocalSearchParams();
@@ -85,152 +85,141 @@ export default function DetailsScreen({ navigation }: any) {
   function SelectChapter(index: number) {
     setActiveTab(index);
   }
-  console.log(activeTab);
-
-  // function getActiveContet(activeTab: number) {
-  //   return {
-  //     id: activeTab,
-  //   };
-  // }
-  console.log("bookData?.name", bookData?.name);
   return (
     <ScrollView
       style={styles.allContainer}
       showsVerticalScrollIndicator={false}
     >
-      <Image style={styles.banner} source={{ uri: bookData?.bookImg }} />
-      <Pressable
-        onPress={() => router.navigate("../(tabs)/books")}
-        style={styles.iconWrapper}
-      >
-        <BackIcon style={styles.icon} />
-      </Pressable>
-      <View
-        style={{
-          paddingLeft: "3%",
-          width: "100%",
-          marginBottom: 30,
-          paddingRight: 30,
-        }}
-      >
-        <Text
-          style={{
-            color: "white",
-            fontFamily: "Inherit",
-            fontSize: 30,
-            fontWeight: "800",
-            marginBottom: 10,
-          }}
+      <GestureHandlerRootView>
+        <Image style={styles.banner} source={{ uri: bookData?.bookImg }} />
+        <Pressable
+          onPress={() => router.navigate("../(tabs)/books")}
+          style={styles.iconWrapper}
         >
-          {bookData?.name}
-        </Text>
-        <View style={styles.categories}>
-          {/* {categoryData?.map((category: { name: string }, index: number) => (
-          <View style={styles?.category} key={index}>
-            <Text style={{ color: "white" }}>{category?.name}</Text>
-          </View>
-        ))} */}
-          <View style={styles?.category}>
-            <Text
-              style={{
-                color: "white",
-                fontFamily: "Inherit",
-                fontSize: 13,
-                fontWeight: "700",
-              }}
-            >
-              {categoryData?.name}
-            </Text>
-          </View>
-        </View>
+          <BackIcon style={styles.icon} />
+        </Pressable>
         <View
           style={{
-            flexDirection: "row",
-            gap: 51,
-            alignItems: "center",
-            justifyContent: "space-between",
+            paddingLeft: "3%",
+            width: "100%",
+            marginBottom: 30,
+            paddingRight: 30,
           }}
         >
+          <Text
+            style={{
+              color: "white",
+              fontFamily: "Inherit",
+              fontSize: 30,
+              fontWeight: "800",
+              marginBottom: 10,
+            }}
+          >
+            {bookData?.name}
+          </Text>
+          <View style={styles.categories}>
+            <View style={styles?.category}>
+              <Text
+                style={{
+                  color: "white",
+                  fontFamily: "Inherit",
+                  fontSize: 13,
+                  fontWeight: "700",
+                }}
+              >
+                {categoryData?.name}
+              </Text>
+            </View>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              gap: 51,
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Text
+              style={{
+                color: "rgb(205,205,205)",
+                fontFamily: "Inherit",
+                fontSize: 17,
+                fontWeight: "400",
+              }}
+            >
+              {communityMembers} Гишүүд
+            </Text>
+            <JoinCommuinityButton bookId={bookId} />
+          </View>
           <Text
             style={{
               color: "rgb(205,205,205)",
               fontFamily: "Inherit",
               fontSize: 17,
               fontWeight: "400",
+              marginTop: 20,
             }}
           >
-            {communityMembers} Гишүүд
+            {bookData?.description}
           </Text>
-          <JoinCommuinityButton bookId={bookId} />
         </View>
-        <Text
+        <View
           style={{
-            color: "rgb(205,205,205)",
-            fontFamily: "Inherit",
-            fontSize: 17,
-            fontWeight: "400",
-            marginTop: 20,
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            backgroundColor: "black",
           }}
         >
-          {bookData?.description}
-        </Text>
-      </View>
-      <View
-        style={{
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          backgroundColor: "black",
-        }}
-      >
-        <View>
-          <ScrollView
-            showsHorizontalScrollIndicator={false}
-            horizontal={true}
-            contentContainerStyle={styles?.chapterContainer}
-          >
-            {bookData?.chapters?.map((chapter: string, index: number) => {
-              console.log(chapter);
-              return (
-                <Pressable
-                  style={{
-                    borderBottomColor:
-                      activeTab == index ? "rgb(73,152,232)" : "black",
-                    borderBottomWidth: 5,
-                    marginTop: 15,
-                    marginLeft: 35,
-                    height: 40,
-                  }}
-                  key={index}
-                  onPress={() => SelectChapter(index)}
-                >
-                  <Text
+          <View>
+            <ScrollView
+              showsHorizontalScrollIndicator={false}
+              horizontal={true}
+              contentContainerStyle={styles?.chapterContainer}
+            >
+              {bookData?.chapters?.map((chapter: string, index: number) => {
+                console.log(chapter);
+                return (
+                  <Pressable
                     style={{
-                      color: "white",
-                      fontFamily: "Inherit",
-                      fontSize: 17,
-                      fontWeight: "700",
+                      borderBottomColor:
+                        activeTab == index ? "rgb(73,152,232)" : "black",
+                      borderBottomWidth: 5,
+                      marginTop: 15,
+                      marginLeft: 35,
+                      height: 40,
                     }}
+                    key={index}
+                    onPress={() => SelectChapter(index)}
                   >
-                    {chapter}
-                  </Text>
-                </Pressable>
-              );
-            })}
-          </ScrollView>
+                    <Text
+                      style={{
+                        color: "white",
+                        fontFamily: "Inherit",
+                        fontSize: 17,
+                        fontWeight: "700",
+                      }}
+                    >
+                      {chapter}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </ScrollView>
+          </View>
+          <BookPosts
+            chapter={activeTab}
+            bookId={bookId}
+            navigation={navigation}
+            bottomSheetRef={bottomSheetRef}
+          />
         </View>
-        <BookPosts
-          chapter={activeTab}
-          bookId={bookId}
-          navigation={navigation}
+        <PostBottomSheet
           bottomSheetRef={bottomSheetRef}
+          handleSheetChanges={handleSheetChanges}
+          navigation={navigation}
         />
-      </View>
-      <PostBottomSheet
-        bottomSheetRef={bottomSheetRef}
-        handleSheetChanges={handleSheetChanges}
-        navigation={navigation}
-      />
+      </GestureHandlerRootView>
     </ScrollView>
   );
 }

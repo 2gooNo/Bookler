@@ -35,13 +35,13 @@ export function Profile({ navigation }: { navigation: any }) {
   const drawer = useRef(null);
   const handleSheetChanges = useCallback((index: number) => {
     if (index == -1) {
-      navigation.getParent().setOptions({
+      navigation?.getParent()?.setOptions({
         tabBarStyle: {
           display: "flex",
         },
       });
     } else if (index == 1) {
-      navigation.getParent().setOptions({
+      navigation?.getParent()?.setOptions({
         tabBarStyle: {
           display: "none",
         },
@@ -49,6 +49,7 @@ export function Profile({ navigation }: { navigation: any }) {
     }
   }, []);
 
+  ("");
   function stringMonth() {
     if (numberMonth == "01") {
       return "Нэгдүгээр сард";
@@ -115,7 +116,7 @@ export function Profile({ navigation }: { navigation: any }) {
           {userData?.banner ? (
             <Image style={styles.banner} source={{ uri: userData?.banner }} />
           ) : (
-            <View style={{ ...styles.banner, backgroundColor: "grey" }}></View>
+            <View style={{ ...styles.banner, backgroundColor: "black" }}></View>
           )}
           <View
             style={{

@@ -24,7 +24,6 @@ export function SignUp({ navigation }: { navigation: any }) {
     useContext(AuthContext);
   const { lang } = useContext(LangContext);
   return (
-
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.allContainer}>
         <BooklerLogo style={styles.xLogo} />
@@ -63,7 +62,6 @@ export function SignUp({ navigation }: { navigation: any }) {
             errors,
             values,
           }) => (
-
             <View
               style={{
                 flexDirection: "column",
@@ -91,7 +89,7 @@ export function SignUp({ navigation }: { navigation: any }) {
               </View>
               <View style={{ marginBottom: "10%", gap: 10 }}>
                 <TextInput
-                   keyboardType="email-address"
+                  keyboardType="email-address"
                   placeholder={homeTranslation[lang]["email"]}
                   placeholderTextColor={"rgb(98,101,105)"}
                   style={[

@@ -58,7 +58,7 @@ export function ChapterSelect({ navigation }: any) {
             elevation: 2,
             paddingVertical: 15,
             backgroundColor: "#1DA1F2",
-            width: 67.5,
+            width: 75,
             alignItems: "center",
           }}
           disabled={selectedChapter.number ? false : true}
@@ -88,20 +88,20 @@ function ChapterCard({ chapter, index }: { chapter: string; index: number }) {
   const { setSelectedChapter, selectedChapter } = useContext(CreatePostContext);
   const selectChapter = useCallback(
     debounce(() => {
-      console.log(
-        selectedChapter,
-        selectedChapter.number,
-        index,
-        selectedChapter.number
-      );
-      if (selectedChapter?.number) {
-        if (selectedChapter?.number - 1 === index) {
-          console.log(selectedChapter);
-          setSelectedChapter({ name: "", number: null });
-        } else if (chapter) {
-          console.log(selectedChapter, chapter, index);
-          setSelectedChapter({ name: chapter, number: index + 1 });
-        }
+      // console.log(
+      //   selectedChapter,
+      //   selectedChapter.number,
+      //   index,
+      //   selectedChapter.number
+      // );
+
+      if (selectedChapter?.number && selectedChapter?.number - 1 === index) {
+        console.log("00000", selectedChapter);
+        setSelectedChapter({ name: "", number: null });
+      } else if (chapter) {
+        console.log("111", selectedChapter, chapter, index);
+
+        setSelectedChapter({ name: chapter, number: index + 1 });
       }
     }, 300),
     [selectedChapter, index]
@@ -110,8 +110,9 @@ function ChapterCard({ chapter, index }: { chapter: string; index: number }) {
   return (
     <Pressable
       onPress={() => {
+        console.log("0");
         selectChapter();
-        console.log(index, chapter);
+        console.log("1");
       }}
       style={{
         paddingVertical: 5,
@@ -122,23 +123,23 @@ function ChapterCard({ chapter, index }: { chapter: string; index: number }) {
         marginBottom: 10,
       }}
     >
-      <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 20 }}>
         <Text style={{ color: "#e8e3e0", fontSize: 18, fontWeight: "bold" }}>
           {index + 1}
         </Text>
-        <View
+        {/* <View
           style={{
             width: 1,
             height: "100%",
             backgroundColor: "white",
             marginLeft: 1,
           }}
-        />
+        /> */}
         <Text
           style={{
             width: 400,
             color: "#e8e3e0",
-            fontSize: 18,
+            fontSize: 13,
             fontWeight: "bold",
           }}
         >
@@ -146,7 +147,7 @@ function ChapterCard({ chapter, index }: { chapter: string; index: number }) {
         </Text>
       </View>
       {selectedChapter?.number && selectedChapter?.number - 1 === index ? (
-        <AntDesign name="check" size={20} color="#1DA1F2" />
+        <AntDesign name="check" size={20} color="white" />
       ) : (
         ""
       )}
